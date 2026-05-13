@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta name="google-site-verification" content="bXy22qdr53vBBWkwyqL8L9t_KvFa9Jnvnji196K1P5Q" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Mundo Laboral Radio</title>
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        :root { --rojo: #ff4d4d; --negro: #0d0d11; --gris: #16161d; --texto: #ffffff; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--negro); color: var(--texto); margin: 0; padding: 0; }
+        header { background: #000; padding: 25px 0; border-bottom: 2px solid var(--rojo); text-align: center; }
+        .brand-name { font-size: 30px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
+        nav { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        nav button.active { background: var(--rojo); border-color: var(--rojo); }
+        .container { padding: 20px; min-height: 60vh; display: flex; justify-content: center; }
+        .seccion { display: none; width: 100%; max-width: 1000px; animation: fadeIn 0.3s; }
+        .seccion.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* CORRECCIÓN DE PANTALLA NEGRA: Imagen con respaldo de color sólido */
+        .reproductor-card { 
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
+                        url('https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1000&auto=format&fit=crop'),
+                        #1a1a1a; 
+            background-size: cover; 
+            background-position: center; 
+            border: 1px solid var(--rojo); 
+            border-radius: 20px; 
+            padding: 50px; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+        }
+        
+        #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; transition: 0.3s; }
+        .news-container { width: 100%; height: 700px; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; background: #fff; }
+        iframe { width: 100%; height: 100%; border: none; }
+        
+        .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+        .card-red { padding: 20px; border-radius: 12px; text-decoration: none; color: white; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid #333; transition: 0.3s; }
+        .card-red:hover { transform: translateY(-3px); background: rgba(255,255,255,0.1); }
+        
+        .form-contacto { background: var(--gris); padding: 25px; border-radius: 15px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #333; }
+        .form-contacto input, .form-contacto textarea { background: #000; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; width: 100%; box-sizing: border-box; font-family: inherit; font-size: 16px; }
+        
+        footer { background: #000; padding: 20px; text-align: center; border-top: 1px solid #222; margin-top: 30px; }
+        .whatsapp-float { position: fixed; bottom: 25px; right: 25px; background: #25D366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: white; z-index: 999; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<a href="https://wa.me/59168785216" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+<header>
+    <div class="brand-name">MUNDO <span style="color:var(--rojo)">LABORAL</span> RADIO</div>
+    <nav id="main-nav">
+        <button onclick="ir('inicio')" id="btn-inicio" class="active">INICIO</button>
+        <button onclick="ir('noticias')" id="btn-noticias">NOTICIAS</button>
+        <button onclick="ir('redes')" id="btn-redes">REDES</button>
+        <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
+    </nav>
+</header>
+
+<div class="container">
+    <div id="inicio" class="seccion active">
+        <div class="reproductor-card">
+            <h1>RADIO EN VIVO</h1>
+            <p>Vallegrande, Bolivia</p>
+            <button id="play-btn" onclick="toggleAudio()"><i id="p-icon" class="fas fa-play"></i></button>
+            <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
+                <i class="fas fa-volume-up"></i>
+                <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.8">
+            </div>
+            <p id="status" style="margin-top:15px; font-weight:bold; color:var(--rojo)">Toca para escuchar</p>
+        </div>
+    </div>
+
+    <div id="noticias" class="seccion">
+        <h2 style="text-align:center;">NOTICIAS</h2>
+        <div class="news-container"><iframe src="https://mundolaboral.radio.com.bo/"></iframe></div>
+    </div>
+
+    <div id="redes" class="seccion">
+        <div class="grid-redes">
+            <a href="https://mundolaboral.radio.com.bo/" target="_blank" class="card-red" style="background:#444"><i class="fas fa-globe fa-2x"></i> Web</a>
+            <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" target="_blank" class="card-red" style="background:#34a853"><i class="fab fa-google-play fa-2x"></i> App</a>
+            <a href="https://facebook.com/MundoLaboralRadio" target="_blank" class="card-red" style="background:#1877F2"><i class="fab fa-facebook fa-2x"></i> Facebook</a>
+            <a href="https://youtube.com/@mundolaboralradiovallegrande" target="_blank" class="card-red" style="background:#FF0000"><i class="fab fa-youtube fa-2x"></i> YouTube</a>
+            <a href="https://www.tiktok.com/@carlosfer_1971" target="_blank" class="card-red" style="background:#000"><i class="fab fa-tiktok fa-2x"></i> TikTok</a>
+            <a href="https://www.instagram.com/carlosfernandoaguilare/" target="_blank" class="card-red" style="background:linear-gradient(45deg, #f09433, #bc1888)"><i class="fab fa-instagram fa-2x"></i> Instagram</a>
+            <a href="https://t.me/+OlAmHfkWb3I2MzEx" target="_blank" class="card-red" style="background:#0088cc"><i class="fab fa-telegram fa-2x"></i> Telegram</a>
+            <a href="https://chat.whatsapp.com/BMDRQO15kyPCFxomtgtIyX" target="_blank" class="card-red" style="background:#25D366"><i class="fas fa-users fa-2x"></i> Grupo</a>
+        </div>
+    </div>
+
+    <div id="contacto" class="seccion">
+        <div class="form-contacto">
+            <h2 style="text-align:center; margin:0">ENVÍANOS UN WHATSAPP</h2>
+            <p style="text-align:center; font-size:14px; color:#ccc;">Envía tus pedidos y sugerencias al instante.</p>
+            <input type="text" id="c-nombre" placeholder="Tu nombre" required>
+            <textarea id="c-mensaje" rows="4" placeholder="Tu mensaje o pedido musical..." required></textarea>
+            <button id="wa-btn" onclick="enviarWA()" style="background:#25D366; color:white; border:none; padding:15px; border-radius:8px; font-weight:bold; cursor:pointer; transition: 0.3s;"><i class="fab fa-whatsapp"></i> ENVIAR POR WHATSAPP</button>
+        </div>
+    </div>
+</div>
+
+<footer><strong>MUNDO LABORAL RADIO</strong><br><small>© 2026 Vallegrande, Bolivia</small></footer>
+
+<script>
+    // NAVEGACIÓN
+    function ir(seccionId) {
+        const secciones = document.getElementsByClassName('seccion');
+        for (let s of secciones) { s.classList.remove('active'); }
+        const botones = document.querySelectorAll('#main-nav button');
+        botones.forEach(b => b.classList.remove('active'));
+        document.getElementById(seccionId).classList.add('active');
+        document.getElementById('btn-' + seccionId).classList.add('active');
+    }
+
+    // CONTROL DE AUDIO
+    const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
+    let sonando = false;
+
+    function toggleAudio() {
+        const icon = document.getElementById("p-icon");
+        const status = document.getElementById("status");
+        if(!sonando) {
+            radio.play();
+            icon.className = "fas fa-pause";
+            status.innerText = "ESCUCHANDO EN VIVO...";
+            sonando = true;
+        } else {
+            radio.pause();
+            icon.className = "fas fa-play";
+            status.innerText = "RADIO PAUSADA";
+            sonando = false;
+        }
+    }
+    document.getElementById('vol-slider').oninput = function() { radio.volume = this.value; };
+
+    // LÓGICA WHATSAPP
+    function enviarWA() {
+        const inputNombre = document.getElementById('c-nombre');
+        const inputMensaje = document.getElementById('c-mensaje');
+        const btn = document.getElementById('wa-btn');
+        const nombre = inputNombre.value;
+        const mensaje = inputMensaje.value;
+        const telefono = "59168785216";
+        
+        if(nombre === "" || mensaje === "") {
+            alert("Por favor completa los campos.");
+            return;
+        }
+        
+        const texto = `Hola Mundo Laboral Radio, soy ${nombre}. ${mensaje}`;
+        const url = `https://wa.me/${telefono}?text=${encodeURIComponent(texto)}`;
+        
+        window.open(url, '_blank');
+
+        inputNombre.value = "";
+        inputMensaje.value = "";
+        
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "¡MENSAJE LISTO!";
+        btn.style.background = "#ffffff";
+        btn.style.color = "#000000";
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = "#25D366";
+            btn.style.color = "white";
+        }, 3000);
+    }
+</script>
+</body>
+</html>
