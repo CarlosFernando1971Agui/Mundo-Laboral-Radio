@@ -115,4 +115,123 @@
             <p style="text-align:center; font-size:14px; color:#ccc;">Envía tus pedidos y sugerencias al instante.</p>
             <input type="text" id="c-nombre" placeholder="Tu nombre" required>
             <textarea id="c-mensaje" rows="4" placeholder="Tu mensaje o pedido musical..." required></textarea>
-            <button id="wa-btn" onclick="enviarWA()" style="background:#25D3
+            <button id="wa-btn" onclick="enviarWA()" style="background:#25D366; color:white; border:none; padding:15px; border-radius:8px; font-weight:bold; cursor:pointer; transition: 0.3s;"><i class="fab fa-whatsapp"></i> ENVIAR POR WHATSAPP</button>
+        </div>
+    </div>
+</div>
+
+<footer><strong>MUNDO LABORAL RADIO</strong><br><small>© 2026 Vallegrande, Bolivia</small></footer>
+
+<script>
+    // LÓGICA DE NAVEGACIÓN CORREGIDA
+    function ir(seccionId) {
+        const secciones = document.getElementsByClassName('seccion');
+        for (let s of secciones) { s.classList.remove('active'); }
+        
+        const botones = document.querySelectorAll('#main-nav button');
+        botones.forEach(b => b.classList.remove('active'));
+        
+        const seccionObjetivo = document.getElementById(seccionId);
+        const botonObjetivo = document.getElementById('btn-' + seccionId);
+        
+        if(seccionObjetivo && botonObjetivo) {
+            seccionObjetivo.classList.add('active');
+            botonObjetivo.classList.add('active');
+        }
+    }
+
+    // CONTROL DE AUDIO ORIGINAL
+    const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
+    let sonando = false;
+
+    function toggleAudio() {
+        const icon = document.getElementById("p-icon");
+        const status = document.getElementById("status");
+        if(!sonando) {
+            radio.play();
+            icon.className = "fas fa-pause";
+            status.innerText = "ESCUCHANDO EN VIVO...";
+            sonando = true;
+        } else {
+            radio.pause();
+            icon.className = "fas fa-play";
+            status.innerText = "RADIO PAUSADA";
+            sonando = false;
+        }
+    }
+    document.getElementById('vol-slider').oninput = function() { radio.volume = this.value; };
+
+    // LÓGICA WHATSAPP
+    function enviarWA() {
+        const inputNombre = document.getElementById('c-nombre');
+        const inputMensaje = document.getElementById('c-mensaje');
+        const btn = document.getElementById('wa-btn');
+        const nombre = inputNombre.value;
+        const mensaje = inputMensaje.value;
+        const telefono = "59168785216";
+        
+        if(nombre === "" || mensaje === "") {
+            alert("Por favor completa los campos.");
+            return;
+        }
+        
+        const texto = `Hola Mundo Laboral Radio, soy ${nombre}. ${mensaje}`;
+        const url = `https://wa.me/${telefono}?text=${encodeURIComponent(texto)}`;
+        
+        window.open(url, '_blank');
+
+        inputNombre.value = "";
+        inputMensaje.value = "";
+        
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "¡MENSAJE LISTO!";
+        btn.style.background = "#ffffff";
+        btn.style.color = "#000000";
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = "#25D366";
+            btn.style.color = "white";
+        }, 3000);
+    }
+
+    // CARGA AUTOMÁTICA DEL FEED RSS
+    document.addEventListener("DOMContentLoaded", function() {
+        const rssUrl = "https://rss.app/feeds/QnRyyFuNBJFstj6P.xml";
+        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById("rss-feed-container");
+                if (data.status === "ok" && data.items.length > 0) {
+                    container.innerHTML = ""; 
+                    data.items.forEach(item => {
+                        let cleanDescription = item.description.replace(/<[^>]*>/g, '');
+                        if (cleanDescription.length > 140) {
+                            cleanDescription = cleanDescription.substring(0, 140) + "...";
+                        }
+                        const dateOptions = { day: 'numeric', month: 'short', year: 'numeric' };
+                        const formattedDate = new Date(item.pubDate).toLocaleDateString('es-ES', dateOptions);
+
+                        container.innerHTML += `
+                            <div class="feed-item">
+                                <div>
+                                    <h3><a href="${item.link}" target="_blank">${item.title} ↗</a></h3>
+                                    <p>${cleanDescription}</p>
+                                </div>
+                                <div class="feed-date">📅 ${formattedDate}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    document.getElementById("rss-feed-container").innerHTML = "<p style='text-align:center; color:#aaa; grid-column: 1/-1;'>No se pudieron cargar los titulares en este momento.</p>";
+                }
+            })
+            .catch(error => {
+                document.getElementById("rss-feed-container").innerHTML = "<p style='text-align:center; color:#aaa; grid-column: 1/-1;'>Error de conexión al cargar las noticias.</p>";
+            });
+    });
+</script>
+</body>
+</html>
