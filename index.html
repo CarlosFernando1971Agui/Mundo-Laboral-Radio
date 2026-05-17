@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,6 +11,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            scroll-behavior: smooth;
         }
 
         header {
@@ -39,13 +39,18 @@
             flex-wrap: wrap;
         }
 
-       <nav>
-            <a href="#" class="active">INICIO</a>
-            <a href="#noticias">NOTICIAS</a>
-            <a href="rss.html">TITULARES RSS</a>
-            <a href="#redes">REDES</a>
-            <a href="#contacto">CONTACTO</a>
-        </nav>
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 16px;
+            background-color: #1c1c1e;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s, color 0.3s;
+            border: 1px solid #2c2c2e;
+        }
+
+        nav a:hover, nav a.active {
             background-color: #ff3b30;
             color: #ffffff;
             border-color: #ff3b30;
@@ -88,6 +93,21 @@
             border: 1px solid #2c2c2e;
         }
 
+        /* Secciones de relleno para que los botones tengan a dónde ir */
+        .content-section {
+            background-color: #121214;
+            border-radius: 16px;
+            padding: 40px 25px;
+            border: 1px solid #2c2c2e;
+            margin-bottom: 30px;
+        }
+
+        .content-section h2 {
+            border-left: 4px solid #ff3b30;
+            padding-left: 10px;
+            margin-top: 0;
+        }
+
         footer {
             text-align: center;
             padding: 30px 10px;
@@ -120,11 +140,26 @@
             <div class="player-placeholder">
                 <p style="color: #aeaeae; margin-bottom: 10px;">🔴 Señal Online Activa</p>
                 <audio controls style="width: 100%;">
-                    <source src="TU_URL_DE_STREAMING_AQUÍ" type="audio/mpeg">
+                    <source src="TU_URL_DE_STREAMING" type="audio/mpeg">
                     Tu navegador no soporta este reproductor.
                 </audio>
             </div>
             <p style="color: #ff3b30; font-weight: bold; margin-top: 15px;">Toca para escuchar</p>
+        </div>
+
+        <div id="noticias" class="content-section">
+            <h2>NOTICIAS LOCALES</h2>
+            <p style="color: #aeaeae;">Espacio dedicado a las informaciones y acontecimientos de Vallegrande y las provincias.</p>
+        </div>
+
+        <div id="redes" class="content-section">
+            <h2>NUESTRAS REDES</h2>
+            <p style="color: #aeaeae;">Síguenos en nuestras plataformas digitales para estar conectado las 24 horas.</p>
+        </div>
+
+        <div id="contacto" class="content-section">
+            <h2>CONTACTO</h2>
+            <p style="color: #aeaeae;">Comunícate con la cabina de Mundo Laboral Radio. Teléfono y publicidad aquí.</p>
         </div>
     </div>
 
@@ -134,3 +169,6 @@
 
 </body>
 </html>
+
+
+    
