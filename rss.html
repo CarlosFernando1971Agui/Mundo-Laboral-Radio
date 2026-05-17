@@ -13,41 +13,46 @@
             padding: 0;
         }
 
-        <header>
-        <h1>MUNDO <span>LABORAL</span> RADIO</h1>
-        <nav>
-            <a href="index.html">INICIO</a>
-            <a href="index.html#noticias">NOTICIAS</a>
-            <a href="#" class="active">TITULARES RSS</a>
-            <a href="index.html#redes">REDES</a>
-            <a href="index.html#contacto">CONTACTO</a>
-        </nav>
-    </header>
+        header {
+            background-color: #000000;
+            padding: 20px 10px;
+            text-align: center;
+            border-bottom: 2px solid #ff3b30;
+        }
+
+        h1 {
             margin: 0;
-            font-size: 2rem;
+            font-size: 2.5rem;
             letter-spacing: 1px;
         }
 
-        header h1 span {
+        h1 span {
             color: #ff3b30;
         }
 
-        /* Botón para volver a la radio */
-        .btn-volver {
-            display: inline-block;
+        nav {
             margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
             color: #ffffff;
             text-decoration: none;
             padding: 8px 16px;
             background-color: #1c1c1e;
             border-radius: 8px;
             font-weight: bold;
-            border: 1px solid #ff3b30;
-            transition: background 0.3s;
+            transition: background 0.3s, color 0.3s;
+            border: 1px solid #2c2c2e;
         }
 
-        .btn-volver:hover {
+        nav a:hover, nav a.active {
             background-color: #ff3b30;
+            color: #ffffff;
+            border-color: #ff3b30;
         }
 
         .container {
@@ -141,7 +146,13 @@
 
     <header>
         <h1>MUNDO <span>LABORAL</span> RADIO</h1>
-        <a href="index.html" class="btn-volver">← Volver a la Radio</a>
+        <nav>
+            <a href="index.html">INICIO</a>
+            <a href="index.html#noticias">NOTICIAS</a>
+            <a href="#" class="active">TITULARES RSS</a>
+            <a href="index.html#redes">REDES</a>
+            <a href="index.html#contacto">CONTACTO</a>
+        </nav>
     </header>
 
     <div class="container">
@@ -193,7 +204,7 @@
                     }
                 })
                 .catch(error => {
-                    container.innerHTML = "<p>Error de conexión al cargar las noticias.</p>";
+                    document.getElementById("rss-feed-container").innerHTML = "<p>Error de conexión al cargar las noticias.</p>";
                 });
         });
     </script>
