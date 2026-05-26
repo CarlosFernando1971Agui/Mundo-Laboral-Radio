@@ -150,39 +150,26 @@
             cursor: pointer;
         }
 
-        /* Diseño de Sección de TV Optimizada */
-        .capa-tv {
-            background-color: var(--bg-tarjetas);
+        /* DISEÑO DE CONTENEDOR DE TV ADAPTADO A PANTALLAS TÁCTILES */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* Relación de aspecto 16:9 widescreen */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            background-color: #000;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
             border: 1px solid var(--rojo);
-            border-radius: 15px;
-            padding: 40px 20px;
-            text-align: center;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            margin-top: 15px;
         }
 
-        .btn-abrir-tv {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            background-color: var(--rojo);
-            color: white;
-            text-decoration: none;
-            padding: 18px 30px;
-            font-size: 18px;
-            font-weight: 800;
-            border-radius: 10px;
-            margin-top: 25px;
-            box-shadow: 0 4px 15px rgba(255, 71, 71, 0.3);
-            text-transform: uppercase;
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 360px;
-            transition: 0.2s;
-        }
-
-        .btn-abrir-tv:hover {
-            background-color: #e03e3e;
-            transform: translateY(-2px);
+            height: 100%;
+            border: none;
         }
 
         /* Sección Noticias Facebook */
@@ -210,10 +197,6 @@
             transition: 0.3s;
             width: 100%;
             max-width: 340px;
-        }
-        .btn-facebook-direct:hover {
-            background: #1565C0;
-            transform: translateY(-2px);
         }
 
         /* Grid de Redes Sociales */
@@ -341,15 +324,13 @@
         </div>
 
         <div id="tv" class="seccion">
-            <div class="capa-tv">
-                <i class="fas fa-tv fa-4x" style="color:var(--rojo); margin-bottom:15px;"></i>
-                <h2 style="font-size:24px; font-weight:800; text-transform:uppercase;">Mundo Laboral Televisión</h2>
-                <p style="color:var(--texto-secundario); font-size:15px; margin-top:10px; line-height:1.6; padding:0 10px;">
-                    Para ver nuestra señal en vivo en teléfonos móviles de manera fluida y saltar los bloqueos de seguridad del servidor, presiona el botón rojo de abajo.
-                </p>
-                <a href="https://ssh101.com/securelive/index.php?id=mundolaboralvid" target="_blank" class="btn-abrir-tv" onclick="pausarRadioPorSeguridad()">
-                    <i class="fas fa-play-circle"></i> Ver Transmisión Aquí
-                </a>
+            <h2 style="text-align:center; margin-bottom:10px;"><i class="fas fa-tv" style="color:var(--rojo)"></i> MUNDO LABORAL TELEVISIÓN</h2>
+            <p style="text-align:center; color:var(--texto-secundario); font-size:14px; margin-bottom: 15px; padding:0 10px;">
+                Si aparece el cuadro de verificación de edad, presiona directamente sobre la pantalla de video para confirmar.
+            </p>
+            
+            <div class="video-container">
+                <div id="espacio-reproductor-tv"></div>
             </div>
         </div>
 
@@ -412,11 +393,12 @@
     </footer>
 
     <script>
-        // ENLACE CORREGIDO .MP3 PARA AUDIO EN CELULARES
+        // Configuración de flujo de audio de la Radio (.mp3 nativo para móviles)
         const URL_STREAMING = "https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3";
         const radio = new Audio(URL_STREAMING);
         let sonando = false;
 
+        // SISTEMA DE NAVEGACIÓN CONTROLADORA DE AUDIO AUTOMÁTICA
         function ir(seccionId) {
             const secciones = document.getElementsByClassName('seccion');
             for (let s of secciones) { s.classList.remove('active'); }
@@ -427,32 +409,44 @@
             document.getElementById(seccionId).classList.add('active');
             document.getElementById('btn-' + seccionId).classList.add('active');
 
+            // CONTROL MUTUO INTELIGENTE DE REPRODUCTORES:
             if (seccionId === 'tv') {
-                pausarRadioPorSeguridad();
+                // 1. Si entras a TV, apaga la radio de fondo si estaba activa
+                if (sonando) {
+                    radio.pause();
+                    document.getElementById("p-icon").className = "fas fa-play";
+                    document.getElementById("status").innerText = "RADIO PAUSADA (Viendo TV)";
+                    sonando = false;
+                }
+                // 2. Inyecta el video en vivo de forma limpia y responsiva
+                document.getElementById('espacio-reproductor-tv').innerHTML = `
+                    <iframe src="https://ssh101.com/securelive/index.php?id=mundolaboralvid" 
+                            scrolling="no" 
+                            allowfullscreen="true" 
+                            allow="autoplay; encrypted-media">
+                    </iframe>`;
+            } else {
+                // 3. Si sales de la pestaña de TV a cualquier otra, destruye el iframe para silenciarlo instantáneamente
+                document.getElementById('espacio-reproductor-tv').innerHTML = "";
             }
         }
 
-        function pausarRadioPorSeguridad() {
-            if (sonando) {
-                radio.pause();
-                document.getElementById("p-icon").className = "fas fa-play";
-                document.getElementById("status").innerText = "RADIO PAUSADA (Viendo TV)";
-                sonando = false;
-            }
-        }
-
+        // Lógica del reproductor de Radio
         function controlarRadio() {
             const icon = document.getElementById("p-icon");
             const status = document.getElementById("status");
 
             if (!sonando) {
+                // Si va a sonar la radio, destruimos el video de TV por si acaso seguía activo
+                document.getElementById('espacio-reproductor-tv').innerHTML = "";
+                
                 radio.play().then(() => {
                     icon.className = "fas fa-pause";
                     status.innerText = "ESCUCHANDO EN VIVO";
                     sonando = true;
                 }).catch(err => {
                     console.log("Error de audio: ", err);
-                    status.innerText = "Error de señal en el móvil.";
+                    status.innerText = "Error al conectar la señal.";
                 });
             } else {
                 radio.pause();
