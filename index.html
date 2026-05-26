@@ -5,25 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo Laboral Media</title>
     <style>
-        /* DISEÑO GENERAL ORIGINAL (FONDO BLANCO Y TEXTO NEGRO) */
+        /* DISEÑO GENERAL ORIGINAL */
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
             background-color: #ffffff;
             color: #000000;
-            padding-bottom: 70px; /* Espacio para el reproductor inferior */
+            padding-bottom: 80px; /* Espacio para el reproductor fijo */
         }
 
-        /* HEADER Y LOGO */
+        /* HEADER SUPERIOR */
         .header-container {
             text-align: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #e0e0e0;
+            padding: 20px 0;
+            background-color: #ffffff;
         }
         .header-logo {
             font-weight: bold;
-            font-size: 26px;
+            font-size: 28px;
             color: #000000;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -32,38 +32,48 @@
             color: #e50914;
         }
 
-        /* MENÚ DE NAVEGACIÓN ORIGINAL */
+        /* MENÚ DE NAVEGACIÓN POR PESTAÑAS */
         .nav-menu {
             text-align: center;
             background-color: #000000;
-            padding: 12px 0;
+            padding: 14px 0;
         }
         .nav-menu a {
             color: #ffffff;
             text-decoration: none;
-            margin: 0 15px;
+            margin: 0 20px;
             font-weight: bold;
             font-size: 14px;
             text-transform: uppercase;
+            cursor: pointer;
+            transition: color 0.2s;
         }
-        .nav-menu a:hover {
+        .nav-menu a:hover, .nav-menu a.active {
             color: #e50914;
         }
 
-        /* TITULO DE LA PÁGINA */
+        /* TÍTULO INTERNO DE LA PESTAÑA */
         .page-title {
             text-align: center;
-            font-size: 32px;
+            font-size: 34px;
             font-weight: bold;
-            margin-top: 30px;
-            margin-bottom: 20px;
+            margin-top: 35px;
+            margin-bottom: 25px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* CONTENEDOR DE DOS COLUMNAS (ESTILO MAQUETA ORIGINAL) */
+        /* SISTEMA DE PESTAÑAS (OCULTAR/MOSTRAR SECCIONES) */
+        .tab-content {
+            display: none; /* Por defecto todo oculto */
+        }
+        .tab-content.active {
+            display: block; /* Solo se muestra la pestaña activa */
+        }
+
+        /* MAQUETA DE DOS COLUMNAS */
         .main-layout {
-            max-width: 1100px;
+            max-width: 1150px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
@@ -72,23 +82,23 @@
             box-sizing: border-box;
         }
 
-        /* COLUMNA DEL REPRODUCTOR (IZQUIERDA) */
+        /* SECCIÓN DEL REPRODUCTOR (IZQUIERDA) */
         .video-column {
             flex: 1;
-            max-width: 760px;
+            max-width: 800px;
             width: 100%;
         }
 
-        /* VENTANA DEL REPRODUCTOR DE VIDEO PERFECTA */
+        /* VENTANA DEL REPRODUCTOR DE VIDEO EXACTA (16:9) */
         .video-window {
             position: relative;
-            padding-bottom: 56.25%; /* Relación de aspecto 16:9 */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
-            border: 4px solid #000000;
+            border: 1px solid #cccccc;
             border-radius: 4px;
             background-color: #000000;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         .video-window iframe {
             position: absolute;
@@ -99,16 +109,16 @@
             border: 0;
         }
 
-        /* COLUMNA DE BOTONES SOCIALES (DERECHA ORIGINAL) */
+        /* COLUMNA DE BOTONES (DERECHA ORIGINAL) */
         .sidebar-column {
-            width: 180px;
-            margin-left: 30px;
+            width: 200px;
+            margin-left: 40px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
         }
 
-        /* BOTONES LATERALES EXACTOS AL MODELO */
+        /* BOTONES LATERALES DE REDES SOCIALES */
         .btn-side {
             display: flex;
             flex-direction: column;
@@ -116,24 +126,27 @@
             justify-content: center;
             color: #ffffff !important;
             text-decoration: none;
-            font-family: Arial, sans-serif;
             font-size: 11px;
             font-weight: bold;
             text-transform: uppercase;
             text-align: center;
-            padding: 12px 5px;
-            border-radius: 4px;
+            padding: 15px 10px;
+            border-radius: 6px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+        .btn-side:hover {
+            transform: scale(1.02);
         }
         .btn-side i {
-            font-size: 20px;
-            margin-bottom: 5px;
+            font-size: 24px;
+            margin-bottom: 6px;
         }
         .btn-wa { background-color: #25d366; }
         .btn-tg { background-color: #0088cc; }
         .btn-fb { background-color: #1877f2; }
 
-        /* BOTÓN DE ACCESO EN VIVO (CENTRADITO ABAJO) */
+        /* BOTÓN DE DIRECTO DESDE LA CALLE */
         .live-btn-container {
             text-align: center;
             margin-top: 25px;
@@ -144,19 +157,18 @@
             color: #ffffff;
             text-decoration: none;
             font-weight: bold;
-            font-size: 14px;
-            padding: 12px 30px;
+            font-size: 13px;
+            padding: 12px 25px;
             border: 2px solid #e50914;
             border-radius: 4px;
             text-transform: uppercase;
-            transition: all 0.3s ease;
+            transition: background 0.2s;
         }
         .btn-live-action:hover {
             background-color: #e50914;
-            color: #ffffff;
         }
 
-        /* REPRODUCTOR DE AUDIO FIJO INFERIOR (ZENO STYLE) */
+        /* REPRODUCTOR DE AUDIO FIJO INFERIOR (ZENO) */
         .footer-radio-player {
             position: fixed;
             bottom: 0;
@@ -169,7 +181,7 @@
             color: #ffffff;
         }
         .footer-content {
-            max-width: 1100px;
+            max-width: 1150px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
@@ -177,15 +189,20 @@
             padding: 0 20px;
         }
         .radio-info {
-            font-size: 13px;
+            font-size: 14px;
         }
         .radio-info .status-live {
             color: #e50914;
             font-weight: bold;
-            margin-right: 5px;
+            margin-right: 6px;
         }
-        .radio-info .station-name {
-            font-weight: 600;
+
+        /* TEXTO INFORMATIVO DE RELLENO PARA OTRAS PESTAÑAS */
+        .placeholder-text {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666666;
+            font-size: 18px;
         }
 
         /* RESPONSIVO PARA CELULARES */
@@ -197,13 +214,13 @@
             .sidebar-column {
                 width: 100%;
                 margin-left: 0;
-                margin-top: 25px;
+                margin-top: 30px;
                 flex-direction: row;
                 justify-content: center;
             }
             .btn-side {
                 flex: 1;
-                max-width: 120px;
+                max-width: 130px;
             }
             .footer-content {
                 flex-direction: column;
@@ -221,61 +238,106 @@
     </div>
 
     <div class="nav-menu">
-        <a href="#radio">Radio en Vivo</a>
-        <a href="#tv" style="color: #e50914;">TV en Vivo</a>
-        <a href="#noticias">Noticias</a>
-        <a href="#contacto">Contacto</a>
+        <a onclick="switchTab('radio-tab')">Radio en Vivo</a>
+        <a id="default-tab" onclick="switchTab('tv-tab')" class="active">TV en Vivo</a>
+        <a onclick="switchTab('noticias-tab')">Noticias</a>
+        <a onclick="switchTab('contacto-tab')">Contacto</a>
     </div>
 
-    <div id="tv" class="page-title">TV EN VIVO</div>
+    <div id="radio-tab" class="tab-content">
+        <div class="page-title">Radio en Vivo</div>
+        <div class="placeholder-text">
+            <p>Escuchando la señal de Mundo Laboral Radio en directo desde el reproductor inferior.</p>
+        </div>
+    </div>
 
-    <div class="main-layout">
+    <div id="tv-tab" class="tab-content active">
+        <div class="page-title">TV EN VIVO</div>
         
-        <div class="video-column">
-            <div class="video-window">
-                <iframe 
-                    src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC&autoplay=1&mute=1&loop=1" 
-                    title="Mundo Laboral TV" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
+        <div class="main-layout">
+            <div class="video-column">
+                <div class="video-window">
+                    <iframe 
+                        src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC&autoplay=1&mute=1&loop=1" 
+                        title="Mundo Laboral TV" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                
+                <div class="live-btn-container">
+                    <a href="https://www.youtube.com/@mundolaboralradio/live" target="_blank" class="btn-live-action">
+                        Entrar al directo desde la calle
+                    </a>
+                </div>
             </div>
-            
-            <div class="live-btn-container">
-                <a href="https://www.youtube.com/@mundolaboralradio/live" target="_blank" class="btn-live-action">
-                    Entrar al directo desde la calle
+
+            <div class="sidebar-column">
+                <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>WhatsApp<br>Prensa</span>
+                </a>
+                <a href="https://t.me/+FfI_M03y91YxNjEx" target="_blank" class="btn-side btn-tg">
+                    <i class="fa-brands fa-telegram"></i>
+                    <span>Telegram</span>
+                </a>
+                <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="btn-side btn-fb">
+                    <i class="fa-brands fa-facebook-f"></i>
+                    <span>Facebook</span>
                 </a>
             </div>
         </div>
-
-        <div id="contacto" class="sidebar-column">
-            <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa">
-                <i class="fa-brands fa-whatsapp"></i>
-                <span>WhatsApp<br>Prensa</span>
-            </a>
-            <a href="https://t.me/+FfI_M03y91YxNjEx" target="_blank" class="btn-side btn-tg">
-                <i class="fa-brands fa-telegram"></i>
-                <span>Telegram</span>
-            </a>
-            <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="btn-side btn-fb">
-                <i class="fa-brands fa-facebook-f"></i>
-                <span>Facebook</span>
-            </a>
-        </div>
-
     </div>
 
-    <div id="radio" class="footer-radio-player">
+    <div id="noticias-tab" class="tab-content">
+        <div class="page-title">Noticias</div>
+        <div class="placeholder-text">
+            <p>Sección de titulares informativos de Vallegrande en desarrollo...</p>
+        </div>
+    </div>
+
+    <div id="contacto-tab" class="tab-content">
+        <div class="page-title">Contacto</div>
+        <div class="placeholder-text">
+            <p>Comunícate con la administración central usando los botones de redes sociales en la pestaña de TV.</p>
+        </div>
+    </div>
+
+    <div class="footer-radio-player">
         <div class="footer-content">
             <div class="radio-info">
-                <span class="status-live">● AL AIRE:</span>
+                <span class="status-live">■ AL AIRE:</span>
                 <span class="station-name">Mundo Laboral Radio (Streaming Digital)</span>
             </div>
-            <audio controls autoplay name="media" style="width: 280px; height: 35px;">
+            <audio controls autoplay name="media" style="width: 300px; height: 40px;">
                 <source src="https://stream.zeno.fm/g6tq4u5g20vtv" type="audio/mpeg">
             </audio>
         </div>
     </div>
+
+    <script>
+        function switchTab(tabId) {
+            // Ocultar todas las pestañas
+            var contents = document.getElementsByClassName('tab-content');
+            for (var i = 0; i < contents.length; i++) {
+                contents[i].classList.remove('active');
+            }
+            
+            // Quitar el color rojo de todos los enlaces del menú
+            var links = document.querySelectorAll('.nav-menu a');
+            for (var i = 0; i < links.length; i++) {
+                links[i].classList.remove('active');
+                links[i].style.color = '#ffffff';
+            }
+            
+            // Mostrar la pestaña seleccionada
+            document.getElementById(tabId).classList.add('active');
+            
+            // Pintar de rojo el enlace presionado
+            event.currentTarget.classList.add('active');
+            event.currentTarget.style.color = '#e50914';
+        }
+    </script>
 
 </body>
 </html>
