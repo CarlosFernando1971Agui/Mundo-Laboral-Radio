@@ -26,7 +26,7 @@
         
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; transition: 0.3s; }
         
-        /* CONTENEDOR DE TV TOTALMENTE OPTIMIZADO */
+        /* CONTENEDOR DE TV OPTIMIZADO */
         .video-tv-seccion {
             background: var(--gris);
             border: 1px solid var(--rojo);
@@ -37,11 +37,10 @@
             margin: 0 auto;
         }
 
-        /* Forzamos el tamaño del reproductor para que sea uniforme */
         .iframe-container {
             position: relative;
             width: 100%;
-            height: 480px; /* Tamaño estándar basado en tu panel */
+            height: 480px; 
             background: #000;
             border-radius: 12px;
             overflow: hidden;
@@ -54,10 +53,9 @@
             overflow: hidden;
         }
 
-        /* Ajuste especial para pantallas de celulares */
         @media (max-width: 768px) {
             .iframe-container {
-                height: 420px; /* Altura ideal en móvil para que el botón de aceptar NO se corte abajo */
+                height: 420px; 
             }
         }
 
@@ -77,7 +75,6 @@
     <nav id="main-nav">
         <button onclick="ir('inicio')" id="btn-inicio" class="active">INICIO</button>
         <button onclick="ir('tv')" id="btn-tv">TV EN VIVO</button>
-        <button onclick="ir('noticias')" id="btn-noticias">NOTICIAS (FACEBOOK)</button>
         <button onclick="ir('redes')" id="btn-redes">REDES</button>
         <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
     </nav>
@@ -102,13 +99,6 @@
         </div>
     </div>
     
-    <div id="noticias" class="seccion">
-        <div style="background:var(--gris); padding:25px; border-radius:15px; text-align:center; border:1px solid var(--rojo);">
-            <h1>ÚLTIMAS NOTICIAS LOCALES</h1>
-            <p style="color:var(--texto-secundario); margin-bottom:25px;">Sigue nuestras publicaciones en Facebook para estar informado.</p>
-            <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" style="background:#1877F2; color:white; text-decoration:none; padding:15px 25px; border-radius:8px; font-weight:bold; font-size:18px;"><i class="fab fa-facebook"></i> Ir a Facebook</a>
-        </div>
-    </div>
     <div id="redes" class="seccion">
         <div class="grid-redes">
             <a href="https://mundolaboral.radio.com.bo/" target="_blank" class="card-red" style="background:#444"><i class="fas fa-globe fa-2x"></i> Web</a>
@@ -144,7 +134,6 @@
         document.getElementById(seccionId).classList.add('active');
         document.getElementById('btn-' + seccionId).classList.add('active');
 
-        // Control de audio y video inteligente cruzado
         if (seccionId === 'tv') {
             if(sonando) {
                 radio.pause();
@@ -152,11 +141,9 @@
                 document.getElementById("status").innerText = "RADIO PAUSADA";
                 sonando = false;
             }
-            // Inyectamos el código Iframe oficial exacto de tu nuevo servidor mundolaboralvid
             document.getElementById('contenedor-reproductor-dinamico').innerHTML = 
                 `<iframe src="https://ssh101.com/securelive/index.php?id=mundolaboralvid" scrolling="no" allowfullscreen="true" allow="autoplay; encrypted-media"></iframe>`;
         } else {
-            // Si sale de la pestaña de TV, destruye el video por completo para que no se mezcle el sonido
             document.getElementById('contenedor-reproductor-dinamico').innerHTML = "";
         }
     }
