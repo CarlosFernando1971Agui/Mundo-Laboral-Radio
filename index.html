@@ -49,7 +49,7 @@
         nav {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             padding: 10px;
             flex-wrap: wrap;
         }
@@ -57,18 +57,19 @@
         nav button {
             background-color: var(--bg-tarjetas);
             color: var(--texto);
-            border: 2px solid transparent;
-            padding: 10px 20px;
+            border: 1px solid #333;
+            padding: 10px 15px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             transition: all 0.3s ease;
             text-transform: uppercase;
         }
 
         nav button.active, nav button:hover {
             background-color: var(--rojo);
+            border-color: var(--rojo);
             transform: translateY(-2px);
         }
 
@@ -125,7 +126,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s ease, background-color 0.2s ease;
+            transition: transform 0.2s ease;
             margin-bottom: 20px;
             box-shadow: 0 0 20px rgba(255, 71, 71, 0.4);
         }
@@ -149,57 +150,70 @@
             cursor: pointer;
         }
 
-        /* Contenedor de Video de TV */
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 12px;
-            background-color: #000;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-            border: 1px solid #2a2a2a;
-            display: none; /* Se oculta hasta que verifiquen la edad */
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Botón de Verificación de Edad Propio */
-        .capa-verificacion {
+        /* Diseño de Sección de TV Optimizada */
+        .capa-tv {
             background-color: var(--bg-tarjetas);
-            border: 2px solid var(--rojo);
-            border-radius: 12px;
+            border: 1px solid var(--rojo);
+            border-radius: 15px;
             padding: 40px 20px;
             text-align: center;
             box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
 
-        .btn-verificar-edad {
-            background-color: #ffffff;
-            color: #b30000;
-            border: none;
-            padding: 16px 28px;
+        .btn-abrir-tv {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background-color: var(--rojo);
+            color: white;
+            text-decoration: none;
+            padding: 18px 30px;
             font-size: 18px;
             font-weight: 800;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+            border-radius: 10px;
+            margin-top: 25px;
+            box-shadow: 0 4px 15px rgba(255, 71, 71, 0.3);
             text-transform: uppercase;
             width: 100%;
-            max-width: 340px;
+            max-width: 360px;
             transition: 0.2s;
         }
 
-        .btn-verificar-edad:active {
-            transform: scale(0.98);
+        .btn-abrir-tv:hover {
+            background-color: #e03e3e;
+            transform: translateY(-2px);
+        }
+
+        /* Sección Noticias Facebook */
+        .facebook-news-card {
+            background: var(--bg-tarjetas);
+            border: 1px solid #1877F2;
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        .btn-facebook-direct {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #1877F2;
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 16px;
+            transition: 0.3s;
+            width: 100%;
+            max-width: 340px;
+        }
+        .btn-facebook-direct:hover {
+            background: #1565C0;
+            transform: translateY(-2px);
         }
 
         /* Grid de Redes Sociales */
@@ -207,7 +221,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 15px;
-            margin-top: 10px;
         }
 
         .card-red {
@@ -222,18 +235,12 @@
             color: var(--texto);
             font-weight: 600;
             font-size: 14px;
-            transition: transform 0.3s ease, background-color 0.3s ease;
+            transition: transform 0.3s ease;
             border: 1px solid #2a2a2a;
         }
 
-        .card-red i {
-            margin-bottom: 10px;
-        }
-
-        .card-red:hover {
-            transform: translateY(-5px);
-            filter: brightness(1.2);
-        }
+        .card-red i { margin-bottom: 10px; }
+        .card-red:hover { transform: translateY(-5px); }
 
         /* Formulario de Contacto */
         .form-contacto {
@@ -259,11 +266,6 @@
             font-size: 15px;
         }
 
-        .form-contacto input:focus, .form-contacto textarea:focus {
-            border-color: var(--rojo);
-            outline: none;
-        }
-
         .btn-enviar {
             background-color: var(--rojo);
             color: white;
@@ -273,7 +275,6 @@
             font-weight: 700;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.2s;
             text-transform: uppercase;
         }
 
@@ -302,11 +303,6 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             text-decoration: none;
             z-index: 999;
-            transition: transform 0.3s;
-        }
-
-        .btn-whatsapp:hover {
-            transform: scale(1.1);
         }
     </style>
 </head>
@@ -317,6 +313,7 @@
         <nav id="main-nav">
             <button id="btn-inicio" class="active" onclick="ir('inicio')">Inicio</button>
             <button id="btn-tv" onclick="ir('tv')">TV en Vivo</button>
+            <button id="btn-noticias" onclick="ir('noticias')">Noticias (Facebook)</button>
             <button id="btn-redes" onclick="ir('redes')">Redes</button>
             <button id="btn-contacto" onclick="ir('contacto')">Contacto</button>
         </nav>
@@ -344,24 +341,29 @@
         </div>
 
         <div id="tv" class="seccion">
-            <h2 style="text-align:center; margin-bottom:20px;"><i class="fas fa-tv" style="color:var(--rojo)"></i> MUNDO LABORAL TELEVISIÓN</h2>
-            
-            <div id="bloqueo-edad" class="capa-verificacion">
-                <i class="fas fa-exclamation-triangle fa-3x" style="color:var(--rojo); margin-bottom:15px;"></i>
-                <h3 style="font-size:20px; font-weight:700;">ACEPTAR TRANSMISIÓN<br>(VERIFICAR EDAD)</h3>
-                <p style="color:var(--texto-secundario); font-size:14px; margin-top:10px; padding:0 15px;">
-                    Pulsa el botón de abajo para confirmar y ver el video de forma instantánea.
+            <div class="capa-tv">
+                <i class="fas fa-tv fa-4x" style="color:var(--rojo); margin-bottom:15px;"></i>
+                <h2 style="font-size:24px; font-weight:800; text-transform:uppercase;">Mundo Laboral Televisión</h2>
+                <p style="color:var(--texto-secundario); font-size:15px; margin-top:10px; line-height:1.6; padding:0 10px;">
+                    Para ver nuestra señal en vivo en teléfonos móviles de manera fluida y saltar los bloqueos de seguridad del servidor, presiona el botón rojo de abajo.
                 </p>
-                <button class="btn-verificar-edad" onclick="desbloquearStream()">Confirmar Edad e Ingresar</button>
+                <a href="https://ssh101.com/securelive/index.php?id=mundolaboralvid" target="_blank" class="btn-abrir-tv" onclick="pausarRadioPorSeguridad()">
+                    <i class="fas fa-play-circle"></i> Ver Transmisión Aquí
+                </a>
             </div>
+        </div>
 
-            <div id="reproductor-tv" class="video-container">
-                <iframe id="iframe-ssh" src="" scrolling="no" allowfullscreen="true" allow="autoplay; encrypted-media"></iframe>
+        <div id="noticias" class="seccion">
+            <div class="facebook-news-card">
+                <i class="fab fa-facebook-square fa-4x" style="color: #1877F2; margin-bottom: 15px;"></i>
+                <h2>ÚLTIMAS NOTICIAS LOCALES</h2>
+                <p style="color: #aaa; line-height: 1.6; padding: 0 10px; margin-top: 10px;">
+                    Mantente al día con los acontecimientos de Vallegrande y las provincias. Haz clic abajo para ingresar directamente a nuestro portal oficial de noticias en Facebook.
+                </p>
+                <a href="https://www.facebook.com/MundoLaboralRadio/" target="_blank" class="btn-facebook-direct">
+                    <i class="fab fa-facebook"></i> Ver Noticias en Facebook
+                </a>
             </div>
-            
-            <p style="text-align:center; color:#aaa; font-size:14px; margin-top:15px;">
-                Si la transmisión no inicia de forma automática tras aceptar, pulsa el botón de reproducción dentro de la pantalla.
-            </p>
         </div>
 
         <div id="redes" class="seccion">
@@ -410,7 +412,7 @@
     </footer>
 
     <script>
-        // ENLACE DIRECTO DE AUDIO PARA QUE FUNCIONE EN MÓVILES (AZURACAST .MP3)
+        // ENLACE CORREGIDO .MP3 PARA AUDIO EN CELULARES
         const URL_STREAMING = "https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3";
         const radio = new Audio(URL_STREAMING);
         let sonando = false;
@@ -425,18 +427,20 @@
             document.getElementById(seccionId).classList.add('active');
             document.getElementById('btn-' + seccionId).classList.add('active');
 
-            // Pausa la radio si se pasa a la sección de TV
             if (seccionId === 'tv') {
-                if (sonando) {
-                    radio.pause();
-                    document.getElementById("p-icon").className = "fas fa-play";
-                    document.getElementById("status").innerText = "RADIO PAUSADA (Viendo TV)";
-                    sonando = false;
-                }
+                pausarRadioPorSeguridad();
             }
         }
 
-        // Lógica de funcionamiento de reproducción de Radio
+        function pausarRadioPorSeguridad() {
+            if (sonando) {
+                radio.pause();
+                document.getElementById("p-icon").className = "fas fa-play";
+                document.getElementById("status").innerText = "RADIO PAUSADA (Viendo TV)";
+                sonando = false;
+            }
+        }
+
         function controlarRadio() {
             const icon = document.getElementById("p-icon");
             const status = document.getElementById("status");
@@ -448,7 +452,7 @@
                     sonando = true;
                 }).catch(err => {
                     console.log("Error de audio: ", err);
-                    status.innerText = "Error de conexión en celulares.";
+                    status.innerText = "Error de señal en el móvil.";
                 });
             } else {
                 radio.pause();
@@ -460,14 +464,6 @@
 
         function cambiarVolumen(valor) {
             radio.volume = valor;
-        }
-
-        // SOLUCIÓN AL IFRAME DE SSH101 EN MÓVILES
-        // Al tocar nuestro botón nativo, inyectamos la URL de transmisión y removemos el bloqueo táctil.
-        function desbloquearStream() {
-            document.getElementById('bloqueo-edad').style.display = 'none';
-            document.getElementById('reproductor-tv').style.display = 'block';
-            document.getElementById('iframe-ssh').src = "https://ssh101.com/securelive/index.php?id=mundolaboralvid";
         }
     </script>
 </body>
