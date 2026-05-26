@@ -35,7 +35,27 @@
         
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; transition: 0.3s; }
         
-        /* NUEVA TARJETA DESTACADA PARA FACEBOOK */
+        /* DISEÑO RESPONSIVO PARA EL VIDEO EN VIVO */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* Relación de aspecto 16:9 */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 16px;
+            border: 1px solid var(--rojo);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
         .facebook-news-card {
             background: var(--gris);
             border: 1px solid #1877F2;
@@ -84,6 +104,7 @@
     <div class="brand-name">MUNDO <span style="color:var(--rojo)">LABORAL</span> RADIO</div>
     <nav id="main-nav">
         <button onclick="ir('inicio')" id="btn-inicio" class="active">INICIO</button>
+        <button onclick="ir('tv')" id="btn-tv">TV EN VIVO</button>
         <button onclick="ir('noticias')" id="btn-noticias">NOTICIAS (FACEBOOK)</button>
         <button onclick="ir('redes')" id="btn-redes">REDES</button>
         <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
@@ -102,6 +123,19 @@
             </div>
             <p id="status" style="margin-top:15px; font-weight:bold; color:var(--rojo)">Toca para escuchar</p>
         </div>
+    </div>
+
+    <div id="tv" class="seccion">
+        <h2 style="text-align:center; margin-bottom:20px;"><i class="fas fa-tv" style="color:var(--rojo)"></i> MUNDO LABORAL TELEVISIÓN</h2>
+        <div class="video-container">
+            <iframe src="https://ssh101.com/secureembed/mundolaboral" 
+                    scrolling="no" 
+                    allowfullscreen="true">
+            </iframe>
+        </div>
+        <p style="text-align:center; color:#aaa; font-size:14px; margin-top:15px;">
+            Si la transmisión no inicia automáticamente, presiona el botón de Play en el reproductor.
+        </p>
     </div>
 
     <div id="noticias" class="seccion">
@@ -144,7 +178,7 @@
 <footer><strong>MUNDO LABORAL RADIO</strong><br><small>© 2026 Vallegrande, Bolivia</small></footer>
 
 <script>
-    // NAVEGACIÓN SANEADA
+    // NAVEGACIÓN
     function ir(seccionId) {
         const secciones = document.getElementsByClassName('seccion');
         for (let s of secciones) { s.classList.remove('active'); }
