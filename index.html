@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo Laboral Media</title>
     <style>
-        /* ESTILOS EXACTOS DE TU VERSIÓN ORIGINAL */
+        /* ESTILOS ORIGINALES E INTACTOS */
         body {
             margin: 0;
             padding: 0;
@@ -64,7 +64,7 @@
             letter-spacing: 1px;
         }
 
-        /* SISTEMA DE PESTAÑAS */
+        /* LÓGICA DE VISIBILIDAD DE PESTAÑAS */
         .tab-content {
             display: none;
         }
@@ -73,7 +73,7 @@
             display: block;
         }
 
-        /* DISPOSICIÓN PESTAÑA TV */
+        /* DISEÑO DE LA PESTAÑA TV */
         .main-layout {
             max-width: 1100px;
             margin: 0 auto;
@@ -142,6 +142,25 @@
         .btn-tg { background-color: #0088cc; }
         .btn-fb { background-color: #1877f2; }
 
+        /* GRILLA AJUSTADA PARA LA PESTAÑA REDES */
+        .grid-redes {
+            max-width: 850px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .grid-redes .btn-side {
+            padding: 25px 10px;
+            font-size: 13px;
+        }
+
+        .grid-redes .btn-side i {
+            font-size: 24px;
+        }
+
         .info-container {
             max-width: 800px;
             margin: 40px auto;
@@ -152,7 +171,7 @@
             line-height: 1.6;
         }
 
-        /* BARRA FIJA INFERIOR REPARADA */
+        /* BARRA FIJA INFERIOR DEL REPRODUCTOR */
         .footer-radio-player {
             position: fixed;
             bottom: 0;
@@ -218,6 +237,9 @@
                 margin-left: 0;
                 margin-top: 20px;
             }
+            .grid-redes {
+                grid-template-columns: 1fr;
+            }
             .footer-content {
                 flex-direction: column;
                 gap: 10px;
@@ -236,14 +258,14 @@
     <div class="nav-menu">
         <a id="nav-radio" onclick="openTab('radio-tab', 'nav-radio')" class="active">Radio en Vivo</a>
         <a id="nav-tv" onclick="openTab('tv-tab', 'nav-tv')">TV en Vivo</a>
-        <a id="nav-noticias" onclick="openTab('noticias-tab', 'nav-noticias')">Noticias</a>
+        <a id="nav-redes" onclick="openTab('redes-tab', 'nav-redes')">Redes</a>
         <a id="nav-contacto" onclick="openTab('contacto-tab', 'nav-contacto')">Contacto</a>
     </div>
 
     <div id="radio-tab" class="tab-content active">
         <div class="page-title">RADIO EN VIVO</div>
         <div class="info-container">
-            <p style="font-size: 18px; font-weight: bold;">💻 Estás sintonizando Mundo Laboral Radio.</p>
+            <p style="font-size: 18px; font-weight: bold;">📻 Estás sintonizando Mundo Laboral Radio.</p>
             <p>Puedes controlar el volumen y la reproducción de la señal de audio directamente desde la barra negra ubicada en la parte inferior de la pantalla.</p>
         </div>
     </div>
@@ -276,10 +298,21 @@
         </div>
     </div>
 
-    <div id="noticias-tab" class="tab-content">
-        <div class="page-title">NOTICIAS</div>
-        <div class="info-container">
-            <p style="font-size: 18px;">Próximamente encontrarás aquí las noticias locales y nacionales más importantes.</p>
+    <div id="redes-tab" class="tab-content">
+        <div class="page-title">NUESTRAS REDES</div>
+        <div class="grid-redes">
+            <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa">
+                <i class="fa-brands fa-whatsapp"></i><span>WhatsApp Prensa</span>
+            </a>
+            <a href="https://t.me/+FfI_M03y91YxNjEx" target="_blank" class="btn-side btn-tg">
+                <i class="fa-brands fa-telegram"></i><span>Telegram</span>
+            </a>
+            <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="btn-side btn-fb">
+                <i class="fa-brands fa-facebook-f"></i><span>Facebook</span>
+            </a>
+            <a href="https://www.youtube.com/@mundolaboralradio" target="_blank" class="btn-side" style="background-color: #ff0000;">
+                <i class="fa-brands fa-youtube"></i><span>YouTube</span>
+            </a>
         </div>
     </div>
 
@@ -303,8 +336,8 @@
                 <span class="status-live">■ AL AIRE:</span>
                 <span class="station-name">Mundo Laboral Radio (Streaming Digital)</span>
             </div>
-            <audio controls class="audio-element" preload="none">
-                <source src="https://stream.zeno.fm/g6tq4u5g20vtv" type="audio/mpeg">
+            <audio controls class="audio-element">
+                <source src="https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3" type="audio/mpeg">
                 Tu navegador no soporta el reproductor de audio.
             </audio>
         </div>
