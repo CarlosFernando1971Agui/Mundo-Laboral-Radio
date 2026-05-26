@@ -12,7 +12,6 @@
             font-family: Arial, sans-serif;
             background-color: #ffffff;
             color: #000000;
-            padding-bottom: 40px;
         }
 
         .header-container {
@@ -73,7 +72,7 @@
             display: block;
         }
 
-        /* REPRODUCTOR AL MEDIO (DISEÑO ORIGINAL) */
+        /* REPRODUCTOR EXCLUSIVO EN EL MEDIO PARA LA RADIO */
         .player-center-container {
             max-width: 500px;
             margin: 40px auto;
@@ -105,11 +104,11 @@
             outline: none;
         }
 
-        /* LAYOUT PESTAÑA TV (SOLO EL VIDEO CENTRADO Y LIMPIO) */
+        /* LAYOUT PESTAÑA TV (CENTRADO Y LIMPIO, SIN BOTONES LATERALES) */
         .main-layout {
             max-width: 850px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 20px 40px 20px;
             box-sizing: border-box;
         }
 
@@ -136,7 +135,7 @@
             border: 0;
         }
 
-        /* ESTILOS GENERALES BOTONES DE REDES */
+        /* BOTONES DE REDES */
         .btn-side {
             display: flex;
             align-items: center;
@@ -168,14 +167,14 @@
         .btn-tw { background-color: #1da1f2; }
         .btn-ps { background-color: #607d8b; }
 
-        /* GRILLA DE 8 BOTONES (EXCLUSIVA DE LA PESTAÑA REDES) */
+        /* GRILLA DE 8 BOTONES DE LA PESTAÑA REDES */
         .grid-redes {
             max-width: 850px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
-            padding: 20px;
+            padding: 20px 20px 40px 20px;
         }
 
         .grid-redes .btn-side {
