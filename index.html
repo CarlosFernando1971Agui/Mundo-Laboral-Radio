@@ -29,7 +29,6 @@
             min-height: 100vh;
         }
 
-        /* Encabezado */
         header {
             text-align: center;
             padding: 25px 15px 15px 15px;
@@ -47,7 +46,6 @@
             color: var(--rojo);
         }
 
-        /* Menú de Navegación */
         nav {
             display: flex;
             justify-content: center;
@@ -74,7 +72,6 @@
             transform: translateY(-2px);
         }
 
-        /* Contenedor de Secciones */
         main {
             flex: 1;
             max-width: 800px;
@@ -97,7 +94,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Diseño de Tarjetas y Reproductores */
         .card {
             background-color: var(--bg-tarjetas);
             border-radius: 15px;
@@ -153,16 +149,17 @@
             cursor: pointer;
         }
 
-        /* Sección Televisión e iframe Inteligente */
+        /* Contenedor de Video de TV */
         .video-container {
             position: relative;
-            padding-bottom: 56.25%; /* Relación de aspecto 16:9 */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
             border-radius: 12px;
             background-color: #000;
             box-shadow: 0 8px 24px rgba(0,0,0,0.6);
             border: 1px solid #2a2a2a;
+            display: none; /* Se oculta hasta que verifiquen la edad */
         }
 
         .video-container iframe {
@@ -172,9 +169,37 @@
             width: 100%;
             height: 100%;
             border: none;
-            /* Fuerza la activación de eventos táctiles en celulares para saltar la advertencia de SSH101 */
-            pointer-events: auto !important;
-            touch-action: auto !important;
+        }
+
+        /* Botón de Verificación de Edad Propio */
+        .capa-verificacion {
+            background-color: var(--bg-tarjetas);
+            border: 2px solid var(--rojo);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        .btn-verificar-edad {
+            background-color: #ffffff;
+            color: #b30000;
+            border: none;
+            padding: 16px 28px;
+            font-size: 18px;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            width: 100%;
+            max-width: 340px;
+            transition: 0.2s;
+        }
+
+        .btn-verificar-edad:active {
+            transform: scale(0.98);
         }
 
         /* Grid de Redes Sociales */
@@ -252,20 +277,15 @@
             text-transform: uppercase;
         }
 
-        .btn-enviar:hover {
-            background-color: #e03e3e;
-        }
-
-        /* Pie de página */
         footer {
             text-align: center;
             padding: 20px;
             color: var(--texto-secundario);
             font-size: 14px;
             border-top: 1px solid #1f1f1f;
+            margin-top: 20px;
         }
 
-        /* Botón de WhatsApp Flotante */
         .btn-whatsapp {
             position: fixed;
             bottom: 20px;
@@ -325,16 +345,22 @@
 
         <div id="tv" class="seccion">
             <h2 style="text-align:center; margin-bottom:20px;"><i class="fas fa-tv" style="color:var(--rojo)"></i> MUNDO LABORAL TELEVISIÓN</h2>
-            <div class="video-container">
-                <iframe src="https://ssh101.com/securelive/index.php?id=mundolaboralvid" 
-                        scrolling="no" 
-                        allowfullscreen="true"
-                        allow="autoplay; encrypted-media"
-                        style="pointer-events: auto !important; touch-action: auto !important;">
-                </iframe>
+            
+            <div id="bloqueo-edad" class="capa-verificacion">
+                <i class="fas fa-exclamation-triangle fa-3x" style="color:var(--rojo); margin-bottom:15px;"></i>
+                <h3 style="font-size:20px; font-weight:700;">ACEPTAR TRANSMISIÓN<br>(VERIFICAR EDAD)</h3>
+                <p style="color:var(--texto-secundario); font-size:14px; margin-top:10px; padding:0 15px;">
+                    Pulsa el botón de abajo para confirmar y ver el video de forma instantánea.
+                </p>
+                <button class="btn-verificar-edad" onclick="desbloquearStream()">Confirmar Edad e Ingresar</button>
             </div>
+
+            <div id="reproductor-tv" class="video-container">
+                <iframe id="iframe-ssh" src="" scrolling="no" allowfullscreen="true" allow="autoplay; encrypted-media"></iframe>
+            </div>
+            
             <p style="text-align:center; color:#aaa; font-size:14px; margin-top:15px;">
-                Si la transmisión solicita confirmación de edad, pulsa directamente sobre la pantalla para verificar.
+                Si la transmisión no inicia de forma automática tras aceptar, pulsa el botón de reproducción dentro de la pantalla.
             </p>
         </div>
 
@@ -346,7 +372,7 @@
                 <a href="https://facebook.com/MundoLaboralRadio" target="_blank" class="card-red" style="background-color:#1877f2;"><i class="fab fa-facebook fa-2x"></i>Facebook</a>
                 <a href="https://youtube.com/@mundolaboralvallegrande" target="_blank" class="card-red" style="background-color:#ff0000;"><i class="fab fa-youtube fa-2x"></i>YouTube</a>
                 <a href="https://www.tiktok.com/@carlosfer_1971" target="_blank" class="card-red" style="background-color:#000000;"><i class="fab fa-tiktok fa-2x"></i>TikTok</a>
-                <a href="https://www.instagram.com/carlosfernandoaguilare/" target="_blank" class="card-red" style="background-color:linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);"><i class="fab fa-instagram fa-2x"></i>Instagram</a>
+                <a href="https://www.instagram.com/carlosfernandoaguilare/" target="_blank" class="card-red" style="background-color:#bc1888;"><i class="fab fa-instagram fa-2x"></i>Instagram</a>
                 <a href="https://t.me/+O1AmHfkWb3I2MzEx" target="_blank" class="card-red" style="background-color:#0088cc;"><i class="fab fa-telegram fa-2x"></i>Telegram</a>
             </div>
         </div>
@@ -384,29 +410,22 @@
     </footer>
 
     <script>
-        // Configuración del Streaming de Audio de la Radio
-        const URL_STREAMING = "https://mundolaboral.radio.com.bo/"; // Cambiar por tu URL .mp3 o stream real si difiere
+        // ENLACE DIRECTO DE AUDIO PARA QUE FUNCIONE EN MÓVILES (AZURACAST .MP3)
+        const URL_STREAMING = "https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3";
         const radio = new Audio(URL_STREAMING);
         let sonando = false;
 
-        // Función de Navegación Dinámica e Inteligente
         function ir(seccionId) {
-            // Ocultar todas las secciones
             const secciones = document.getElementsByClassName('seccion');
-            for (let s of secciones) { 
-                s.classList.remove('active'); 
-            }
+            for (let s of secciones) { s.classList.remove('active'); }
             
-            // Quitar estado activo a los botones del menú
             const botones = document.querySelectorAll('#main-nav button');
             botones.forEach(b => b.classList.remove('active'));
             
-            // Activar la sección elegida y su botón correspondiente
             document.getElementById(seccionId).classList.add('active');
             document.getElementById('btn-' + seccionId).classList.add('active');
 
-            // SISTEMA ANTI-SUPERPOSICIÓN DE AUDIO:
-            // Si el usuario cambia a la sección de TV, pausamos automáticamente el audio de la radio de fondo
+            // Pausa la radio si se pasa a la sección de TV
             if (seccionId === 'tv') {
                 if (sonando) {
                     radio.pause();
@@ -417,7 +436,7 @@
             }
         }
 
-        // Controladores del Reproductor de Radio
+        // Lógica de funcionamiento de reproducción de Radio
         function controlarRadio() {
             const icon = document.getElementById("p-icon");
             const status = document.getElementById("status");
@@ -428,8 +447,8 @@
                     status.innerText = "ESCUCHANDO EN VIVO";
                     sonando = true;
                 }).catch(err => {
-                    console.log("Error al reproducir: ", err);
-                    status.innerText = "Error al conectar la señal.";
+                    console.log("Error de audio: ", err);
+                    status.innerText = "Error de conexión en celulares.";
                 });
             } else {
                 radio.pause();
@@ -441,6 +460,14 @@
 
         function cambiarVolumen(valor) {
             radio.volume = valor;
+        }
+
+        // SOLUCIÓN AL IFRAME DE SSH101 EN MÓVILES
+        // Al tocar nuestro botón nativo, inyectamos la URL de transmisión y removemos el bloqueo táctil.
+        function desbloquearStream() {
+            document.getElementById('bloqueo-edad').style.display = 'none';
+            document.getElementById('reproductor-tv').style.display = 'block';
+            document.getElementById('iframe-ssh').src = "https://ssh101.com/securelive/index.php?id=mundolaboralvid";
         }
     </script>
 </body>
