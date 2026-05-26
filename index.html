@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo Laboral Media</title>
     <style>
-        /* ESTILOS ORIGINALES E INTACTOS */
+        /* ESTILOS BASE */
         body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
             background-color: #ffffff;
             color: #000000;
-            padding-bottom: 90px;
+            padding-bottom: 40px; /* Reducido al no haber barra fija inferior */
         }
 
         .header-container {
@@ -64,7 +64,7 @@
             letter-spacing: 1px;
         }
 
-        /* LÓGICA DE VISIBILIDAD DE PESTAÑAS */
+        /* LÓGICA DE PESTAÑAS */
         .tab-content {
             display: none;
         }
@@ -73,13 +73,45 @@
             display: block;
         }
 
-        /* DISEÑO DE LA PESTAÑA TV */
+        /* CONTENEDOR CENTRAL DEL REPRODUCTOR EN RADIO */
+        .player-center-container {
+            max-width: 500px;
+            margin: 30px auto;
+            background-color: #000000;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border-top: 4px solid #e50914;
+        }
+
+        .player-center-container .radio-info {
+            color: #ffffff;
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .player-center-container .status-live {
+            color: #ff0000;
+            margin-right: 5px;
+            animation: blink 1.5s infinite;
+        }
+
+        .audio-center-element {
+            width: 100%;
+            max-width: 400px;
+            height: 45px;
+            outline: none;
+        }
+
+        /* DISPOSICIÓN DE LA PESTAÑA TV */
         .main-layout {
             max-width: 1100px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             padding: 0 20px;
             box-sizing: border-box;
         }
@@ -109,15 +141,41 @@
             border: 0;
         }
 
-        /* BOTONES LATERALES DE LA PESTAÑA TV */
+        /* COLUMNA LATERAL TV */
         .sidebar-column {
-            width: 220px;
+            width: 240px;
             margin-left: 30px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
+        /* BOTÓN EN VIVO PARPADEANTE */
+        .btn-live-stream {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #e50914;
+            color: #ffffff !important;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            padding: 16px 10px;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(229,9,20,0.3);
+            margin-bottom: 5px;
+        }
+
+        .btn-live-stream i.fa-circle {
+            font-size: 10px;
+            color: #ffffff;
+            animation: blink 1s infinite;
+        }
+
+        /* ESTILOS DE BOTONES DE ENLACE */
         .btn-side {
             display: flex;
             align-items: center;
@@ -129,22 +187,29 @@
             font-weight: bold;
             text-transform: uppercase;
             text-align: center;
-            padding: 18px 10px;
+            padding: 15px 10px;
             border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .btn-side i {
             font-size: 18px;
+            width: 20px;
+            text-align: center;
         }
 
         .btn-wa { background-color: #25d366; }
         .btn-tg { background-color: #0088cc; }
         .btn-fb { background-color: #1877f2; }
+        .btn-yt { background-color: #ff0000; }
+        .btn-tk { background-color: #000000; border: 1px solid #333; }
+        .btn-ig { background-color: #c13584; }
+        .btn-tw { background-color: #1da1f2; }
+        .btn-ps { background-color: #607d8b; }
 
-        /* GRILLA RESTAURADA PARA LOS 4 BOTONES DE REDES */
+        /* GRILLA COMPLETA DE 8 BOTONES EN REDES */
         .grid-redes {
-            max-width: 850px;
+            max-width: 900px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -153,17 +218,17 @@
         }
 
         .grid-redes .btn-side {
-            padding: 25px 10px;
+            padding: 22px 15px;
             font-size: 13px;
         }
 
         .grid-redes .btn-side i {
-            font-size: 24px;
+            font-size: 22px;
         }
 
         .info-container {
             max-width: 800px;
-            margin: 40px auto;
+            margin: 30px auto;
             padding: 0 20px;
             text-align: center;
             color: #333333;
@@ -171,48 +236,10 @@
             line-height: 1.6;
         }
 
-        /* BARRA FIJA INFERIOR DEL REPRODUCTOR */
-        .footer-radio-player {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #000000;
-            border-top: 3px solid #e50914;
-            padding: 12px 0;
-            z-index: 9999;
-            color: #ffffff;
-        }
-
-        .footer-content {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .radio-info {
-            font-size: 14px;
-        }
-
-        .radio-info .status-live {
-            color: #ff0000;
-            font-weight: bold;
-            margin-right: 6px;
-        }
-
-        .audio-element {
-            width: 300px;
-            height: 40px;
-            display: block;
-        }
-
-        /* BOTÓN FLOTANTE DE WHATSAPP */
+        /* BOTÓN FLOTANTE WHATSAPP */
         .whatsapp-floating {
             position: fixed;
-            bottom: 95px;
+            bottom: 25px;
             right: 20px;
             background-color: #25d366;
             color: #ffffff !important;
@@ -228,6 +255,13 @@
             text-decoration: none;
         }
 
+        /* ANIMACIONES */
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
         @media (max-width: 768px) {
             .main-layout {
                 flex-direction: column;
@@ -235,15 +269,10 @@
             .sidebar-column {
                 width: 100%;
                 margin-left: 0;
-                margin-top: 20px;
+                margin-top: 25px;
             }
             .grid-redes {
                 grid-template-columns: 1fr;
-            }
-            .footer-content {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
             }
         }
     </style>
@@ -264,9 +293,21 @@
 
     <div id="radio-tab" class="tab-content active">
         <div class="page-title">RADIO EN VIVO</div>
+        
         <div class="info-container">
-            <p style="font-size: 18px; font-weight: bold;">📻 Estás sintonizando Mundo Laboral Radio.</p>
-            <p>Puedes controlar el volumen y la reproducción de la señal de audio directamente desde la barra negra ubicada en la parte inferior de la pantalla.</p>
+            <p style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">💻 Estás sintonizando Mundo Laboral Radio.</p>
+            <p>Haz clic en el botón de reproducción del cuadro central para iniciar o pausar la señal en vivo.</p>
+        </div>
+
+        <div class="player-center-container">
+            <div class="radio-info">
+                <span class="status-live"><i class="fa-solid fa-circle"></i> AL AIRE:</span>
+                <span>Mundo Laboral Radio</span>
+            </div>
+            <audio controls class="audio-center-element">
+                <source src="https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3" type="audio/mpeg">
+                Tu navegador no soporta el reproductor de audio.
+            </audio>
         </div>
     </div>
 
@@ -285,6 +326,9 @@
             </div>
 
             <div class="sidebar-column">
+                <a href="https://www.youtube.com/@mundolaboralradio/live" target="_blank" class="btn-live-stream">
+                    <i class="fa-solid fa-circle"></i><span>Ir a Transmisión en Vivo</span>
+                </a>
                 <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa">
                     <i class="fa-brands fa-whatsapp"></i><span>WhatsApp Prensa</span>
                 </a>
@@ -310,8 +354,20 @@
             <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="btn-side btn-fb">
                 <i class="fa-brands fa-facebook-f"></i><span>Facebook</span>
             </a>
-            <a href="https://www.youtube.com/@mundolaboralradio" target="_blank" class="btn-side" style="background-color: #ff0000;">
+            <a href="https://www.youtube.com/@mundolaboralradio" target="_blank" class="btn-side btn-yt">
                 <i class="fa-brands fa-youtube"></i><span>YouTube</span>
+            </a>
+            <a href="https://www.tiktok.com/@mundolaboralradio" target="_blank" class="btn-side btn-tk">
+                <i class="fa-brands fa-tiktok"></i><span>TikTok</span>
+            </a>
+            <a href="https://www.instagram.com/mundolaboralradio" target="_blank" class="btn-side btn-ig">
+                <i class="fa-brands fa-instagram"></i><span>Instagram</span>
+            </a>
+            <a href="https://x.com/mlaboralradio" target="_blank" class="btn-side btn-tw">
+                <i class="fa-brands fa-x-twitter"></i><span>X / Twitter</span>
+            </a>
+            <a href="https://play.google.com/store/apps/details?id=com.mundolaboral.radio" target="_blank" class="btn-side btn-ps">
+                <i class="fa-brands fa-google-play"></i><span>Nuestra App (Android)</span>
             </a>
         </div>
     </div>
@@ -329,19 +385,6 @@
     <a href="https://wa.me/59173111000" target="_blank" class="whatsapp-floating" title="Escríbenos a Prensa">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
-
-    <div class="footer-radio-player">
-        <div class="footer-content">
-            <div class="radio-info">
-                <span class="status-live">■ AL AIRE:</span>
-                <span class="station-name">Mundo Laboral Radio (Streaming Digital)</span>
-            </div>
-            <audio controls class="audio-element">
-                <source src="https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3" type="audio/mpeg">
-                Tu navegador no soporta el reproductor de audio.
-            </audio>
-        </div>
-    </div>
 
     <script>
         function openTab(tabId, navId) {
