@@ -14,7 +14,6 @@
         .brand-name { font-size: 30px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
         nav { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
         
-        /* Botones del menú principal */
         nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 13.3333px; font-family: 'Segoe UI', sans-serif; }
         nav button.active { background: var(--rojo); border-color: var(--rojo); }
         
@@ -23,7 +22,6 @@
         .seccion.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        /* Tarjeta del Reproductor */
         .reproductor-card { 
             background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
                         url('https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1000&auto=format&fit=crop'),
@@ -39,12 +37,11 @@
         
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; transition: 0.3s; }
         
-        /* Cuadrícula de Redes Sociales */
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
         .card-red { padding: 20px; border-radius: 12px; text-decoration: none; color: white; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid #333; transition: 0.3s; }
         .card-red:hover { transform: translateY(-3px); background: rgba(255,255,255,0.1); }
         
-        /* Diseño Moderno del Feed de Noticias */
+        /* CUADRÍCULA NUEVA PARA MOSTRAR LAS NOTICIAS DIRECTAMENTE */
         .rss-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 20px; }
         @media (min-width: 768px) { .rss-grid { grid-template-columns: 1fr 1fr; } }
         .feed-item { background: var(--gris); border-radius: 14px; padding: 22px; border: 1px solid #2a2a35; transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
@@ -57,7 +54,6 @@
         .feed-date { color: var(--rojo); font-weight: bold; }
         .feed-more { color: #0088cc; text-decoration: none; font-weight: bold; }
 
-        /* Formulario de Contacto */
         .form-contacto { background: var(--gris); padding: 25px; border-radius: 15px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #333; }
         .form-contacto input, .form-contacto textarea { background: #000; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; width: 100%; box-sizing: border-box; font-family: inherit; font-size: 16px; }
         
@@ -97,7 +93,7 @@
         <h2 style="text-align:center; margin-bottom: 5px;">ÚLTIMOS TITULARES</h2>
         <p style="text-align:center; color:#aaa; font-size:14px; margin-bottom: 25px;">Actualizado en tiempo real. Haz clic sobre cualquier noticia para leer más.</p>
         <div id="rss-feed-container" class="rss-grid">
-            <p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px;"><i class="fas fa-spinner fa-spin"></i> Cargando últimas noticias...</p>
+            <p style="text-align:center; color:#aaa; grid-column: 1/-1; padding: 40px;"><i class="fas fa-spinner fa-spin"></i> Sincronizando noticias frescas...</p>
         </div>
     </div>
 
@@ -128,7 +124,7 @@
 <footer><strong>MUNDO LABORAL RADIO</strong><br><small>© 2026 Vallegrande, Bolivia</small></footer>
 
 <script>
-    // SISTEMA DE NAVEGACIÓN INTERNA
+    // SISTEMA DE NAVEGACIÓN
     function ir(seccionId) {
         const secciones = document.getElementsByClassName('seccion');
         for (let s of secciones) { s.classList.remove('active'); }
@@ -145,7 +141,7 @@
         }
     }
 
-    // REPRODUCTOR DE AUDIO ORIGINAL
+    // REPRODUCTOR DE AUDIO
     const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
     let sonando = false;
 
@@ -166,7 +162,7 @@
     }
     document.getElementById('vol-slider').oninput = function() { radio.volume = this.value; };
 
-    // ENVÍO DE MENSAJES POR WHATSAPP
+    // WHATSAPP
     function enviarWA() {
         const inputNombre = document.getElementById('c-nombre');
         const inputMensaje = document.getElementById('c-mensaje');
@@ -200,46 +196,37 @@
         }, 3000);
     }
 
-    // LECTOR RSS ALTERNATIVO E INMUNE A BLOQUEOS (SISTEMA HÍBRIDO)
+    // EL NUEVO SISTEMA HÍBRIDO (EVITA BLOQUEOS)
     document.addEventListener("DOMContentLoaded", function() {
         const rssUrl = "https://rss.app/feeds/QnRyyFuNBJFstj6P.xml";
-        // Usamos una pasarela de respaldo ultra estable de código abierto
         const apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`;
 
         fetch(apiUrl)
             .then(response => {
                 if (response.ok) return response.json();
-                throw new Error('Error en la red principal.');
+                throw new Error('Error en el primer puente.');
             })
             .then(data => {
                 const container = document.getElementById("rss-feed-container");
-                
-                // Procesamos el XML crudo para saltarnos las limitaciones de cuotas de las APIs tradicionales
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(data.contents, "text/xml");
                 const items = xmlDoc.getElementsByTagName("item");
 
                 if (items.length > 0) {
-                    container.innerHTML = ""; // Limpiamos el cargando
-                    
-                    // Mostramos las últimas 10 noticias de forma impecable
+                    container.innerHTML = ""; 
                     const limite = Math.min(items.length, 10);
                     for (let i = 0; i < limite; i++) {
                         const title = items[i].getElementsByTagName("title")[0]?.textContent || "Noticia sin título";
                         const link = items[i].getElementsByTagName("link")[0]?.textContent || "#";
                         let description = items[i].getElementsByTagName("description")[0]?.textContent || "";
                         
-                        // Limpieza de etiquetas HTML de la descripción
                         description = description.replace(/<[^>]*>/g, '');
-                        if (description.length > 130) {
-                            description = description.substring(0, 130) + "...";
-                        }
+                        if (description.length > 130) { description = description.substring(0, 130) + "..."; }
 
                         let pubDate = items[i].getElementsByTagName("pubDate")[0]?.textContent || "";
                         let fechaFormateada = "Reciente";
                         if (pubDate) {
-                            const dateOptions = { day: 'numeric', month: 'short' };
-                            fechaFormateada = new Date(pubDate).toLocaleDateString('es-ES', dateOptions);
+                            fechaFormateada = new Date(pubDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
                         }
 
                         container.innerHTML += `
@@ -260,11 +247,10 @@
                 }
             })
             .catch(error => {
-                console.log("Cambiando al sistema de respaldo...");
                 recargoDeEmergencia();
             });
 
-        // Servidor secundario automatizado por si el primero falla
+        // Motor secundario por si el primero está saturado
         function recargoDeEmergencia() {
             const backupUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
             fetch(backupUrl)
@@ -274,7 +260,8 @@
                     if (data.status === "ok" && data.items.length > 0) {
                         container.innerHTML = "";
                         data.items.slice(0, 10).forEach(item => {
-                            let cleanDesc = item.description.replace(/<[^>]*>/g, '').substring(0, 130) + "...";
+                            let cleanDesc = item.description.replace(/<[^>]*>/g, '');
+                            if (cleanDesc.length > 130) { cleanDesc = cleanDesc.substring(0, 130) + "..."; }
                             const f = new Date(item.pubDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
                             container.innerHTML += `
                                 <div class="feed-item">
