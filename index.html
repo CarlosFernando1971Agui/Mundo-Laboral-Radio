@@ -12,7 +12,7 @@
             font-family: Arial, sans-serif;
             background-color: #ffffff;
             color: #000000;
-            padding-bottom: 95px; /* Espacio para que la barra negra inferior no tape nada */
+            padding-bottom: 95px; /* Espacio para que la barra negra inferior no tape el contenido */
         }
 
         .header-container {
@@ -109,15 +109,39 @@
             border: 0;
         }
 
-        /* BOTONES DE ENLACES */
+        /* COLUMNA LATERAL TV */
         .sidebar-column {
-            width: 220px;
+            width: 240px;
             margin-left: 30px;
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
+        /* BOTÓN DE TRANSMISIÓN EN VIVO */
+        .btn-live-stream {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #e50914;
+            color: #ffffff !important;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            padding: 18px 10px;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(229, 9, 20, 0.3);
+        }
+
+        .btn-live-stream i {
+            font-size: 12px;
+            animation: blink 1s infinite;
+        }
+
+        /* ESTILOS GENERALES BOTONES DE REDES */
         .btn-side {
             display: flex;
             align-items: center;
@@ -149,7 +173,7 @@
         .btn-tw { background-color: #1da1f2; }
         .btn-ps { background-color: #607d8b; }
 
-        /* GRILLA DE 8 BOTONES EN LA PESTAÑA REDES */
+        /* GRILLA DE 8 BOTONES (EXCLUSIVA DE LA PESTAÑA REDES) */
         .grid-redes {
             max-width: 850px;
             margin: 0 auto;
@@ -178,7 +202,7 @@
             line-height: 1.6;
         }
 
-        /* BARRA INFERIOR NEGRA ORIGINAL RESTAURADA */
+        /* BARRA INFERIOR NEGRA FIJA REPRODUCTOR */
         .footer-radio-player {
             position: fixed;
             bottom: 0;
@@ -233,6 +257,12 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             z-index: 9998;
             text-decoration: none;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
         }
 
         @media (max-width: 768px) {
@@ -292,14 +322,8 @@
             </div>
 
             <div class="sidebar-column">
-                <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa">
-                    <i class="fa-brands fa-whatsapp"></i><span>WhatsApp Prensa</span>
-                </a>
-                <a href="https://t.me/+FfI_M03y91YxNjEx" target="_blank" class="btn-side btn-tg">
-                    <i class="fa-brands fa-telegram"></i><span>Telegram</span>
-                </a>
-                <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="btn-side btn-fb">
-                    <i class="fa-brands fa-facebook-f"></i><span>Facebook</span>
+                <a href="https://www.youtube.com/@mundolaboralradio/live" target="_blank" class="btn-live-stream">
+                    <i class="fa-solid fa-circle"></i><span>Ir a Transmisión en Vivo</span>
                 </a>
             </div>
         </div>
