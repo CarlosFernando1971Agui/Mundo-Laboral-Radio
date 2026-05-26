@@ -1,172 +1,266 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Mundo Laboral Radio y TV</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mundo Laboral Radio - Vallegrande</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/responsive.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --rojo: #ff4d4d; --negro: #0d0d11; --gris: #16161d; --texto: #ffffff; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--negro); color: var(--texto); margin: 0; padding: 0; }
-        header { background: #000; padding: 25px 0; border-bottom: 2px solid var(--rojo); text-align: center; }
-        .brand-name { font-size: 30px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
-        nav { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
-        nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 13px; text-transform: uppercase; }
-        nav button.active { background: var(--rojo); border-color: var(--rojo); }
-        .container { padding: 20px; min-height: 60vh; display: flex; justify-content: center; }
-        .seccion { display: none; width: 100%; max-width: 1000px; animation: fadeIn 0.3s; }
-        .seccion.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        .reproductor-card { 
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
-                        url('https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1000&auto=format&fit=crop'), #1a1a1a; 
-            background-size: cover; background-position: center; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-        }
-        
-        #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; transition: 0.3s; }
-        
-        /* CONTENEDOR DE TV OPTIMIZADO */
-        .video-tv-seccion {
-            background: var(--gris);
-            border: 1px solid var(--rojo);
-            border-radius: 20px;
-            padding: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            max-width: 860px;
-            margin: 0 auto;
+        :root {
+            --primary-color: #e50914; /* Rojo */
+            --secondary-color: #111111; /* Negro Oscuro */
+            --text-color: #ffffff;
+            --accent-color: #25d366; /* Verde WhatsApp */
         }
 
-        .iframe-container {
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 60px; /* Espacio para el reproductor fijo inferior */
+        }
+
+        /* Navbar personalizada */
+        .navbar-custom {
+            background-color: #000000 !important;
+            border-bottom: 3px solid var(--primary-color);
+        }
+        .navbar-brand img {
+            max-height: 50px;
+        }
+        .nav-link {
+            color: var(--text-color) !important;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        /* Encabezado Principal */
+        .hero-header {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            border-bottom: 2px solid #222;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        /* Secciones */
+        .section-title {
+            color: var(--text-color);
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .card-custom {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+
+        /* Contenedor Adaptable de Video (16:9) */
+        .iframe-wrapper {
             position: relative;
-            width: 100%;
-            height: 480px; 
-            background: #000;
-            border-radius: 12px;
+            padding-bottom: 56.25%;
+            height: 0;
             overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            background-color: #000;
         }
-
-        .iframe-container iframe {
+        .iframe-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            border: none;
-            overflow: hidden;
+            border: 0;
         }
 
-        @media (max-width: 768px) {
-            .iframe-container {
-                height: 420px; 
-            }
+        /* Barra de Alerta En Vivo */
+        .live-alert-bar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            font-weight: bold;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .live-alert-bar a {
+            color: #fff;
+            text-decoration: underline;
+            margin-left: 10px;
+            background: rgba(0,0,0,0.3);
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .live-alert-bar a:hover {
+            background: rgba(0,0,0,0.5);
+            text-decoration: none;
         }
 
-        .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-        .card-red { padding: 20px; border-radius: 12px; text-decoration: none; color: white; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid #333; transition: 0.3s; }
-        .card-red:hover { transform: translateY(-3px); background: rgba(255,255,255,0.1); }
-        .form-contacto { background: var(--gris); padding: 25px; border-radius: 15px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #333; }
-        .form-contacto input, .form-contacto textarea { background: #000; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; }
-        footer { background: #000; padding: 20px; text-align: center; border-top: 1px solid #222; margin-top: 30px; }
-        .whatsapp-float { position: fixed; bottom: 25px; right: 25px; background: #25D366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: white; z-index: 999; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        .blink-dot {
+            animation: blink 1.5s infinite;
+            margin-right: 8px;
+        }
+
+        /* Botones de Redes Sociales */
+        .btn-social {
+            margin: 5px;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: 600;
+            color: white !important;
+        }
+        .btn-whatsapp { background-color: #25d366; }
+        .btn-telegram { background-color: #0088cc; }
+        .btn-facebook { background-color: #1877f2; }
+
+        /* Reproductor de Audio Fijo Inferior */
+        .audio-player-fixed {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #000000;
+            border-top: 3px solid var(--primary-color);
+            padding: 10px 0;
+            z-index: 9999;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+        }
     </style>
 </head>
 <body>
-<a href="https://chat.whatsapp.com/BMDRQO15kyPCFxomtgtIyX" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-<header>
-    <div class="brand-name">MUNDO <span style="color:var(--rojo)">LABORAL</span> RADIO</div>
-    <nav id="main-nav">
-        <button onclick="ir('inicio')" id="btn-inicio" class="active">INICIO</button>
-        <button onclick="ir('tv')" id="btn-tv">TV EN VIVO</button>
-        <button onclick="ir('redes')" id="btn-redes">REDES</button>
-        <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <span style="color: var(--primary-color); font-weight: 800; font-size: 24px;">MUNDO LABORAL</span>
+            </a>
+            <button class="navbar-expand-lg navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#radio"><i class="fa-solid fa-radio me-1"></i> Radio en Vivo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#tv"><i class="fa-solid fa-tv me-1"></i> TV 24/7</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#noticias"><i class="fa-solid fa-newspaper me-1"></i> Noticias</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto"><i class="fa-solid fa-comments me-1"></i> Contacto</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
-</header>
-<div class="container">
-    <div id="inicio" class="seccion active">
-        <div class="reproductor-card">
-            <h1>RADIO EN VIVO</h1>
-            <p>Vallegrande, Bolivia</p>
-            <button id="play-btn" onclick="toggleAudio()"><i id="p-icon" class="fas fa-play"></i></button>
-            <div style="display:flex; align-items:center; justify-content:center; gap:10px;"><i class="fas fa-volume-up"></i><input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.8"></div>
-            <p id="status" style="margin-top:15px; font-weight:bold; color:var(--rojo)">Toca para escuchar</p>
+
+    <header class="hero-header">
+        <div class="container">
+            <h1 class="display-5 fw-bold" style="color: var(--primary-color);">MUNDO LABORAL MEDIA</h1>
+            <p class="lead">Transmitiendo la verdad desde Vallegrande, Bolivia para todo el mundo.</p>
         </div>
-    </div>
-    
-    <div id="tv" class="seccion">
-        <div class="video-tv-seccion">
-            <h1 style="text-align:center; margin-bottom:5px;">MUNDO LABORAL TV</h1>
-            <p style="text-align:center; color:var(--texto-secundario); margin-bottom:20px;">Pulsa el botón blanco central para confirmar tu edad y activar la transmisión.</p>
-            <div class="iframe-container" id="contenedor-reproductor-dinamico">
+    </header>
+
+    <main class="container my-5">
+        <div class="row">
+            
+            <div class="col-lg-8">
+                
+                <section id="tv" class="mb-5">
+                    <h2 class="section-title">Mundo Laboral TV 24/7</h2>
+                    
+                    <div class="live-alert-bar">
+                        <span class="blink-dot">🔴</span> ¿ESTAMOS EN VIVO DESDE LA CALLE? 
+                        <a href="https://www.youtube.com/@mundolaboralradio/live" target="_blank">
+                            <i class="fa-solid fa-tower-broadcast me-1"></i> Entrar al Directo aquí
+                        </a>
+                    </div>
+
+                    <div class="iframe-wrapper">
+                        <iframe 
+                            src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC&autoplay=1&mute=1&loop=1" 
+                            title="Mundo Laboral TV 24/7" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <p class="text-muted mt-2 small text-center">
+                        <i class="fa-solid fa-circle-info me-1"></i> Nuestra programación de videos grabados corre de forma continua las 24 horas. Para activar el audio, presione el icono de volumen en el reproductor.
+                    </p>
+                </section>
+
+                <section id="noticias" class="mb-5">
+                    <h2 class="section-title">Últimas Noticias de la Región</h2>
+                    <div id="contenedor-noticias">
+                        <div class="card card-custom p-4 text-center">
+                            <p><i class="fa-solid fa-spinner fa-spin me-2"></i> Cargando los titulares de Vallegrande y las provincias...</p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="col-lg-4">
+                
+                <div class="card card-custom p-4 text-center mb-4" style="border-top: 4px solid #34a853;">
+                    <h3><i class="fa-brands fa-android text-success me-2"></i>Nuestra App Oficial</h3>
+                    <p>Lleva nuestra señal de Radio y TV de forma estable en tu celular sin cortes.</p>
+                    <a href="https://play.google.com/store/apps/details?id=com.migueledw.mundolaboralradio" target="_blank" class="btn btn-danger w-100 fw-bold">
+                        <i class="fa-brands fa-google-play me-2"></i>Descargar en Play Store
+                    </a>
                 </div>
+
+                <div id="contacto" class="card card-custom p-4 text-center">
+                    <h3>Interactúa con Nosotros</h3>
+                    <p>Envía tus denuncias, saludos o sugerencias de publicidad directo a la administración.</p>
+                    <div class="d-flex flex-column">
+                        <a href="https://wa.me/59173111000" target="_blank" class="btn btn-social btn-whatsapp">
+                            <i class="fa-brands fa-whatsapp me-2"></i>WhatsApp Prensa
+                        </a>
+                        <a href="https://t.me/+FfI_M03y91YxNjEx" target="_blank" class="btn btn-social btn-telegram">
+                            <i class="fa-brands fa-telegram me-2"></i>Grupo de Telegram
+                        </a>
+                        <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="btn btn-social btn-facebook">
+                            <i class="fa-brands fa-facebook-f me-2"></i>Página de Facebook
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="radio" class="audio-player-fixed">
+        <div class="container d-flex flex-column flex-sm-row align-items-center justify-content-between">
+            <div class="text-center text-sm-start mb-2 mb-sm-0">
+                <span class="fw-bold d-block" style="color: var(--primary-color); font-size: 14px;"><i class="fa-solid fa-circle-dot blink-dot"></i> AL AIRE</span>
+                <span class="fw-semibold" style="font-size: 16px;">Mundo Laboral Radio (Streaming Digital)</span>
+            </div>
+            <audio controls autoplay name="media" style="max-width: 100%; width: 300px; height: 40px;">
+                <source src="https://stream.zeno.fm/g6tq4u5g20vtv" type="audio/mpeg">
+                Tu navegador no soporta este reproductor de audio.
+            </audio>
         </div>
     </div>
-    
-    <div id="redes" class="seccion">
-        <div class="grid-redes">
-            <a href="https://mundolaboral.radio.com.bo/" target="_blank" class="card-red" style="background:#444"><i class="fas fa-globe fa-2x"></i> Web</a>
-            <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" target="_blank" class="card-red" style="background:#34a853"><i class="fab fa-google-play fa-2x"></i> App</a>
-            <a href="https://facebook.com/MundoLaboralRadio" target="_blank" class="card-red" style="background:#1877F2"><i class="fab fa-facebook fa-2x"></i> Facebook</a>
-            <a href="https://youtube.com/@mundolaboralradiovallegrande" target="_blank" class="card-red" style="background:#FF0000"><i class="fab fa-youtube fa-2x"></i> YouTube</a>
-            <a href="https://www.tiktok.com/@carlosfer_1971" target="_blank" class="card-red" style="background:#000"><i class="fab fa-tiktok fa-2x"></i> TikTok</a>
-            <a href="https://www.instagram.com/carlosfernandoaguilare/" target="_blank" class="card-red" style="background:linear-gradient(45deg, #f09433, #bc1888)"><i class="fab fa-instagram fa-2x"></i> Instagram</a>
-            <a href="https://t.me/+OlAmHfkWb3I2MzEx" target="_blank" class="card-red" style="background:#0088cc"><i class="fab fa-telegram fa-2x"></i> Telegram</a>
-        </div>
-    </div>
-    <div id="contacto" class="seccion">
-        <div class="form-contacto">
-            <h2 style="text-align:center; margin:0">CONTÁCTANOS</h2>
-            <p style="text-align:center; font-size:14px; color:#ccc;">Envíanos tus pedidos o sugerencias.</p>
-            <input type="text" id="c-nombre" placeholder="Tu nombre" required>
-            <textarea id="c-mensaje" rows="4" placeholder="Tu mensaje..." required></textarea>
-            <button onclick="enviarWA()" style="background:#25D366; color:white; border:none; padding:15px; border-radius:8px; font-weight:bold; cursor:pointer;"><i class="fab fa-whatsapp"></i> Enviar WhatsApp</button>
-        </div>
-    </div>
-</div>
-<footer><strong>MUNDO LABORAL RADIO</strong><br><small>© 2026 Vallegrande, Bolivia</small></footer>
-<script>
-    const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
-    let sonando = false;
 
-    function ir(seccionId) {
-        const secciones = document.getElementsByClassName('seccion');
-        for (let s of secciones) { s.classList.remove('active'); }
-        const botones = document.querySelectorAll('#main-nav button');
-        botones.forEach(b => b.classList.remove('active'));
-        
-        document.getElementById(seccionId).classList.add('active');
-        document.getElementById('btn-' + seccionId).classList.add('active');
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 
-        if (seccionId === 'tv') {
-            if(sonando) {
-                radio.pause();
-                document.getElementById("p-icon").className = "fas fa-play";
-                document.getElementById("status").innerText = "RADIO PAUSADA";
-                sonando = false;
-            }
-            document.getElementById('contenedor-reproductor-dinamico').innerHTML = 
-                `<iframe src="https://ssh101.com/securelive/index.php?id=mundolaboralvid" scrolling="no" allowfullscreen="true" allow="autoplay; encrypted-media"></iframe>`;
-        } else {
-            document.getElementById('contenedor-reproductor-dinamico').innerHTML = "";
-        }
-    }
-
-    function toggleAudio() {
-        const icon = document.getElementById("p-icon");
-        const status = document.getElementById("status");
-        if(!sonando) { 
-            document.getElementById('contenedor-reproductor-dinamico').innerHTML = "";
-            radio.play(); 
-            icon.className = "fas fa-pause"; 
-            status.innerText = "ESCUCHANDO EN VIVO..."; 
-            sonando = true; 
-        }
-        else { radio.pause(); icon.className = "fas fa-play"; status.innerText = "RADIO PAUSADA"; sonando = false; }
-    }
-    document.getElementById('vol-slider').oninput = function() { radio.volume = this.value; };
-    function enviarWA() {
-        const nombre = document.getElementById('c-nombre').value;
-        const mensaje = document.getElementById('c-mensaje').value;
-        const texto = `Hola Mundo Laboral Radio, soy ${nombre}. ${mensaje}`;
-        window.open(`https://wa.me/59168785216?text=${encodeURIComponent(texto)}`, '_blank');
-    }
-</script>
+    <script>
+        // Aquí puedes colocar tu lógica fetch que lee el archivo rss.html o el feed de noticias
+        // para renderizarlo dinámicamente dentro de #contenedor-noticias si lo necesitas en el futuro.
+    </script>
 </body>
 </html>
