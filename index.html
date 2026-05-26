@@ -3,79 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mundo Laboral Radio - Vallegrande</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/responsive.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Mundo Laboral Media</title>
     <style>
-        :root {
-            --primary-color: #e50914; /* Rojo */
-            --secondary-color: #111111; /* Negro Oscuro */
-            --text-color: #ffffff;
-            --accent-color: #25d366; /* Verde WhatsApp */
-        }
-
+        /* DISEÑO GENERAL ORIGINAL (FONDO BLANCO Y TEXTO NEGRO) */
         body {
-            background-color: var(--secondary-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding-bottom: 60px; /* Espacio para el reproductor fijo inferior */
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            padding-bottom: 70px; /* Espacio para el reproductor inferior */
         }
 
-        /* Navbar personalizada */
-        .navbar-custom {
-            background-color: #000000 !important;
-            border-bottom: 3px solid var(--primary-color);
-        }
-        .navbar-brand img {
-            max-height: 50px;
-        }
-        .nav-link {
-            color: var(--text-color) !important;
-            font-weight: 600;
-            text-transform: uppercase;
-            transition: color 0.3s;
-        }
-        .nav-link:hover {
-            color: var(--primary-color) !important;
-        }
-
-        /* Encabezado Principal */
-        .hero-header {
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
-            border-bottom: 2px solid #222;
-            padding: 20px 0;
+        /* HEADER Y LOGO */
+        .header-container {
             text-align: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
         }
-
-        /* Secciones */
-        .section-title {
-            color: var(--text-color);
-            border-left: 5px solid var(--primary-color);
-            padding-left: 15px;
-            margin-bottom: 25px;
+        .header-logo {
+            font-weight: bold;
+            font-size: 26px;
+            color: #000000;
             text-transform: uppercase;
-            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .header-logo span {
+            color: #e50914;
         }
 
-        .card-custom {
-            background-color: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 10px;
-            color: var(--text-color);
+        /* MENÚ DE NAVEGACIÓN ORIGINAL */
+        .nav-menu {
+            text-align: center;
+            background-color: #000000;
+            padding: 12px 0;
+        }
+        .nav-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .nav-menu a:hover {
+            color: #e50914;
+        }
+
+        /* TITULO DE LA PÁGINA */
+        .page-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin-top: 30px;
             margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Contenedor Adaptable de Video (16:9) */
-        .iframe-wrapper {
+        /* CONTENEDOR DE DOS COLUMNAS (ESTILO MAQUETA ORIGINAL) */
+        .main-layout {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        /* COLUMNA DEL REPRODUCTOR (IZQUIERDA) */
+        .video-column {
+            flex: 1;
+            max-width: 760px;
+            width: 100%;
+        }
+
+        /* VENTANA DEL REPRODUCTOR DE VIDEO PERFECTA */
+        .video-window {
             position: relative;
-            padding-bottom: 56.25%;
+            padding-bottom: 56.25%; /* Relación de aspecto 16:9 */
             height: 0;
             overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            background-color: #000;
+            border: 4px solid #000000;
+            border-radius: 4px;
+            background-color: #000000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        .iframe-wrapper iframe {
+        .video-window iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -84,183 +99,183 @@
             border: 0;
         }
 
-        /* Barra de Alerta En Vivo */
-        .live-alert-bar {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 12px;
-            font-weight: bold;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            text-align: center;
+        /* COLUMNA DE BOTONES SOCIALES (DERECHA ORIGINAL) */
+        .sidebar-column {
+            width: 180px;
+            margin-left: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        .live-alert-bar a {
-            color: #fff;
-            text-decoration: underline;
-            margin-left: 10px;
-            background: rgba(0,0,0,0.3);
-            padding: 5px 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-        .live-alert-bar a:hover {
-            background: rgba(0,0,0,0.5);
+
+        /* BOTONES LATERALES EXACTOS AL MODELO */
+        .btn-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff !important;
             text-decoration: none;
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            padding: 12px 5px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        .btn-side i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        .btn-wa { background-color: #25d366; }
+        .btn-tg { background-color: #0088cc; }
+        .btn-fb { background-color: #1877f2; }
+
+        /* BOTÓN DE ACCESO EN VIVO (CENTRADITO ABAJO) */
+        .live-btn-container {
+            text-align: center;
+            margin-top: 25px;
+        }
+        .btn-live-action {
+            display: inline-block;
+            background-color: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 12px 30px;
+            border: 2px solid #e50914;
+            border-radius: 4px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        .btn-live-action:hover {
+            background-color: #e50914;
+            color: #ffffff;
         }
 
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
-            100% { opacity: 1; }
-        }
-        .blink-dot {
-            animation: blink 1.5s infinite;
-            margin-right: 8px;
-        }
-
-        /* Botones de Redes Sociales */
-        .btn-social {
-            margin: 5px;
-            border-radius: 50px;
-            padding: 10px 20px;
-            font-weight: 600;
-            color: white !important;
-        }
-        .btn-whatsapp { background-color: #25d366; }
-        .btn-telegram { background-color: #0088cc; }
-        .btn-facebook { background-color: #1877f2; }
-
-        /* Reproductor de Audio Fijo Inferior */
-        .audio-player-fixed {
+        /* REPRODUCTOR DE AUDIO FIJO INFERIOR (ZENO STYLE) */
+        .footer-radio-player {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background-color: #000000;
-            border-top: 3px solid var(--primary-color);
-            padding: 10px 0;
+            border-top: 3px solid #e50914;
+            padding: 12px 0;
             z-index: 9999;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+            color: #ffffff;
+        }
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .radio-info {
+            font-size: 13px;
+        }
+        .radio-info .status-live {
+            color: #e50914;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .radio-info .station-name {
+            font-weight: 600;
+        }
+
+        /* RESPONSIVO PARA CELULARES */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+                align-items: center;
+            }
+            .sidebar-column {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 25px;
+                flex-direction: row;
+                justify-content: center;
+            }
+            .btn-side {
+                flex: 1;
+                max-width: 120px;
+            }
+            .footer-content {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <span style="color: var(--primary-color); font-weight: 800; font-size: 24px;">MUNDO LABORAL</span>
-            </a>
-            <button class="navbar-expand-lg navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="#radio"><i class="fa-solid fa-radio me-1"></i> Radio en Vivo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#tv"><i class="fa-solid fa-tv me-1"></i> TV 24/7</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#noticias"><i class="fa-solid fa-newspaper me-1"></i> Noticias</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contacto"><i class="fa-solid fa-comments me-1"></i> Contacto</a></li>
-                </ul>
+    <div class="header-container">
+        <div class="header-logo">MUNDO <span>LABORAL</span> MEDIA</div>
+    </div>
+
+    <div class="nav-menu">
+        <a href="#radio">Radio en Vivo</a>
+        <a href="#tv" style="color: #e50914;">TV en Vivo</a>
+        <a href="#noticias">Noticias</a>
+        <a href="#contacto">Contacto</a>
+    </div>
+
+    <div id="tv" class="page-title">TV EN VIVO</div>
+
+    <div class="main-layout">
+        
+        <div class="video-column">
+            <div class="video-window">
+                <iframe 
+                    src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC&autoplay=1&mute=1&loop=1" 
+                    title="Mundo Laboral TV" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
             </div>
-        </div>
-    </nav>
-
-    <header class="hero-header">
-        <div class="container">
-            <h1 class="display-5 fw-bold" style="color: var(--primary-color);">MUNDO LABORAL MEDIA</h1>
-            <p class="lead">Transmitiendo la verdad desde Vallegrande, Bolivia para todo el mundo.</p>
-        </div>
-    </header>
-
-    <main class="container my-5">
-        <div class="row">
             
-            <div class="col-lg-8">
-                
-                <section id="tv" class="mb-5">
-                    <h2 class="section-title">Mundo Laboral TV 24/7</h2>
-                    
-                    <div class="live-alert-bar">
-                        <span class="blink-dot">🔴</span> ¿ESTAMOS EN VIVO DESDE LA CALLE? 
-                        <a href="https://www.youtube.com/@mundolaboralradio/live" target="_blank">
-                            <i class="fa-solid fa-tower-broadcast me-1"></i> Entrar al Directo aquí
-                        </a>
-                    </div>
-
-                    <div class="iframe-wrapper">
-                        <iframe 
-                            src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC&autoplay=1&mute=1&loop=1" 
-                            title="Mundo Laboral TV 24/7" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    <p class="text-muted mt-2 small text-center">
-                        <i class="fa-solid fa-circle-info me-1"></i> Nuestra programación de videos grabados corre de forma continua las 24 horas. Para activar el audio, presione el icono de volumen en el reproductor.
-                    </p>
-                </section>
-
-                <section id="noticias" class="mb-5">
-                    <h2 class="section-title">Últimas Noticias de la Región</h2>
-                    <div id="contenedor-noticias">
-                        <div class="card card-custom p-4 text-center">
-                            <p><i class="fa-solid fa-spinner fa-spin me-2"></i> Cargando los titulares de Vallegrande y las provincias...</p>
-                        </div>
-                    </div>
-                </section>
-
-            </div>
-
-            <div class="col-lg-4">
-                
-                <div class="card card-custom p-4 text-center mb-4" style="border-top: 4px solid #34a853;">
-                    <h3><i class="fa-brands fa-android text-success me-2"></i>Nuestra App Oficial</h3>
-                    <p>Lleva nuestra señal de Radio y TV de forma estable en tu celular sin cortes.</p>
-                    <a href="https://play.google.com/store/apps/details?id=com.migueledw.mundolaboralradio" target="_blank" class="btn btn-danger w-100 fw-bold">
-                        <i class="fa-brands fa-google-play me-2"></i>Descargar en Play Store
-                    </a>
-                </div>
-
-                <div id="contacto" class="card card-custom p-4 text-center">
-                    <h3>Interactúa con Nosotros</h3>
-                    <p>Envía tus denuncias, saludos o sugerencias de publicidad directo a la administración.</p>
-                    <div class="d-flex flex-column">
-                        <a href="https://wa.me/59173111000" target="_blank" class="btn btn-social btn-whatsapp">
-                            <i class="fa-brands fa-whatsapp me-2"></i>WhatsApp Prensa
-                        </a>
-                        <a href="https://t.me/+FfI_M03y91YxNjEx" target="_blank" class="btn btn-social btn-telegram">
-                            <i class="fa-brands fa-telegram me-2"></i>Grupo de Telegram
-                        </a>
-                        <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="btn btn-social btn-facebook">
-                            <i class="fa-brands fa-facebook-f me-2"></i>Página de Facebook
-                        </a>
-                    </div>
-                </div>
-
+            <div class="live-btn-container">
+                <a href="https://www.youtube.com/@mundolaboralradio/live" target="_blank" class="btn-live-action">
+                    Entrar al directo desde la calle
+                </a>
             </div>
         </div>
-    </main>
 
-    <div id="radio" class="audio-player-fixed">
-        <div class="container d-flex flex-column flex-sm-row align-items-center justify-content-between">
-            <div class="text-center text-sm-start mb-2 mb-sm-0">
-                <span class="fw-bold d-block" style="color: var(--primary-color); font-size: 14px;"><i class="fa-solid fa-circle-dot blink-dot"></i> AL AIRE</span>
-                <span class="fw-semibold" style="font-size: 16px;">Mundo Laboral Radio (Streaming Digital)</span>
+        <div id="contacto" class="sidebar-column">
+            <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa">
+                <i class="fa-brands fa-whatsapp"></i>
+                <span>WhatsApp<br>Prensa</span>
+            </a>
+            <a href="https://t.me/+FfI_M03y91YxNjEx" target="_blank" class="btn-side btn-tg">
+                <i class="fa-brands fa-telegram"></i>
+                <span>Telegram</span>
+            </a>
+            <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="btn-side btn-fb">
+                <i class="fa-brands fa-facebook-f"></i>
+                <span>Facebook</span>
+            </a>
+        </div>
+
+    </div>
+
+    <div id="radio" class="footer-radio-player">
+        <div class="footer-content">
+            <div class="radio-info">
+                <span class="status-live">● AL AIRE:</span>
+                <span class="station-name">Mundo Laboral Radio (Streaming Digital)</span>
             </div>
-            <audio controls autoplay name="media" style="max-width: 100%; width: 300px; height: 40px;">
+            <audio controls autoplay name="media" style="width: 280px; height: 35px;">
                 <source src="https://stream.zeno.fm/g6tq4u5g20vtv" type="audio/mpeg">
-                Tu navegador no soporta este reproductor de audio.
             </audio>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-
-    <script>
-        // Aquí puedes colocar tu lógica fetch que lee el archivo rss.html o el feed de noticias
-        // para renderizarlo dinámicamente dentro de #contenedor-noticias si lo necesitas en el futuro.
-    </script>
 </body>
 </html>
