@@ -11,19 +11,21 @@
         .header-logo span { color: #e50914; }
         .nav-menu { text-align: center; background-color: #000000; padding: 14px 0; }
         .nav-menu a { color: #ffffff; text-decoration: none; margin: 0 20px; font-weight: bold; font-size: 14px; text-transform: uppercase; cursor: pointer; }
+        
         .tab-content { display: none; padding: 40px 20px; text-align: center; }
         .tab-content.active { display: block; }
         .page-title { font-size: 34px; font-weight: bold; margin-bottom: 25px; text-transform: uppercase; }
         
-        /* Botones */
-        .sidebar-buttons { display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto; }
-        .btn-side { display: flex; align-items: center; justify-content: center; gap: 15px; color: #ffffff !important; text-decoration: none; font-size: 14px; font-weight: bold; text-transform: uppercase; padding: 18px 20px; border-radius: 6px; }
-        .btn-wa { background-color: #25d366; }
-        .btn-tg { background-color: #0088cc; }
-        .btn-fb { background-color: #1877f2; }
-        .btn-yt { background-color: #ff0000; }
+        /* Contenedor de video simple y limpio */
+        .video-container { max-width: 800px; margin: 0 auto; }
+        .responsive-video { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+        .responsive-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        /* Botones de Redes (Estilo grilla) */
+        .redes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; max-width: 800px; margin: 0 auto; }
+        .btn-red { display: block; padding: 15px; background: #333; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; text-transform: uppercase; }
+        .btn-red:hover { background: #e50914; }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
@@ -45,15 +47,24 @@
 
     <div id="tv-tab" class="tab-content">
         <div class="page-title">TV EN VIVO</div>
+        <div class="video-container">
+            <div class="responsive-video">
+                <iframe src="https://www.youtube.com/embed/videoseries?list=TU_ID_DE_LISTA_AQUI" allowfullscreen></iframe>
+            </div>
         </div>
+    </div>
 
     <div id="redes-tab" class="tab-content">
         <div class="page-title">NUESTRAS REDES</div>
-        <div class="sidebar-buttons">
-            <a href="#" class="btn-side btn-wa"><i class="fa-brands fa-whatsapp"></i> WhatsApp Prensa</a>
-            <a href="#" class="btn-side btn-tg"><i class="fa-brands fa-telegram"></i> Telegram</a>
-            <a href="#" class="btn-side btn-fb"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
-            <a href="#" class="btn-side btn-yt"><i class="fa-brands fa-youtube"></i> YouTube</a>
+        <div class="redes-grid">
+            <a href="#" class="btn-red">WhatsApp 1</a>
+            <a href="#" class="btn-red">WhatsApp 2</a>
+            <a href="#" class="btn-red">Telegram</a>
+            <a href="#" class="btn-red">Facebook</a>
+            <a href="#" class="btn-red">YouTube</a>
+            <a href="#" class="btn-red">Instagram</a>
+            <a href="#" class="btn-red">Twitter</a>
+            <a href="#" class="btn-red">TikTok</a>
         </div>
     </div>
 
