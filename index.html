@@ -6,7 +6,7 @@
     <title>Mundo Laboral Media</title>
     <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
     <style>
-        /* ESTILOS BASE */
+        /* ESTILOS BASE COMPLETAMENTE LIMPIOS */
         body {
             margin: 0;
             padding: 0;
@@ -67,7 +67,7 @@
             color: #ffffff;
         }
 
-        /* SISTEMA DE PESTAÑAS */
+        /* PESTAÑAS */
         .tab-content {
             display: none;
         }
@@ -76,7 +76,7 @@
             display: block;
         }
 
-        /* CONTENEDORES DE VIDEO Y REPRODUCTORES */
+        /* ESTRUCTURA PRINCIPAL (TV) */
         .main-layout {
             max-width: 1100px;
             margin: 0 auto;
@@ -97,16 +97,16 @@
             position: relative;
         }
 
-        /* Contenedor responsivo para YouTube e IFRAMES (Relación 16:9) */
         .video-responsive-container {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
+            padding-bottom: 56.25%; /* Relación 16:9 */
             height: 0;
             overflow: hidden;
             width: 100%;
         }
 
-        .video-responsive-container iframe {
+        .video-responsive-container iframe, 
+        .video-responsive-container div.wrapper-live-player {
             position: absolute;
             top: 0;
             left: 0;
@@ -115,25 +115,43 @@
             border: 0;
         }
 
-        /* Indicador de Estado del Vivo Automático */
+        /* INDICADOR DISCRETO DE ESTADO */
         .live-status-indicator {
             margin-bottom: 15px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             text-transform: uppercase;
             display: flex;
             align-items: center;
             gap: 8px;
+            color: #aaa;
         }
 
         .status-dot {
-            width: 10px;
-            height: 10px;
+            width: 9px;
+            height: 9px;
             border-radius: 50%;
             display: inline-block;
         }
-        .status-dot.searching { background-color: #ffaa00; animation: pulse 1s infinite; }
+        .status-dot.searching { background-color: #555; }
         .status-dot.live { background-color: #ff0000; animation: pulse 1s infinite; }
+
+        /* REPRODUCTOR DE RADIO INTEGRADO EXCLUSIVO */
+        .radio-box-container {
+            max-width: 500px;
+            margin: 30px auto;
+            background: #111111;
+            border: 1px solid #222;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .audio-player-element {
+            width: 100%;
+            margin-top: 20px;
+        }
 
         /* BOTONES LATERALES */
         .sidebar-buttons {
@@ -153,61 +171,19 @@
             text-transform: uppercase;
             padding: 18px 20px;
             border-radius: 6px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
             transition: transform 0.2s;
         }
 
-        .btn-side:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-side i {
-            font-size: 22px;
-            width: 25px;
-            text-align: center;
-        }
-
+        .btn-side:hover { transform: translateY(-2px); }
+        .btn-side i { font-size: 22px; width: 25px; text-align: center; }
+        
         .btn-wa { background-color: #25d366; }
         .btn-tg { background-color: #0088cc; }
         .btn-fb { background-color: #1877f2; }
 
-        /* BARRA INFERIOR DE RADIO FIXED */
-        .bottom-radio-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #050505;
-            border-top: 3px solid #e50914;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-sizing: border-box;
-            z-index: 9999;
-        }
-
-        .radio-playing-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .blink-dot {
-            color: #ff0000;
-            animation: pulse 1.5s infinite;
-        }
-
-        .audio-player-element {
-            height: 36px;
-            width: 320px;
-        }
-
         .info-container {
             max-width: 800px;
-            margin: 40px auto;
+            margin: 20px auto;
             padding: 0 20px;
             text-align: center;
             color: #cccccc;
@@ -222,17 +198,7 @@
         }
 
         @media (max-width: 850px) {
-            .main-layout {
-                grid-template-columns: 1fr;
-            }
-            .bottom-radio-bar {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-            .audio-player-element {
-                width: 100%;
-            }
+            .main-layout { grid-template-columns: 1fr; }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -250,22 +216,36 @@
         <a id="nav-contacto" onclick="openTab('contacto-tab', 'nav-contacto')">Contacto</a>
     </div>
 
-    <div id="radio-tab" class="tab-content active" style="padding-bottom: 100px;">
+    <div id="radio-tab" class="tab-content active">
         <div class="page-title">RADIO EN VIVO</div>
+        
+        <div class="radio-box-container">
+            <p style="font-size: 18px; font-weight: bold; color: #ffffff; margin: 0 0 10px 0;">
+                🔴 AL AIRE
+            </p>
+            <p style="color: #888; margin: 0 0 20px 0; font-size: 14px;">
+                Mundo Laboral Radio (Streaming Digital)
+            </p>
+            
+            <audio id="main-radio-player" controls class="audio-player-element">
+                <source src="https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3" type="audio/mpeg">
+                Tu navegador no soporta el reproductor de audio.
+            </audio>
+        </div>
+
         <div class="info-container">
-            <p style="font-size: 18px; font-weight: bold; color: #ffffff;">📻 Estás sintonizando Mundo Laboral Radio.</p>
-            <p>Puedes controlar el volumen y la reproducción de la señal de audio directamente desde la barra negra ubicada en la parte inferior de la pantalla.</p>
+            <p>Sintoniza nuestra programación radial las 24 horas del día con la mejor fidelidad digital.</p>
         </div>
     </div>
 
-    <div id="tv-tab" class="tab-content" style="padding-bottom: 100px;">
+    <div id="tv-tab" class="tab-content">
         <div class="page-title">TV EN VIVO</div>
         
         <div class="main-layout">
             <div>
                 <div class="live-status-indicator">
                     <span id="live-indicator-dot" class="status-dot searching"></span>
-                    <span id="live-indicator-text">Cargando programación...</span>
+                    <span id="live-indicator-text">Programación Regular</span>
                 </div>
 
                 <div class="video-wrapper">
@@ -273,19 +253,18 @@
                         
                         <iframe 
                             id="player-youtube"
-                            src="https://www.youtube.com/embed/videoseries?list=PLuv8v9asR76eSId_X8Ph_b9fO7UCLlY6N&autoplay=1&mute=1&rel=0" 
+                            src="https://www.youtube.com/embed?listType=playlist&list=PLuv8v9asR76eSId_X8Ph_b9fO7UCLlY6N&autoplay=1&mute=1&rel=0" 
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowfullscreen>
                         </iframe>
 
-                        <div id="wrapper-live" style="display: none; position: absolute; top:0; left:0; width:100%; height:100%;">
+                        <div id="wrapper-live" class="wrapper-live-player" style="display: none;">
                             <video 
                                 id="live-tv-player" 
                                 class="video-js vjs-default-skin vjs-fill" 
                                 controls 
                                 preload="auto">
                                 <source src="TU_ENLACE_DE_STREAMING_DESDE_EL_CELULAR.m3u8" type="application/x-mpegURL">
-                                Tu navegador no soporta streaming HLS.
                             </video>
                         </div>
 
@@ -307,47 +286,36 @@
         </div>
     </div>
 
-    <div id="redes-tab" class="tab-content" style="padding-bottom: 100px;">
+    <div id="redes-tab" class="tab-content">
         <div class="page-title">NUESTRAS REDES</div>
-        <div style="max-width: 600px; margin: 0 auto; padding: 0 20px;" class="sidebar-buttons">
+        <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;" class="sidebar-buttons">
             <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa"><i class="fa-brands fa-whatsapp"></i> WhatsApp Prensa</a>
             <a href="https://t.me/+FfI_M03y91YxNjEx" target="_blank" class="btn-side btn-tg"><i class="fa-brands fa-telegram"></i> Telegram</a>
             <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="btn-side btn-fb"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
         </div>
     </div>
 
-    <div id="contacto-tab" class="tab-content" style="padding-bottom: 100px;">
+    <div id="contacto-tab" class="tab-content">
         <div class="page-title">CONTACTO</div>
-        <div class="info-container">
-            <p style="font-size: 18px; margin-bottom: 25px; color: #ffffff;">¿Quieres enviarnos una denuncia o publicidad?</p>
-            <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa" style="display: inline-flex; width: auto; padding: 15px 30px;">
-                <i class="fa-brands fa-whatsapp"></i> Enviar Mensaje a Dirección
+        <div class="info-container" style="padding-top: 30px;">
+            <p style="font-size: 18px; margin-bottom: 25px; color: #ffffff;">¿Tienes alguna denuncia, sugerencia o consulta comercial?</p>
+            <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa" style="display: inline-flex; width: auto; padding: 15px 30px; margin: 0 auto;">
+                <i class="fa-brands fa-whatsapp"></i> Contactar a Dirección
             </a>
         </div>
-    </div>
-
-    <div class="bottom-radio-bar">
-        <div class="radio-playing-info">
-            <span class="blink-dot">■ AL AIRE:</span>
-            <span>Mundo Laboral Radio (Streaming Digital)</span>
-        </div>
-        <audio controls class="audio-player-element">
-            <source src="https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3" type="audio/mpeg">
-            Tu navegador no soporta el reproductor de audio.
-        </audio>
     </div>
 
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
     
     <script>
-        // URL de tu streaming móvil (Debe ser la misma que pusiste en el <source>)
+        // PON AQUÍ TU ENLACE .M3U8 REAL DEL EN VIVO
         const STREAM_URL = "TU_ENLACE_DE_STREAMING_DESDE_EL_CELULAR.m3u8";
 
-        // Inicializar reproductor de Video.js
         var livePlayer = videojs('live-tv-player');
         var isStreamingActive = false;
+        var radioPlayer = document.getElementById('main-radio-player');
 
-        // Función para cambiar entre Pestañas del Menú
+        // Control de navegación entre pestañas
         function openTab(tabId, navId) {
             var tabs = document.getElementsByClassName('tab-content');
             for (var i = 0; i < tabs.length; i++) {
@@ -362,7 +330,12 @@
             document.getElementById(tabId).classList.add('active');
             document.getElementById(navId).classList.add('active');
 
-            // Pausar streaming móvil si se sale de la pestaña de TV
+            // Si sale de la pestaña Radio, pausamos la radio para que no se cruce con la TV
+            if (tabId !== 'radio-tab') {
+                radioPlayer.pause();
+            }
+
+            // Si sale de la pestaña TV y el vivo estaba corriendo, lo pausa
             if (tabId !== 'tv-tab' && isStreamingActive) {
                 livePlayer.pause();
             } else if (tabId === 'tv-tab' && isStreamingActive) {
@@ -370,68 +343,61 @@
             }
         }
 
-        // SISTEMA DE DETECCIÓN AUTOMÁTICA (REVISIÓN DE SEÑAL)
-        function verificarSenalEnVivo() {
-            if (!STREAM_URL || STREAM_URL.includes("TU_ENLACE_DE_STREAMING")) {
-                actualizarInterfaz(false);
-                return;
-            }
+        // Sistema de Escaneo del archivo M3U8 (Cada 8 segundos comprueba tu cel)
+        function comprobarTransmisionCelular() {
+            if (!STREAM_URL || STREAM_URL.includes("TU_ENLACE_DE_STREAMING")) return;
 
-            // Hacemos una petición ligera tipo 'HEAD' para saber si el archivo de transmisión existe
             fetch(STREAM_URL, { method: 'HEAD', cache: 'no-store' })
             .then(response => {
-                // Si el servidor responde bien (Status 200), significa que estás transmitiendo
                 if (response.ok) {
-                    actualizarInterfaz(true);
+                    intercambiarAReproductorVivo(true);
                 } else {
-                    actualizarInterfaz(false);
+                    intercambiarAReproductorVivo(false);
                 }
             })
             .catch(() => {
-                // Si da error de conexión (el streaming está apagado), muestra YouTube
-                actualizarInterfaz(false);
+                intercambiarAReproductorVivo(false);
             });
         }
 
-        function actualizarInterfaz(enVivoActivo) {
+        function intercambiarAReproductorVivo(enVivoDetectado) {
             var ytPlayer = document.getElementById('player-youtube');
             var liveWrapper = document.getElementById('wrapper-live');
             var indicatorDot = document.getElementById('live-indicator-dot');
             var indicatorText = document.getElementById('live-indicator-text');
 
-            if (enVivoActivo) {
+            if (enVivoDetectado) {
                 if (!isStreamingActive) {
-                    // Acción de CORTE: Oculta YouTube y activa tu Transmisión Móvil
+                    // CAMBIO AL VIVO: Apaga YouTube, prende VideoJS
                     ytPlayer.style.display = 'none';
                     liveWrapper.style.display = 'block';
                     
                     indicatorDot.className = "status-dot live";
-                    indicatorText.innerHTML = "🔴 EN VIVO: Transmisión directa desde exteriores";
+                    indicatorText.innerHTML = "🔴 EN VIVO DESDE EXTERIORES";
+                    indicatorText.style.color = "#ff0000";
                     
-                    // Recarga y reproduce automáticamente el reproductor HLS
                     livePlayer.src({ type: 'application/x-mpegURL', src: STREAM_URL });
                     livePlayer.play();
                     isStreamingActive = true;
                 }
             } else {
-                if (isStreamingActive || indicatorText.innerHTML === "Cargando programación...") {
-                    // Acción de REGRESO: Oculta el vivo y restablece la Playlist de YouTube
+                if (isStreamingActive) {
+                    // REGRESO A YOUTUBE: Apaga VideoJS, prende YouTube
                     livePlayer.pause();
                     liveWrapper.style.display = 'none';
                     ytPlayer.style.display = 'block';
                     
                     indicatorDot.className = "status-dot searching";
-                    indicatorText.innerHTML = "📺 Programación Regular (Lista de YouTube)";
+                    indicatorText.innerHTML = "Programación Regular";
+                    indicatorText.style.color = "#aaa";
                     isStreamingActive = false;
                 }
             }
         }
 
-        // Comprobar el estado de la transmisión al cargar la página
-        verificarSenalEnVivo();
-
-        // Comprobación en bucle automático cada 10 segundos
-        setInterval(verificarSenalEnVivo, 10000);
+        // Ejecutar revisiones continuas
+        comprobarTransmisionCelular();
+        setInterval(comprobarTransmisionCelular, 8000);
     </script>
 </body>
 </html>
