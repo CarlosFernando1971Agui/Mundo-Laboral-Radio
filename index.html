@@ -2,83 +2,74 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mundo Laboral Media</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #ffffff; color: #000000; }
-        .header-container { text-align: center; padding: 20px 0; border-bottom: 2px solid #e50914; }
-        .header-logo { font-weight: bold; font-size: 28px; color: #000000; text-transform: uppercase; }
-        .header-logo span { color: #e50914; }
-        .nav-menu { text-align: center; background-color: #000000; padding: 14px 0; }
-        .nav-menu a { color: #ffffff; text-decoration: none; margin: 0 20px; font-weight: bold; font-size: 14px; text-transform: uppercase; cursor: pointer; }
-        
-        .tab-content { display: none; padding: 40px 20px; text-align: center; }
-        .tab-content.active { display: block; }
-        .page-title { font-size: 34px; font-weight: bold; margin-bottom: 25px; text-transform: uppercase; }
+        body { margin: 0; font-family: sans-serif; background: #fff; }
+        .header { text-align: center; padding: 20px; border-bottom: 2px solid #e50914; }
+        .nav { text-align: center; background: #000; padding: 15px; }
+        .nav a { color: #fff; margin: 0 15px; text-decoration: none; cursor: pointer; font-weight: bold; }
+        .content { display: none; padding: 40px; text-align: center; }
+        .content.active { display: block; }
         
         /* Video */
-        .video-container { max-width: 800px; margin: 0 auto; }
-        .responsive-video { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
-        .responsive-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .vid-box { max-width: 800px; margin: auto; }
+        .vid-ratio { position: relative; padding-bottom: 56.25%; height: 0; }
+        .vid-ratio iframe { position: absolute; top:0; left:0; width: 100%; height: 100%; }
 
-        /* Botones de Redes */
-        .redes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 900px; margin: 0 auto; }
-        .btn-red { padding: 20px; background: #333; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
-        .btn-red:hover { background: #e50914; }
+        /* Grid de 8 Botones */
+        .btn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 600px; margin: auto; }
+        .btn { padding: 15px; background: #333; color: #fff; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .btn:hover { background: #e50914; }
     </style>
 </head>
 <body>
 
-    <div class="header-container">
-        <div class="header-logo">MUNDO <span>LABORAL</span> MEDIA</div>
-    </div>
+<div class="header"><h1>MUNDO <span>LABORAL</span> MEDIA</h1></div>
 
-    <div class="nav-menu">
-        <a onclick="showTab('radio-tab')">Radio en Vivo</a>
-        <a onclick="showTab('tv-tab')">TV en Vivo</a>
-        <a onclick="showTab('redes-tab')">Redes</a>
-        <a onclick="showTab('contacto-tab')">Contacto</a>
-    </div>
+<div class="nav">
+    <a onclick="tab('radio')">RADIO EN VIVO</a>
+    <a onclick="tab('tv')">TV EN VIVO</a>
+    <a onclick="tab('redes')">REDES</a>
+    <a onclick="tab('contacto')">CONTACTO</a>
+</div>
 
-    <div id="radio-tab" class="tab-content active">
-        <div class="page-title">RADIO EN VIVO</div>
-        <p>Estás sintonizando Mundo Laboral Radio.</p>
-    </div>
+<div id="radio" class="content active">
+    <h2>RADIO EN VIVO</h2>
+    <audio controls>
+        <source src="https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3" type="audio/mpeg">
+    </audio>
+</div>
 
-    <div id="tv-tab" class="tab-content">
-        <div class="page-title">TV EN VIVO</div>
-        <div class="video-container">
-            <div class="responsive-video">
-                <iframe src="https://www.youtube.com/embed/videoseries?list=PLuv8v9asR76eSId_X8Ph_b9fO7UCLlY6N" allowfullscreen></iframe>
-            </div>
+<div id="tv" class="content">
+    <h2>TV EN VIVO</h2>
+    <div class="vid-box">
+        <div class="vid-ratio">
+            <iframe src="https://www.youtube.com/embed/videoseries?list=PLuv8v9asR76eSId_X8Ph_b9fO7UCLlY6N" allowfullscreen></iframe>
         </div>
     </div>
+</div>
 
-    <div id="redes-tab" class="tab-content">
-        <div class="page-title">NUESTRAS REDES</div>
-        <div class="redes-grid">
-            <a href="#" class="btn-red">WhatsApp Prensa</a>
-            <a href="#" class="btn-red">Telegram</a>
-            <a href="#" class="btn-red">Facebook</a>
-            <a href="#" class="btn-red">YouTube</a>
-            <a href="#" class="btn-red">Instagram</a>
-            <a href="#" class="btn-red">Twitter</a>
-            <a href="#" class="btn-red">TikTok</a>
-            <a href="#" class="btn-red">Sitio Web</a>
-        </div>
+<div id="redes" class="content">
+    <h2>NUESTRAS REDES</h2>
+    <div class="btn-grid">
+        <a href="#" class="btn">WhatsApp 1</a>
+        <a href="#" class="btn">WhatsApp 2</a>
+        <a href="#" class="btn">Telegram</a>
+        <a href="#" class="btn">Facebook</a>
+        <a href="#" class="btn">YouTube</a>
+        <a href="#" class="btn">Instagram</a>
+        <a href="#" class="btn">Twitter</a>
+        <a href="#" class="btn">TikTok</a>
     </div>
+</div>
 
-    <div id="contacto-tab" class="tab-content">
-        <div class="page-title">CONTACTO</div>
-        <p>Puedes escribirnos a nuestra dirección de correo o números de contacto.</p>
-    </div>
+<div id="contacto" class="content"><h2>CONTACTO</h2></div>
 
-    <script>
-        function showTab(id) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
-    </script>
+<script>
+    function tab(id) {
+        document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+</script>
 </body>
 </html>
