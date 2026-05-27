@@ -17,17 +17,21 @@
         .container { padding: 20px; min-height: 60vh; display: flex; justify-content: center; }
         .seccion { display: none; width: 100%; max-width: 1000px; animation: fadeIn 0.3s; }
         .seccion.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
         .reproductor-card { background: #1a1a1a; border: 1px solid var(--rojo); border-radius: 20px; padding: 40px; text-align: center; }
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
         
-        /* Contenedor del video que mostrará tu directo */
-        .tv-container { width: 100%; aspect-ratio: 16 / 9; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; background: #000; }
+        /* Contenedor de Videos */
+        .tv-container { width: 100%; aspect-ratio: 16 / 9; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; background: #000; margin-top: 20px; }
         iframe { width: 100%; height: 100%; border: none; }
         
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 12px; text-decoration: none; color: white; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid #333; }
         .card-red:hover { background: rgba(255,255,255,0.1); }
+        
+        .form-contacto { background: var(--gris); padding: 25px; border-radius: 15px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #333; }
+        .form-contacto input, .form-contacto textarea { background: #000; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; }
         .whatsapp-float { position: fixed; bottom: 25px; right: 25px; background: #25D366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: white; z-index: 999; text-decoration: none; }
     </style>
 </head>
@@ -54,28 +58,8 @@
                 <i class="fas fa-volume-up"></i>
                 <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.8">
             </div>
+            <p id="status" style="margin-top:15px; font-weight:bold; color:var(--rojo)">Toca para escuchar</p>
         </div>
     </div>
 
-    <div id="videos" class="seccion">
-        <h2 style="text-align:center;">TV EN VIVO</h2>
-        <div class="tv-container">
-            <iframe src="https://www.youtube.com/embed/live_stream?channel=UC_TU_ID_DE_CANAL_AQUI&autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <div id="redes" class="seccion">
-        <div class="grid-redes">
-            </div>
-    </div>
-</div>
-
-<script>
-    function ir(seccionId) {
-        document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
-        document.getElementById(seccionId).classList.add('active');
-    }
-    // (Tu script de audio original)
-</script>
-</body>
-</html>
+    <div id="videos" class="seccion
