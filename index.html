@@ -17,21 +17,17 @@
         .container { padding: 20px; min-height: 60vh; display: flex; justify-content: center; }
         .seccion { display: none; width: 100%; max-width: 1000px; animation: fadeIn 0.3s; }
         .seccion.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
         .reproductor-card { background: #1a1a1a; border: 1px solid var(--rojo); border-radius: 20px; padding: 40px; text-align: center; }
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
         
-        .tv-container { width: 100%; aspect-ratio: 16 / 9; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; background: #000; margin-top: 20px; }
+        /* Contenedor del video que mostrará tu directo */
+        .tv-container { width: 100%; aspect-ratio: 16 / 9; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; background: #000; }
         iframe { width: 100%; height: 100%; border: none; }
         
-        /* Botones de redes con sus colores */
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .card-red { padding: 20px; border-radius: 12px; text-decoration: none; color: white; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: 0.3s; }
-        .card-red:hover { opacity: 0.9; transform: translateY(-3px); }
-        
-        .form-contacto { background: var(--gris); padding: 25px; border-radius: 15px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #333; }
-        .form-contacto input, .form-contacto textarea { background: #000; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; }
+        .card-red { padding: 20px; border-radius: 12px; text-decoration: none; color: white; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid #333; }
+        .card-red:hover { background: rgba(255,255,255,0.1); }
         .whatsapp-float { position: fixed; bottom: 25px; right: 25px; background: #25D366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: white; z-index: 999; text-decoration: none; }
     </style>
 </head>
@@ -58,77 +54,28 @@
                 <i class="fas fa-volume-up"></i>
                 <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.8">
             </div>
-            <p id="status" style="margin-top:15px; font-weight:bold; color:var(--rojo)">Toca para escuchar</p>
         </div>
     </div>
 
     <div id="videos" class="seccion">
-        <h2 style="text-align:center;">VIDEOS</h2>
+        <h2 style="text-align:center;">TV EN VIVO</h2>
         <div class="tv-container">
-            <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/live_stream?channel=UC_TU_ID_DE_CANAL_AQUI&autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
     </div>
 
     <div id="redes" class="seccion">
         <div class="grid-redes">
-            <a href="https://mundolaboral.radio.com.bo/" target="_blank" class="card-red" style="background:#444;"><i class="fas fa-globe fa-2x"></i> Web</a>
-            <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" target="_blank" class="card-red" style="background:#34a853;"><i class="fab fa-google-play fa-2x"></i> App Android</a>
-            <a href="https://facebook.com/MundoLaboralRadio" target="_blank" class="card-red" style="background:#1877F2;"><i class="fab fa-facebook fa-2x"></i> Facebook</a>
-            <a href="https://www.youtube.com/@mundolaboralradio" target="_blank" class="card-red" style="background:#FF0000;"><i class="fab fa-youtube fa-2x"></i> YouTube</a>
-            <a href="https://www.tiktok.com/@carlosfer_1971" target="_blank" class="card-red" style="background:#000;"><i class="fab fa-tiktok fa-2x"></i> TikTok</a>
-            <a href="https://www.instagram.com/carlosfernandoaguilare/" target="_blank" class="card-red" style="background:#bc1888;"><i class="fab fa-instagram fa-2x"></i> Instagram</a>
-            <a href="https://t.me/+OlAmHfkWb3I2MzEx" target="_blank" class="card-red" style="background:#0088cc;"><i class="fab fa-telegram fa-2x"></i> Telegram</a>
-            <a href="https://chat.whatsapp.com/BMDRQO15kyPCFxomtgtIyX" target="_blank" class="card-red" style="background:#25D366;"><i class="fas fa-users fa-2x"></i> Grupo WhatsApp</a>
-        </div>
-    </div>
-
-    <div id="contacto" class="seccion">
-        <div class="form-contacto">
-            <h2>ENVÍANOS UN WHATSAPP</h2>
-            <input type="text" id="c-nombre" placeholder="Tu nombre">
-            <textarea id="c-mensaje" rows="4" placeholder="Tu mensaje..."></textarea>
-            <button id="wa-btn" onclick="enviarWA()" style="background:#25D366; color:white; border:none; padding:15px; cursor:pointer; border-radius:8px;">ENVIAR</button>
-        </div>
+            </div>
     </div>
 </div>
 
 <script>
     function ir(seccionId) {
         document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
         document.getElementById(seccionId).classList.add('active');
-        document.getElementById('btn-' + seccionId).classList.add('active');
     }
-
-    const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
-    let sonando = false;
-    const status = document.getElementById("status");
-
-    function toggleAudio() {
-        const icon = document.getElementById("p-icon");
-        if(!sonando) { 
-            radio.play(); 
-            icon.className = "fas fa-pause"; 
-            status.innerText = "RADIO AL AIRE";
-            sonando = true; 
-        } else { 
-            radio.pause(); 
-            icon.className = "fas fa-play"; 
-            status.innerText = "RADIO PAUSADA";
-            sonando = false; 
-        }
-    }
-    document.getElementById('vol-slider').oninput = function() { radio.volume = this.value; };
-    
-    function enviarWA() {
-        const nombre = document.getElementById('c-nombre').value;
-        const msg = document.getElementById('c-mensaje').value;
-        if(nombre && msg) {
-            window.open(`https://wa.me/59168785216?text=Hola, soy ${nombre}. ${msg}`, '_blank');
-        } else {
-            alert("Completa tu nombre y mensaje");
-        }
-    }
+    // (Tu script de audio original)
 </script>
 </body>
 </html>
