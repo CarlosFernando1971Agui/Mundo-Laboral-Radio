@@ -18,18 +18,15 @@
         .seccion.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        .reproductor-card { background: #1a1a1a; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px; text-align: center; }
-        #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
+        .reproductor-card { background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1000&auto=format&fit=crop'); background-size: cover; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; transition: 0.3s; }
         
-        .tv-container { width: 100%; aspect-ratio: 16 / 9; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; background: #000; }
-        iframe { width: 100%; height: 100%; border: none; }
-        
-        .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .card-red { padding: 20px; border-radius: 12px; text-decoration: none; color: white; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
+        .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+        .card-red { padding: 20px; border-radius: 12px; text-decoration: none; color: white; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid #333; transition: 0.3s; }
         .card-red:hover { transform: translateY(-3px); background: rgba(255,255,255,0.1); }
         
-        .form-contacto { background: var(--gris); padding: 25px; border-radius: 15px; display: flex; flex-direction: column; gap: 12px; }
-        .form-contacto input, .form-contacto textarea { background: #000; border: 1px solid #444; color: white; padding: 12px; width: 100%; box-sizing: border-box; }
+        .form-contacto { background: var(--gris); padding: 25px; border-radius: 15px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #333; }
+        .form-contacto input, .form-contacto textarea { background: #000; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; width: 100%; box-sizing: border-box; }
         
         .whatsapp-float { position: fixed; bottom: 25px; right: 25px; background: #25D366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; color: white; z-index: 999; text-decoration: none; }
     </style>
@@ -42,7 +39,6 @@
     <div class="brand-name">MUNDO <span style="color:var(--rojo)">LABORAL</span> RADIO</div>
     <nav id="main-nav">
         <button onclick="ir('inicio')" id="btn-inicio" class="active">RADIO</button>
-        <button onclick="ir('tv')" id="btn-tv">TV EN VIVO</button>
         <button onclick="ir('redes')" id="btn-redes">REDES</button>
         <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
     </nav>
@@ -52,28 +48,26 @@
     <div id="inicio" class="seccion active">
         <div class="reproductor-card">
             <h1>RADIO EN VIVO</h1>
+            <p>Vallegrande, Bolivia</p>
             <button id="play-btn" onclick="toggleAudio()"><i id="p-icon" class="fas fa-play"></i></button>
-            <p id="status" style="color:var(--rojo)">Toca para escuchar</p>
-        </div>
-    </div>
-
-    <div id="tv" class="seccion">
-        <h2 style="text-align:center;">TV EN VIVO</h2>
-        <div class="tv-container">
-            <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
+            <div style="display:flex; align-items:center; justify-content:center; gap:10px;">
+                <i class="fas fa-volume-up"></i>
+                <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.8">
+            </div>
+            <p id="status" style="margin-top:15px; font-weight:bold; color:var(--rojo)">Toca para escuchar</p>
         </div>
     </div>
 
     <div id="redes" class="seccion">
         <div class="grid-redes">
-            <a href="https://mundolaboral.radio.com.bo/" class="card-red" style="background:#444"><i class="fas fa-globe"></i> Sitio Web</a>
-            <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" class="card-red" style="background:#34a853"><i class="fab fa-google-play"></i> App Android</a>
-            <a href="https://facebook.com/MundoLaboralRadio" class="card-red" style="background:#1877F2"><i class="fab fa-facebook"></i> Facebook</a>
-            <a href="https://youtube.com/@mundolaboralradiovallegrande" class="card-red" style="background:#FF0000"><i class="fab fa-youtube"></i> YouTube</a>
-            <a href="https://www.tiktok.com/@carlosfer_1971" class="card-red" style="background:#000"><i class="fab fa-tiktok"></i> TikTok</a>
-            <a href="https://www.instagram.com/carlosfernandoaguilare/" class="card-red" style="background:#bc1888"><i class="fab fa-instagram"></i> Instagram</a>
-            <a href="https://t.me/+OlAmHfkWb3I2MzEx" class="card-red" style="background:#0088cc"><i class="fab fa-telegram"></i> Telegram</a>
-            <a href="https://chat.whatsapp.com/BMDRQO15kyPCFxomtgtIyX" class="card-red" style="background:#25D366"><i class="fas fa-users"></i> Grupo WhatsApp</a>
+            <a href="https://mundolaboral.radio.com.bo/" target="_blank" class="card-red" style="background:#444"><i class="fas fa-globe fa-2x"></i> Web</a>
+            <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" target="_blank" class="card-red" style="background:#34a853"><i class="fab fa-google-play fa-2x"></i> App</a>
+            <a href="https://facebook.com/MundoLaboralRadio" target="_blank" class="card-red" style="background:#1877F2"><i class="fab fa-facebook fa-2x"></i> Facebook</a>
+            <a href="https://youtube.com/@mundolaboralradiovallegrande" target="_blank" class="card-red" style="background:#FF0000"><i class="fab fa-youtube fa-2x"></i> YouTube</a>
+            <a href="https://www.tiktok.com/@carlosfer_1971" target="_blank" class="card-red" style="background:#000"><i class="fab fa-tiktok fa-2x"></i> TikTok</a>
+            <a href="https://www.instagram.com/carlosfernandoaguilare/" target="_blank" class="card-red" style="background:#bc1888"><i class="fab fa-instagram fa-2x"></i> Instagram</a>
+            <a href="https://t.me/+OlAmHfkWb3I2MzEx" target="_blank" class="card-red" style="background:#0088cc"><i class="fab fa-telegram fa-2x"></i> Telegram</a>
+            <a href="https://chat.whatsapp.com/BMDRQO15kyPCFxomtgtIyX" target="_blank" class="card-red" style="background:#25D366"><i class="fas fa-users fa-2x"></i> Grupo</a>
         </div>
     </div>
 
@@ -102,6 +96,7 @@
         if(!sonando) { radio.play(); icon.className = "fas fa-pause"; sonando = true; }
         else { radio.pause(); icon.className = "fas fa-play"; sonando = false; }
     }
+    document.getElementById('vol-slider').oninput = function() { radio.volume = this.value; };
     
     function enviarWA() {
         const nombre = document.getElementById('c-nombre').value;
