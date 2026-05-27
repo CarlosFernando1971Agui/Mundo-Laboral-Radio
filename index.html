@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mundo Laboral Radio</title>
+    <title>Mundo Laboral Media</title>
     <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
     <style>
-        /* ESTILOS BASE ORIGINALES (COLORES NEGROS) */
+        /* ESTILOS BASE */
         body {
             margin: 0;
             padding: 0;
@@ -76,78 +76,98 @@
             display: block;
         }
 
-        /* REPRODUCTOR CENTRALIZADO DE RADIO */
-        .player-center-container {
-            max-width: 500px;
-            margin: 40px auto;
-            background-color: #111111;
-            border-radius: 12px;
-            padding: 30px 20px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.1);
-            border-top: 4px solid #e50914;
-        }
-
-        .player-center-container .radio-info {
-            color: #ffffff;
-            font-size: 16px;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .player-center-container .status-live, .tv-status-live {
-            color: #ff0000;
-            margin-right: 5px;
-            animation: blink 1.5s infinite;
-        }
-
-        .audio-center-element {
-            width: 100%;
-            max-width: 400px;
-            height: 45px;
-            outline: none;
-        }
-
-        /* DISPOSICIÓN PESTAÑA TV (REPRODUCTOR PROPIO EN VIVO) */
+        /* CONTENEDORES DE VIDEO Y REPRODUCTORES */
         .main-layout {
-            max-width: 850px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 20px 40px 20px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
             box-sizing: border-box;
-            text-align: center;
         }
 
-        .video-container-box {
+        .video-wrapper {
             width: 100%;
-            max-width: 740px;
-            margin: 0 auto;
             background-color: #111111;
             border: 1px solid #333;
             border-radius: 6px;
             padding: 10px;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.05);
+            box-sizing: border-box;
+            position: relative;
         }
 
-        /* ESTILOS DE BOTONES DE REDES */
+        /* Contenedor responsivo para YouTube (Relación 16:9) */
+        .youtube-responsive {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .youtube-responsive iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Controladores de modo de transmisión */
+        .stream-switcher {
+            margin-bottom: 15px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-switch {
+            background-color: #222;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .btn-switch.active {
+            background-color: #e50914;
+            border-color: #e50914;
+        }
+
+        /* BOTONES LATERALES */
+        .sidebar-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
         .btn-side {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            gap: 15px;
             color: #ffffff !important;
             text-decoration: none;
-            font-size: 11px;
+            font-size: 14px;
             font-weight: bold;
             text-transform: uppercase;
-            text-align: center;
-            padding: 18px 10px;
+            padding: 18px 20px;
             border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .btn-side:hover {
+            transform: translateY(-2px);
         }
 
         .btn-side i {
-            font-size: 18px;
-            width: 20px;
+            font-size: 22px;
+            width: 25px;
             text-align: center;
         }
 
@@ -155,28 +175,39 @@
         .btn-tg { background-color: #0088cc; }
         .btn-fb { background-color: #1877f2; }
         .btn-yt { background-color: #ff0000; }
-        .btn-tk { background-color: #333333; border: 1px solid #444; }
-        .btn-ig { background-color: #c13584; }
-        .btn-tw { background-color: #1da1f2; }
-        .btn-ps { background-color: #607d8b; }
 
-        /* GRILLA DE 8 BOTONES */
-        .grid-redes {
-            max-width: 900px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            padding: 20px 20px 40px 20px;
+        /* BARRA INFERIOR DE RADIO FIXED */
+        .bottom-radio-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #050505;
+            border-top: 3px solid #e50914;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+            z-index: 9999;
         }
 
-        .grid-redes .btn-side {
-            padding: 25px 10px;
-            font-size: 13px;
+        .radio-playing-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: bold;
         }
 
-        .grid-redes .btn-side i {
-            font-size: 24px;
+        .blink-dot {
+            color: #ff0000;
+            animation: blink 1.5s infinite;
+        }
+
+        .audio-player-element {
+            height: 36px;
+            width: 320px;
         }
 
         .info-container {
@@ -189,34 +220,23 @@
             line-height: 1.6;
         }
 
-        /* BOTÓN FLOTANTE DE WHATSAPP */
-        .whatsapp-floating {
-            position: fixed;
-            bottom: 25px;
-            right: 20px;
-            background-color: #25d366;
-            color: #ffffff !important;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            z-index: 9998;
-            text-decoration: none;
-        }
-
         @keyframes blink {
             0% { opacity: 1; }
             50% { opacity: 0.4; }
             100% { opacity: 1; }
         }
 
-        @media (max-width: 768px) {
-            .grid-redes {
+        @media (max-width: 850px) {
+            .main-layout {
                 grid-template-columns: 1fr;
+            }
+            .bottom-radio-bar {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            .audio-player-element {
+                width: 100%;
             }
         }
     </style>
@@ -225,7 +245,7 @@
 <body>
 
     <div class="header-container">
-        <div class="header-logo">MUNDO <span>LABORAL</span> RADIO</div>
+        <div class="header-logo">MUNDO <span>LABORAL</span> MEDIA</div>
     </div>
 
     <div class="nav-menu">
@@ -235,94 +255,99 @@
         <a id="nav-contacto" onclick="openTab('contacto-tab', 'nav-contacto')">Contacto</a>
     </div>
 
-    <div id="radio-tab" class="tab-content active">
+    <div id="radio-tab" class="tab-content active" style="padding-bottom: 100px;">
         <div class="page-title">RADIO EN VIVO</div>
         <div class="info-container">
             <p style="font-size: 18px; font-weight: bold; color: #ffffff;">📻 Estás sintonizando Mundo Laboral Radio.</p>
-            <p>Haz clic en el botón de reproducción del cuadro central negro para iniciar o pausar la señal en vivo.</p>
-        </div>
-
-        <div class="player-center-container">
-            <div class="radio-info">
-                <span class="status-live">■ AL AIRE:</span>
-                <span>Mundo Laboral Radio</span>
-            </div>
-            <audio controls class="audio-center-element">
-                <source src="https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3" type="audio/mpeg">
-                Tu navegador no soporta el reproductor de audio.
-            </audio>
+            <p>Puedes controlar el volumen y la reproducción de la señal de audio directamente desde la barra negra ubicada en la parte inferior de la pantalla.</p>
         </div>
     </div>
 
-    <div id="tv-tab" class="tab-content">
+    <div id="tv-tab" class="tab-content" style="padding-bottom: 100px;">
         <div class="page-title">TV EN VIVO</div>
         
-        <div class="info-container">
-            <p style="font-size: 16px; color: #ffffff;"><span class="tv-status-live">🔴 EN VIVO:</span> Transmisión directa desde exteriores.</p>
-        </div>
-
         <div class="main-layout">
-            <div class="video-container-box">
-                <video 
-                    id="live-tv-player" 
-                    class="video-js vjs-default-skin vjs-16-9 vjs-big-play-centered" 
-                    controls 
-                    preload="auto" 
-                    width="100%">
-                    <source src="TU_ENLACE_DE_STREAMING.m3u8" type="application/x-mpegURL">
-                    Tu navegador no soporta la reproducción de video en vivo.
-                </video>
+            <div>
+                <div class="stream-switcher">
+                    <button id="btn-mode-yt" class="btn-switch active" onclick="setTvMode('youtube')"><i class="fa-solid fa-film"></i> Programación Regular</button>
+                    <button id="btn-mode-live" class="btn-switch" onclick="setTvMode('live')"><i class="fa-solid fa-circle-dot blink-dot"></i> TRANSMISIÓN EN VIVO DESDE MOVIL</button>
+                </div>
+
+                <div class="video-wrapper">
+                    <div id="wrapper-youtube" class="youtube-responsive">
+                        <iframe 
+                            src="https://www.youtube.com/embed/videoseries?list=PLuv8v9asR76eSId_X8Ph_b9fO7UCLlY6N&autoplay=1&mute=1" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div id="wrapper-live" style="display: none;">
+                        <video 
+                            id="live-tv-player" 
+                            class="video-js vjs-default-skin vjs-16-9 vjs-big-play-centered" 
+                            controls 
+                            preload="auto" 
+                            width="100%">
+                            <source src="TU_ENLACE_DE_STREAMING_DESDE_EL_CELULAR.m3u8" type="application/x-mpegURL">
+                            Tu navegador no soporta streaming HLS.
+                        </video>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-buttons">
+                <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa">
+                    <i class="fa-brands fa-whatsapp"></i><span>WhatsApp Prensa</span>
+                </a>
+                <a href="https://t.me/+FfI_M03y91YxNjEx" target="_blank" class="btn-side btn-tg">
+                    <i class="fa-brands fa-telegram"></i><span>Telegram</span>
+                </a>
+                <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="btn-side btn-fb">
+                    <i class="fa-brands fa-facebook-f"></i><span>Facebook</span>
+                </a>
             </div>
         </div>
     </div>
 
-    <div id="redes-tab" class="tab-content">
+    <div id="redes-tab" class="tab-content" style="padding-bottom: 100px;">
         <div class="page-title">NUESTRAS REDES</div>
-        <div class="grid-redes">
-            <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa">
-                <i class="fa-brands fa-whatsapp"></i><span>WhatsApp Prensa</span>
-            </a>
-            <a href="https://t.me/+FfI_M03y91YxNjEx" target="_blank" class="btn-side btn-tg">
-                <i class="fa-brands fa-telegram"></i><span>Telegram</span>
-            </a>
-            <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="btn-side btn-fb">
-                <i class="fa-brands fa-facebook-f"></i><span>Facebook</span>
-            </a>
-            <a href="https://www.youtube.com/@mundolaboralradio" target="_blank" class="btn-side btn-yt">
-                <i class="fa-brands fa-youtube"></i><span>YouTube</span>
-            </a>
-            <a href="https://www.tiktok.com/@mundolaboralradio" target="_blank" class="btn-side btn-tk">
-                <i class="fa-brands fa-tiktok"></i><span>TikTok</span>
-            </a>
-            <a href="https://www.instagram.com/mundolaboralradio" target="_blank" class="btn-side btn-ig">
-                <i class="fa-brands fa-instagram"></i><span>Instagram</span>
-            </a>
-            <a href="https://x.com/mlaboralradio" target="_blank" class="btn-side btn-tw">
-                <i class="fa-brands fa-x-twitter"></i><span>X / Twitter</span>
-            </a>
-            <a href="https://play.google.com/store/apps/details?id=com.mundolaboral.radio" target="_blank" class="btn-side btn-ps">
-                <i class="fa-brands fa-google-play"></i><span>Nuestra App (Android)</span>
-            </a>
+        <div style="max-width: 600px; margin: 0 auto; padding: 0 20px;" class="sidebar-buttons">
+            <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa"><i class="fa-brands fa-whatsapp"></i> WhatsApp Prensa</a>
+            <a href="https://t.me/+FfI_M03y91YxNjEx" target="_blank" class="btn-side btn-tg"><i class="fa-brands fa-telegram"></i> Telegram</a>
+            <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="btn-side btn-fb"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+            <a href="https://www.youtube.com/@mundolaboralradio" target="_blank" class="btn-side btn-yt"><i class="fa-brands fa-youtube"></i> YouTube</a>
         </div>
     </div>
 
-    <div id="contacto-tab" class="tab-content">
+    <div id="contacto-tab" class="tab-content" style="padding-bottom: 100px;">
         <div class="page-title">CONTACTO</div>
         <div class="info-container">
             <p style="font-size: 18px; margin-bottom: 25px; color: #ffffff;">¿Quieres enviarnos una denuncia o publicidad?</p>
-            <a href="https://wa.me/59173111000" target="_blank" style="background-color: #25d366; color: white; text-decoration: none; padding: 15px 30px; font-weight: bold; border-radius: 5px; display: inline-block; font-size: 18px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                <i class="fa-brands fa-whatsapp me-2" style="font-size: 22px; vertical-align: middle;"></i> Enviar Mensaje a Dirección
+            <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa" style="display: inline-flex; width: auto; padding: 15px 30px;">
+                <i class="fa-brands fa-whatsapp"></i> Enviar Mensaje a Dirección
             </a>
         </div>
     </div>
 
-    <a href="https://wa.me/59173111000" target="_blank" class="whatsapp-floating" title="Escríbenos a Prensa">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
+    <div class="bottom-radio-bar">
+        <div class="radio-playing-info">
+            <span class="blink-dot">■ AL AIRE:</span>
+            <span>Mundo Laboral Radio (Streaming Digital)</span>
+        </div>
+        <audio controls class="audio-player-element">
+            <source src="https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3" type="audio/mpeg">
+            Tu navegador no soporta el reproductor de audio.
+        </audio>
+    </div>
 
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
     
     <script>
+        // Inicializar reproductor de Video.js para el móvil
+        var livePlayer = videojs('live-tv-player');
+
+        // Función para cambiar entre Pestañas del Menú
         function openTab(tabId, navId) {
             var tabs = document.getElementsByClassName('tab-content');
             for (var i = 0; i < tabs.length; i++) {
@@ -336,8 +361,36 @@
             
             document.getElementById(tabId).classList.add('active');
             document.getElementById(navId).classList.add('active');
+
+            // Pausar el en vivo si el usuario sale de la pestaña TV
+            if (tabId !== 'tv-tab') {
+                livePlayer.pause();
+            }
+        }
+
+        // Función clave: Alternar entre la Playlist de YouTube y la cámara en vivo
+        function setTvMode(mode) {
+            var wrapperYt = document.getElementById('wrapper-youtube');
+            var wrapperLive = document.getElementById('wrapper-live');
+            var btnYt = document.getElementById('btn-mode-yt');
+            var btnLive = document.getElementById('btn-mode-live');
+
+            if (mode === 'youtube') {
+                // Mostrar YouTube, ocultar y pausar transmisión móvil
+                wrapperYt.style.display = 'block';
+                wrapperLive.style.display = 'none';
+                btnYt.classList.add('active');
+                btnLive.classList.remove('active');
+                livePlayer.pause();
+            } else if (mode === 'live') {
+                // Ocultar YouTube, mostrar e iniciar transmisión móvil
+                wrapperYt.style.display = 'none';
+                wrapperLive.style.display = 'block';
+                btnYt.classList.remove('active');
+                btnLive.classList.add('active');
+                livePlayer.play();
+            }
         }
     </script>
-
 </body>
 </html>
