@@ -65,7 +65,7 @@
     <div id="videos" class="seccion">
         <div class="video-nav">
             <button id="sub-btn-playlist" class="active" onclick="verVideo('playlist')"><i class="fas fa-list"></i> PLAYLIST / RECIENTES</button>
-            <button id="sub-btn-live" onclick="verVideo('live')"><i class="fas fa-circle" style="color:#ff4d4d"></i> TRANSMISIÓN EN VIVO</button>
+            <button id="sub-btn-live" onclick="verVideo('live')" title="haz clic para ver la transmisión en vivo"><i class="fas fa-circle" style="color:#ff4d4d"></i> TRANSMISIÓN EN VIVO</button>
         </div>
 
         <div id="video-playlist" class="video-subseccion active">
@@ -76,7 +76,7 @@
 
         <div id="video-live" class="video-subseccion">
             <div class="tv-container">
-                <iframe src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/live_stream?channel=AQUÍ_PONES_TU_ID_DE_CANAL_QUE_EMPIEZA_CON_UC" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
         </div>
     </div>
@@ -113,7 +113,6 @@
         document.getElementById('btn-' + id).classList.add('active');
     }
 
-    // Función para alternar entre Playlist y En Vivo
     function verVideo(tipo) {
         document.querySelectorAll('.video-subseccion').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.video-nav button').forEach(b => b.classList.remove('active'));
