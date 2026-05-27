@@ -97,15 +97,16 @@
             position: relative;
         }
 
-        /* Contenedor responsivo para YouTube (Relación 16:9) */
-        .youtube-responsive {
+        /* Contenedor responsivo para YouTube e IFRAMES (Relación 16:9) */
+        .video-responsive-container {
             position: relative;
             padding-bottom: 56.25%; /* 16:9 */
             height: 0;
             overflow: hidden;
+            width: 100%;
         }
 
-        .youtube-responsive iframe {
+        .video-responsive-container iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -114,30 +115,25 @@
             border: 0;
         }
 
-        /* Controladores de modo de transmisión */
-        .stream-switcher {
+        /* Indicador de Estado del Vivo Automático */
+        .live-status-indicator {
             margin-bottom: 15px;
-            text-align: left;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .btn-switch {
-            background-color: #222;
-            color: #fff;
-            border: 1px solid #444;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 13px;
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
         }
-
-        .btn-switch.active {
-            background-color: #e50914;
-            border-color: #e50914;
-        }
+        .status-dot.searching { background-color: #ffaa00; animation: pulse 1s infinite; }
+        .status-dot.live { background-color: #ff0000; animation: pulse 1s infinite; }
 
         /* BOTONES LATERALES */
         .sidebar-buttons {
@@ -174,7 +170,6 @@
         .btn-wa { background-color: #25d366; }
         .btn-tg { background-color: #0088cc; }
         .btn-fb { background-color: #1877f2; }
-        .btn-yt { background-color: #ff0000; }
 
         /* BARRA INFERIOR DE RADIO FIXED */
         .bottom-radio-bar {
@@ -202,7 +197,7 @@
 
         .blink-dot {
             color: #ff0000;
-            animation: blink 1.5s infinite;
+            animation: pulse 1.5s infinite;
         }
 
         .audio-player-element {
@@ -220,7 +215,7 @@
             line-height: 1.6;
         }
 
-        @keyframes blink {
+        @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.4; }
             100% { opacity: 1; }
@@ -268,30 +263,32 @@
         
         <div class="main-layout">
             <div>
-                <div class="stream-switcher">
-                    <button id="btn-mode-yt" class="btn-switch active" onclick="setTvMode('youtube')"><i class="fa-solid fa-film"></i> Programación Regular</button>
-                    <button id="btn-mode-live" class="btn-switch" onclick="setTvMode('live')"><i class="fa-solid fa-circle-dot blink-dot"></i> TRANSMISIÓN EN VIVO DESDE MOVIL</button>
+                <div class="live-status-indicator">
+                    <span id="live-indicator-dot" class="status-dot searching"></span>
+                    <span id="live-indicator-text">Cargando programación...</span>
                 </div>
 
                 <div class="video-wrapper">
-                    <div id="wrapper-youtube" class="youtube-responsive">
+                    <div class="video-responsive-container">
+                        
                         <iframe 
-                            src="https://www.youtube.com/embed/videoseries?list=PLuv8v9asR76eSId_X8Ph_b9fO7UCLlY6N&autoplay=1&mute=1" 
+                            id="player-youtube"
+                            src="https://www.youtube.com/embed/videoseries?list=PLuv8v9asR76eSId_X8Ph_b9fO7UCLlY6N&autoplay=1&mute=1&rel=0" 
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowfullscreen>
                         </iframe>
-                    </div>
 
-                    <div id="wrapper-live" style="display: none;">
-                        <video 
-                            id="live-tv-player" 
-                            class="video-js vjs-default-skin vjs-16-9 vjs-big-play-centered" 
-                            controls 
-                            preload="auto" 
-                            width="100%">
-                            <source src="TU_ENLACE_DE_STREAMING_DESDE_EL_CELULAR.m3u8" type="application/x-mpegURL">
-                            Tu navegador no soporta streaming HLS.
-                        </video>
+                        <div id="wrapper-live" style="display: none; position: absolute; top:0; left:0; width:100%; height:100%;">
+                            <video 
+                                id="live-tv-player" 
+                                class="video-js vjs-default-skin vjs-fill" 
+                                controls 
+                                preload="auto">
+                                <source src="TU_ENLACE_DE_STREAMING_DESDE_EL_CELULAR.m3u8" type="application/x-mpegURL">
+                                Tu navegador no soporta streaming HLS.
+                            </video>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -316,7 +313,6 @@
             <a href="https://wa.me/59173111000" target="_blank" class="btn-side btn-wa"><i class="fa-brands fa-whatsapp"></i> WhatsApp Prensa</a>
             <a href="https://t.me/+FfI_M03y91YxNjEx" target="_blank" class="btn-side btn-tg"><i class="fa-brands fa-telegram"></i> Telegram</a>
             <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="btn-side btn-fb"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
-            <a href="https://www.youtube.com/@mundolaboralradio" target="_blank" class="btn-side btn-yt"><i class="fa-brands fa-youtube"></i> YouTube</a>
         </div>
     </div>
 
@@ -344,8 +340,12 @@
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
     
     <script>
-        // Inicializar reproductor de Video.js para el móvil
+        // URL de tu streaming móvil (Debe ser la misma que pusiste en el <source>)
+        const STREAM_URL = "TU_ENLACE_DE_STREAMING_DESDE_EL_CELULAR.m3u8";
+
+        // Inicializar reproductor de Video.js
         var livePlayer = videojs('live-tv-player');
+        var isStreamingActive = false;
 
         // Función para cambiar entre Pestañas del Menú
         function openTab(tabId, navId) {
@@ -362,35 +362,76 @@
             document.getElementById(tabId).classList.add('active');
             document.getElementById(navId).classList.add('active');
 
-            // Pausar el en vivo si el usuario sale de la pestaña TV
-            if (tabId !== 'tv-tab') {
+            // Pausar streaming móvil si se sale de la pestaña de TV
+            if (tabId !== 'tv-tab' && isStreamingActive) {
                 livePlayer.pause();
-            }
-        }
-
-        // Función clave: Alternar entre la Playlist de YouTube y la cámara en vivo
-        function setTvMode(mode) {
-            var wrapperYt = document.getElementById('wrapper-youtube');
-            var wrapperLive = document.getElementById('wrapper-live');
-            var btnYt = document.getElementById('btn-mode-yt');
-            var btnLive = document.getElementById('btn-mode-live');
-
-            if (mode === 'youtube') {
-                // Mostrar YouTube, ocultar y pausar transmisión móvil
-                wrapperYt.style.display = 'block';
-                wrapperLive.style.display = 'none';
-                btnYt.classList.add('active');
-                btnLive.classList.remove('active');
-                livePlayer.pause();
-            } else if (mode === 'live') {
-                // Ocultar YouTube, mostrar e iniciar transmisión móvil
-                wrapperYt.style.display = 'none';
-                wrapperLive.style.display = 'block';
-                btnYt.classList.remove('active');
-                btnLive.classList.add('active');
+            } else if (tabId === 'tv-tab' && isStreamingActive) {
                 livePlayer.play();
             }
         }
+
+        // SISTEMA DE DETECCIÓN AUTOMÁTICA (REVISIÓN DE SEÑAL)
+        function verificarSenalEnVivo() {
+            if (!STREAM_URL || STREAM_URL.includes("TU_ENLACE_DE_STREAMING")) {
+                actualizarInterfaz(false);
+                return;
+            }
+
+            // Hacemos una petición ligera tipo 'HEAD' para saber si el archivo de transmisión existe
+            fetch(STREAM_URL, { method: 'HEAD', cache: 'no-store' })
+            .then(response => {
+                // Si el servidor responde bien (Status 200), significa que estás transmitiendo
+                if (response.ok) {
+                    actualizarInterfaz(true);
+                } else {
+                    actualizarInterfaz(false);
+                }
+            })
+            .catch(() => {
+                // Si da error de conexión (el streaming está apagado), muestra YouTube
+                actualizarInterfaz(false);
+            });
+        }
+
+        function actualizarInterfaz(enVivoActivo) {
+            var ytPlayer = document.getElementById('player-youtube');
+            var liveWrapper = document.getElementById('wrapper-live');
+            var indicatorDot = document.getElementById('live-indicator-dot');
+            var indicatorText = document.getElementById('live-indicator-text');
+
+            if (enVivoActivo) {
+                if (!isStreamingActive) {
+                    // Acción de CORTE: Oculta YouTube y activa tu Transmisión Móvil
+                    ytPlayer.style.display = 'none';
+                    liveWrapper.style.display = 'block';
+                    
+                    indicatorDot.className = "status-dot live";
+                    indicatorText.innerHTML = "🔴 EN VIVO: Transmisión directa desde exteriores";
+                    
+                    // Recarga y reproduce automáticamente el reproductor HLS
+                    livePlayer.src({ type: 'application/x-mpegURL', src: STREAM_URL });
+                    livePlayer.play();
+                    isStreamingActive = true;
+                }
+            } else {
+                if (isStreamingActive || indicatorText.innerHTML === "Cargando programación...") {
+                    // Acción de REGRESO: Oculta el vivo y restablece la Playlist de YouTube
+                    livePlayer.pause();
+                    liveWrapper.style.display = 'none';
+                    ytPlayer.style.display = 'block';
+                    
+                    indicatorDot.className = "status-dot searching";
+                    indicatorText.innerHTML = "📺 Programación Regular (Lista de YouTube)";
+                    isStreamingActive = false;
+                }
+            }
+        }
+
+        // Comprobar el estado de la transmisión al cargar la página
+        verificarSenalEnVivo();
+
+        // Comprobación en bucle automático cada 10 segundos
+        setInterval(verificarSenalEnVivo, 10000);
     </script>
 </body>
 </html>
