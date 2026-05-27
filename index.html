@@ -10,19 +10,25 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--negro); color: var(--texto); margin: 0; padding: 0; }
         header { background: #000; padding: 25px 0; border-bottom: 2px solid var(--rojo); text-align: center; }
         .brand-name { font-size: 30px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
-        nav { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 15px; }
-        nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        nav { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         nav button.active { background: var(--rojo); border-color: var(--rojo); }
-        .container { padding: 20px; min-height: 50vh; display: flex; justify-content: center; }
-        .seccion { display: none; width: 100%; max-width: 800px; }
+        .container { padding: 20px; min-height: 60vh; display: flex; justify-content: center; }
+        .seccion { display: none; width: 100%; max-width: 1000px; animation: fadeIn 0.3s; }
         .seccion.active { display: block; }
-        .reproductor-card { background: #1a1a1a; border: 1px solid var(--rojo); border-radius: 20px; padding: 30px; text-align: center; }
-        .tv-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .reproductor-card { background: #1a1a1a; border: 1px solid var(--rojo); border-radius: 20px; padding: 40px; text-align: center; }
+        #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
+        .tv-container { width: 100%; aspect-ratio: 16 / 9; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; background: #000; }
         iframe { width: 100%; height: 100%; border: none; }
-        .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-        .card-red { padding: 15px; border-radius: 10px; color: white; text-decoration: none; text-align: center; border: 1px solid #333; }
-        .form-contacto { background: var(--gris); padding: 20px; border-radius: 15px; }
-        input, textarea { width: 100%; padding: 10px; margin: 5px 0; background: #000; color: #fff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box; }
+        
+        .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .card-red { padding: 20px; border-radius: 12px; text-decoration: none; color: white; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid #333; }
+        .card-red:hover { background: rgba(255,255,255,0.1); }
+        
+        .form-contacto { background: var(--gris); padding: 25px; border-radius: 15px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #333; }
+        .form-contacto input, .form-contacto textarea { background: #000; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -41,11 +47,9 @@
     <div id="inicio" class="seccion active">
         <div class="reproductor-card">
             <h1>RADIO EN VIVO</h1>
-            <button id="play-btn" onclick="toggleAudio()" style="background:var(--rojo); border:none; color:white; padding:20px 40px; border-radius:50px; cursor:pointer; font-size:20px;">
-                <i id="p-icon" class="fas fa-play"></i>
-            </button>
+            <button id="play-btn" onclick="toggleAudio()"><i id="p-icon" class="fas fa-play"></i></button>
+            <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.8">
             <p id="status">Toca para escuchar</p>
-            <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.8">
         </div>
     </div>
 
@@ -60,14 +64,15 @@
             <a href="https://facebook.com/MundoLaboralRadio" class="card-red" style="background:#1877F2">Facebook</a>
             <a href="https://youtube.com/@mundolaboralradiovallegrande" class="card-red" style="background:#FF0000">YouTube</a>
             <a href="https://www.tiktok.com/@carlosfer_1971" class="card-red" style="background:#000">TikTok</a>
+            <a href="https://t.me/+OlAmHfkWb3I2MzEx" class="card-red" style="background:#0088cc">Telegram</a>
         </div>
     </div>
 
     <div id="contacto" class="seccion">
         <div class="form-contacto">
-            <input type="text" id="c-nombre" placeholder="Tu nombre">
-            <textarea id="c-mensaje" placeholder="Tu mensaje"></textarea>
-            <button onclick="enviarWA()" style="background:#25D366; color:white; border:none; padding:10px; width:100%;">ENVIAR WHATSAPP</button>
+            <input type="text" id="c-nombre" placeholder="Nombre">
+            <textarea id="c-mensaje" placeholder="Mensaje"></textarea>
+            <button onclick="enviarWA()" style="background:#25D366; color:white; border:none; padding:10px;">ENVIAR</button>
         </div>
     </div>
 </div>
@@ -84,18 +89,8 @@
     let sonando = false;
 
     function toggleAudio() {
-        const icon = document.getElementById("p-icon");
-        if (!sonando) {
-            radio.play();
-            icon.className = "fas fa-pause";
-            document.getElementById("status").innerText = "SONANDO...";
-            sonando = true;
-        } else {
-            radio.pause();
-            icon.className = "fas fa-play";
-            document.getElementById("status").innerText = "RADIO PAUSADA";
-            sonando = false;
-        }
+        if (!sonando) { radio.play(); sonando = true; } 
+        else { radio.pause(); sonando = false; }
     }
 
     function enviarWA() {
