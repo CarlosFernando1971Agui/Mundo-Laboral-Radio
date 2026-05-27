@@ -25,9 +25,10 @@
         .tv-container { width: 100%; aspect-ratio: 16 / 9; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; background: #000; margin-top: 20px; }
         iframe { width: 100%; height: 100%; border: none; }
         
+        /* Botones de redes con sus colores */
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .card-red { padding: 20px; border-radius: 12px; text-decoration: none; color: white; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid #333; }
-        .card-red:hover { background: rgba(255,255,255,0.1); }
+        .card-red { padding: 20px; border-radius: 12px; text-decoration: none; color: white; text-align: center; font-weight: bold; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: 0.3s; }
+        .card-red:hover { opacity: 0.9; transform: translateY(-3px); }
         
         .form-contacto { background: var(--gris); padding: 25px; border-radius: 15px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #333; }
         .form-contacto input, .form-contacto textarea { background: #000; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; }
@@ -70,14 +71,14 @@
 
     <div id="redes" class="seccion">
         <div class="grid-redes">
-            <a href="https://mundolaboral.radio.com.bo/" target="_blank" class="card-red"><i class="fas fa-globe fa-2x"></i> Web</a>
-            <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" target="_blank" class="card-red"><i class="fab fa-google-play fa-2x"></i> App Android</a>
-            <a href="https://facebook.com/MundoLaboralRadio" target="_blank" class="card-red"><i class="fab fa-facebook fa-2x"></i> Facebook</a>
-            <a href="https://youtube.com/@mundolaboralradiovallegrande" target="_blank" class="card-red"><i class="fab fa-youtube fa-2x"></i> YouTube</a>
-            <a href="https://www.tiktok.com/@carlosfer_1971" target="_blank" class="card-red"><i class="fab fa-tiktok fa-2x"></i> TikTok</a>
-            <a href="https://www.instagram.com/carlosfernandoaguilare/" target="_blank" class="card-red"><i class="fab fa-instagram fa-2x"></i> Instagram</a>
-            <a href="https://t.me/+OlAmHfkWb3I2MzEx" target="_blank" class="card-red"><i class="fab fa-telegram fa-2x"></i> Telegram</a>
-            <a href="https://chat.whatsapp.com/BMDRQO15kyPCFxomtgtIyX" target="_blank" class="card-red"><i class="fas fa-users fa-2x"></i> Grupo WhatsApp</a>
+            <a href="https://mundolaboral.radio.com.bo/" target="_blank" class="card-red" style="background:#444;"><i class="fas fa-globe fa-2x"></i> Web</a>
+            <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" target="_blank" class="card-red" style="background:#34a853;"><i class="fab fa-google-play fa-2x"></i> App Android</a>
+            <a href="https://facebook.com/MundoLaboralRadio" target="_blank" class="card-red" style="background:#1877F2;"><i class="fab fa-facebook fa-2x"></i> Facebook</a>
+            <a href="https://www.youtube.com/@mundolaboralradio" target="_blank" class="card-red" style="background:#FF0000;"><i class="fab fa-youtube fa-2x"></i> YouTube</a>
+            <a href="https://www.tiktok.com/@carlosfer_1971" target="_blank" class="card-red" style="background:#000;"><i class="fab fa-tiktok fa-2x"></i> TikTok</a>
+            <a href="https://www.instagram.com/carlosfernandoaguilare/" target="_blank" class="card-red" style="background:#bc1888;"><i class="fab fa-instagram fa-2x"></i> Instagram</a>
+            <a href="https://t.me/+OlAmHfkWb3I2MzEx" target="_blank" class="card-red" style="background:#0088cc;"><i class="fab fa-telegram fa-2x"></i> Telegram</a>
+            <a href="https://chat.whatsapp.com/BMDRQO15kyPCFxomtgtIyX" target="_blank" class="card-red" style="background:#25D366;"><i class="fas fa-users fa-2x"></i> Grupo WhatsApp</a>
         </div>
     </div>
 
