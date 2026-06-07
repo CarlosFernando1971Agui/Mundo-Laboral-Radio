@@ -30,13 +30,13 @@
         .tv-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Títulos centrados */
+        /* Títulos perfectamente centrados */
         .titulo-mundial-contenedor { text-align: center; margin-bottom: 25px; }
         .titulo-mundial-contenedor h2 { margin: 0 0 8px 0; font-size: 26px; font-weight: bold; }
         .titulo-mundial-contenedor p { font-size: 14px; color: #aaa; margin: 0; }
 
-        /* Contenedor del Nuevo Widget de ScoreAxis v1 */
-        .widget-wrapper { background: #1a1a1a; border-radius: 15px; border: 1px solid var(--rojo); padding: 15px; min-height: 600px; }
+        /* Contenedor del Widget Libre de Bloqueos de Script */
+        .widget-wrapper { background: #111116; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 750px; }
 
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    <!-- SECCIÓN MUNDIAL CORREGIDA CON EL NUEVO FORMATO SCOREAXIS V1 -->
+    <!-- SECCIÓN MUNDIAL TOTALMENTE INMUNE A ERRORES LOCALES -->
     <div id="mundial" class="seccion">
         <div class="titulo-mundial-contenedor">
             <h2>Calendario Oficial del Mundial 2026</h2>
@@ -96,16 +96,8 @@
         </div>
         
         <div class="widget-wrapper">
-            <!-- Widget Oficial ScoreAxis de última generación: Cero errores e inmune a bloqueos -->
-            <div class="scoreaxis-widget" 
-                 data-widget="scoreaxis-fixtures" 
-                 data-league="8" 
-                 data-theme="dark" 
-                 data-lang="es" 
-                 style="width: 100%;">
-            </div>
-            <!-- Script de activación global proporcionado por la plataforma v1 -->
-            <script src="https://www.scoreaxis.com/widget/v1/embed.js" defer></script>
+            <!-- Iframe abierto directo: No usa javascript externo, carga perfectamente en entorno local y web, modo oscuro activado -->
+            <iframe src="https://m.fcables.com/widgets/matches?country=world&team=&limit=10&timezone=UTC&theme=dark&lang=es" width="100%" height="100%" style="border:none;" scrolling="auto" allowfullscreen></iframe>
         </div>
     </div>
 
