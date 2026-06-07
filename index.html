@@ -9,19 +9,18 @@
         :root { --rojo: #ff4d4d; --negro: #0d0d11; --gris: #16161d; --texto: #ffffff; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--negro); color: var(--texto); margin: 0; padding: 0; }
         
-        /* Estilos generales */
         header { background: #000; padding: 25px 0; border-bottom: 2px solid var(--rojo); text-align: center; }
         .brand-name { font-size: 30px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
+        
         nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
         nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         nav button.active { background: var(--rojo); border-color: var(--rojo); }
         
-        /* Contenedores */
-        .info-box { background: #1a1a1a; max-width: 950px; margin: 0 auto 20px auto; padding: 20px; border-radius: 10px; border: 1px solid var(--rojo); display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        .data-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .info-item { display: flex; align-items: center; gap: 8px; font-weight: bold; }
+        /* Barra de estado (Solo reloj) */
+        .status-bar { background: #1a1a1a; max-width: 950px; margin: 0 auto 20px auto; padding: 15px; border-radius: 10px; border: 1px solid var(--rojo); text-align: center; font-weight: bold; }
         
-        .seccion { display: none; padding: 20px; text-align: center; }
+        /* Secciones */
+        .seccion { display: none; padding: 20px; text-align: center; max-width: 950px; margin: 0 auto; }
         .seccion.active { display: block; }
     </style>
 </head>
@@ -37,22 +36,19 @@
     </nav>
 </header>
 
-<div class="info-box">
-    <div class="data-row">
-        <div class="info-item"><i class="fas fa-clock"></i> <span id="clock">00:00</span></div>
-        <div class="info-item"><i class="fas fa-thermometer-half"></i> <span id="temp">--</span>°C</div>
-        <div class="info-item"><i class="fas fa-cloud"></i> <span id="desc">Cargando...</span></div>
-    </div>
+<!-- Barra limpia solo con reloj -->
+<div class="status-bar">
+    <i class="fas fa-clock" style="color:var(--rojo)"></i> <span id="clock">00:00</span>
 </div>
 
 <div id="inicio" class="seccion active">
-    <h1>Sección Radio</h1>
-    <p>Contenido de Radio aquí.</p>
+    <h1>RADIO EN VIVO</h1>
+    <p>Vallegrande, Bolivia</p>
 </div>
 
 <div id="videos" class="seccion">
     <h1>Sección Videos</h1>
-    <p>Contenido de Videos aquí.</p>
+    <p>Contenido de videos.</p>
 </div>
 
 <div id="redes" class="seccion">
@@ -64,45 +60,24 @@
 </div>
 
 <script>
-    // 1. Lógica de Navegación
+    // Lógica de navegación
     function ir(id) {
-        console.log("Cambiando a: " + id); // Para depurar, abre F12 en tu navegador
-        
-        // Ocultar todas las secciones
+        // Ocultar todo
         document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
-        // Quitar clase activa de botones
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
         
-        // Mostrar sección destino
+        // Mostrar objetivo
         document.getElementById(id).classList.add('active');
-        // Activar botón
         document.getElementById('btn-' + id).classList.add('active');
     }
 
-    // 2. Lógica Clima
-    async function obtenerClima() {
-        const apiKey = '67990054779e52bafeb9bd5eb11949d';
-        const lat = -18.47; 
-        const lon = -64.10;
-        try {
-            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=es`;
-            const response = await fetch(url);
-            const data = await response.json();
-            document.getElementById('temp').textContent = Math.round(data.main.temp);
-            document.getElementById('desc').textContent = data.weather[0].description;
-        } catch (error) {
-            console.log("Error en API clima, pero la web sigue funcionando");
-        }
-    }
-
-    // 3. Reloj
+    // Lógica del Reloj
     function updateClock() {
         const now = new Date();
         document.getElementById('clock').textContent = now.toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'});
     }
-
-    // Iniciar funciones al cargar
-    obtenerClima();
+    
+    // Iniciar reloj
     setInterval(updateClock, 1000);
     updateClock();
 </script>
