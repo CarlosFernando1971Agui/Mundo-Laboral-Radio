@@ -29,16 +29,9 @@
 
         .tv-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
-        
-        /* Estilos de Tarjetas Manuales */
-        .fixture-container { display: flex; flex-direction: column; gap: 15px; }
-        .partido-card { background: var(--gris); border: 1px solid #333; border-left: 5px solid var(--rojo); border-radius: 8px; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .partido-info { font-size: 13px; color: #aaa; }
-        .partido-equipos { font-size: 16px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
-        .resultado-marcador { background: #000; padding: 5px 15px; border-radius: 5px; font-weight: 900; color: var(--rojo); font-size: 18px; border: 1px solid #222; }
 
-        /* Contenedor del Widget */
-        .widget-wrapper { background: #1a1a1a; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 650px; }
+        /* Contenedor del Widget del Mundial */
+        .widget-wrapper { background: #1a1a1a; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 700px; }
 
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
@@ -90,58 +83,15 @@
         </div>
     </div>
 
-    <!-- SECCIÓN MUNDIAL CORREGIDA SIN 404 -->
+    <!-- SECCIÓN MUNDIAL TOTALMENTE AUTOMÁTICA Y LIBRE DE ERRORES -->
     <div id="mundial" class="seccion">
-        <div class="sub-nav">
-            <button id="sub-btn-fixture" class="active" onclick="verMundial('fixture')"><i class="far fa-calendar-alt"></i> PRIMEROS PARTIDOS</button>
-            <button id="sub-btn-resultados" onclick="verMundial('resultados')"><i class="fas fa-sync-alt"></i> TODO EN VIVO (AUTO)</button>
-        </div>
-
-        <!-- Subsección 1: Primeros Partidos -->
-        <div id="mundial-fixture" class="sub-seccion active">
-            <h2>Fixture de Apertura (Hora Local Bolivia)</h2>
-            <div class="fixture-container">
-                <div class="partido-card">
-                    <div class="partido-info">
-                        <div><strong>Grupo A - ¡Inaugural!</strong></div>
-                        <div>Jueves 11 de Junio - 16:00</div>
-                    </div>
-                    <div class="partido-equipos">
-                        <span>México 🇲🇽</span> <span>vs</span> <span>Sudáfrica 🇿🇦</span>
-                    </div>
-                    <div class="resultado-marcador">-- : --</div>
-                </div>
-                <div class="partido-card">
-                    <div class="partido-info">
-                        <div><strong>Grupo B - Fecha 1</strong></div>
-                        <div>Viernes 12 de Junio - 20:00</div>
-                    </div>
-                    <div class="partido-equipos">
-                        <span>Canadá 🇨🇦</span> <span>vs</span> <span>Bosnia y Herze. 🇧🇦</span>
-                    </div>
-                    <div class="resultado-marcador">-- : --</div>
-                </div>
-                <div class="partido-card">
-                    <div class="partido-info">
-                        <div><strong>Grupo D - Fecha 1</strong></div>
-                        <div>Sábado 13 de Junio - 22:00</div>
-                    </div>
-                    <div class="partido-equipos">
-                        <span>Estados Unidos 🇺🇸</span> <span>vs</span> <span>Paraguay 🇵🇾</span>
-                    </div>
-                    <div class="resultado-marcador">-- : --</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Subsección 2: Centro de Resultados (DIRECCIÓN OFICIAL REPARADA) -->
-        <div id="mundial-resultados" class="sub-seccion">
-            <h2>Partidos y Marcadores en Tiempo Real</h2>
-            <p style="font-size:13px; color:#aaa; margin-top:-10px; margin-bottom:15px;">Resultados globales de fútbol automáticos y traducidos a tu idioma.</p>
-            <div class="widget-wrapper">
-                <!-- Enlace oficial directo sin carpetas rotas, adaptado con colores negro y rojo -->
-                <iframe src="https://widgets.sofascore.com/embed/livescore?widgetTheme=dark&pageBackground=%231a1a1a&headerBackground=%23ff4d4d" width="100%" height="100%" style="border:none;" scrolling="auto"></iframe>
-            </div>
+        <h2>Fixture y Marcadores en Vivo</h2>
+        <p style="font-size:13px; color:#aaa; margin-top:-10px; margin-bottom:15px;">
+            Sigue el fixture completo, horarios, grupos y resultados del Mundial actualizados automáticamente minuto a minuto.
+        </p>
+        <div class="widget-wrapper">
+            <!-- Widget de ScoreBat Libre de Bloqueos y Autotraducido al Español -->
+            <iframe src="https://www.scorebat.com/embed/livescore/" width="100%" height="100%" style="border:none;" scrolling="auto" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -186,18 +136,6 @@
         } else {
             document.getElementById('video-playlist').classList.add('active');
             document.getElementById('sub-btn-playlist').classList.add('active');
-        }
-    }
-
-    function verMundial(tipo) {
-        document.querySelectorAll('#mundial .sub-seccion').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('#mundial .sub-nav button').forEach(b => b.classList.remove('active'));
-        if(tipo === 'resultados') {
-            document.getElementById('mundial-resultados').classList.add('active');
-            document.getElementById('sub-btn-resultados').classList.add('active');
-        } else {
-            document.getElementById('mundial-fixture').classList.add('active');
-            document.getElementById('sub-btn-fixture').classList.add('active');
         }
     }
 
