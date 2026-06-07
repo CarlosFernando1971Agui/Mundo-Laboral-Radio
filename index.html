@@ -89,36 +89,60 @@
 
     <!-- MUNDIAL -->
     <div id="mundial" class="seccion">
-        <div class="countdown-box">
-            <h3>Falta para el inicio de la fiesta mundialista</h3>
-            <div id="contadorMundial">Calculando...</div>
-        </div>
-        
+    <h2 style="text-align: center; color: var(--rojo);">COPA MUNDIAL 2026 - GRUPOS</h2>
+    
+    <div style="display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; margin-bottom: 20px;">
+        <button onclick="mostrarGrupo('A')" class="tab-btn active">Grupo A</button>
+        <button onclick="mostrarGrupo('B')" class="tab-btn">Grupo B</button>
+        <button onclick="mostrarGrupo('C')" class="tab-btn">Grupo C</button>
+        <button onclick="mostrarGrupo('D')" class="tab-btn">Grupo D</button>
+    </div>
+
+    <div id="grupo-A" class="grupo-panel active">
         <div class="grid-mundial">
-            <!-- Partidos (Estilo Google) -->
             <div class="card-mundial">
-                <h3 style="margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px;">Partidos - Fase de grupos</h3>
-                <div style="font-size: 0.9em;">
-                    <p><strong>Grupo A</strong></p>
-                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #333;">
-                        <span>🇲🇽 México vs 🇿🇦 Sudáfrica</span>
-                        <span style="color: var(--rojo);">Jue, 11/6 - 3:00 p.m.</span>
-                    </div>
-                </div>
+                <h3>Partidos Grupo A</h3>
+                <p>México vs Sudáfrica - Jue, 11/6</p>
+                <p>Corea del Sur vs Chequia - Jue, 11/6</p>
             </div>
-            <!-- Posiciones (Estilo Google) -->
             <div class="card-mundial">
-                <h3 style="margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px;">Posiciones - Grupo A</h3>
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.9em; text-align: center;">
-                    <thead><tr style="color: #888;"><th style="text-align: left;">Equipo</th><th>PJ</th><th>Pts</th></tr></thead>
-                    <tbody style="line-height: 2.5;">
-                        <tr><td style="text-align: left;">🇲🇽 México</td><td>0</td><td>0</td></tr>
-                        <tr><td style="text-align: left;">🇿🇦 Sudáfrica</td><td>0</td><td>0</td></tr>
-                    </tbody>
+                <h3>Posiciones Grupo A</h3>
+                <table style="width:100%">
+                    <tr><th>Equipo</th><th>PJ</th><th>Pts</th></tr>
+                    <tr><td>México</td><td>0</td><td>0</td></tr>
                 </table>
             </div>
         </div>
     </div>
+
+    <div id="grupo-B" class="grupo-panel">
+        <div class="grid-mundial">
+            <div class="card-mundial"><h3>Partidos Grupo B</h3><p>Próximamente...</p></div>
+            <div class="card-mundial"><h3>Posiciones Grupo B</h3><p>Próximamente...</p></div>
+        </div>
+    </div>
+    
+    </div>
+
+<style>
+    .tab-btn { background: #333; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
+    .tab-btn.active { background: var(--rojo); }
+    .grupo-panel { display: none; }
+    .grupo-panel.active { display: block; }
+</style>
+
+<script>
+    function mostrarGrupo(id) {
+        // Ocultar todos los paneles
+        document.querySelectorAll('.grupo-panel').forEach(p => p.classList.remove('active'));
+        // Quitar clase activa a botones
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        
+        // Mostrar el seleccionado
+        document.getElementById('grupo-' + id).classList.add('active');
+        event.target.classList.add('active');
+    }
+</script>
 
     <!-- REDES -->
     <div id="redes" class="seccion">
