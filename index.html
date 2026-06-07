@@ -7,43 +7,22 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <style>
         :root { --rojo: #ff4d4d; --negro: #0d0d11; --gris: #16161d; --texto: #ffffff; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--negro); color: var(--texto); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--negro); color: var(--texto); margin: 0; padding: 0; }
         
+        /* Estilos generales */
         header { background: #000; padding: 25px 0; border-bottom: 2px solid var(--rojo); text-align: center; }
         .brand-name { font-size: 30px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
-        
-        nav { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
-        nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         nav button.active { background: var(--rojo); border-color: var(--rojo); }
         
-        /* Contenedor Info Dinámico */
+        /* Contenedores */
         .info-box { background: #1a1a1a; max-width: 950px; margin: 0 auto 20px auto; padding: 20px; border-radius: 10px; border: 1px solid var(--rojo); display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        .location-label { color: var(--rojo); font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #333; width: 100%; text-align: center; padding-bottom: 5px; margin-bottom: 5px; font-size: 1.2em; }
         .data-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .info-item { display: flex; align-items: center; gap: 8px; font-weight: bold; font-size: 1.1em; }
-
-        .container { flex: 1; padding: 0 20px 20px 20px; display: flex; justify-content: center; }
-        .seccion { display: none; width: 100%; max-width: 950px; }
+        .info-item { display: flex; align-items: center; gap: 8px; font-weight: bold; }
+        
+        .seccion { display: none; padding: 20px; text-align: center; }
         .seccion.active { display: block; }
-        
-        /* Reproductor */
-        .reproductor-card { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop'); background-size: cover; background-position: center; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px 20px; text-align: center; }
-        #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
-        .vol-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
-        
-        .sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-        .sub-nav button { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
-        .sub-nav button.active { background: var(--rojo); }
-        .video-box { display: none; width: 100%; }
-        .video-box.active { display: block; }
-        .iframe-container { aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
-        iframe { width: 100%; height: 100%; border: none; }
-        .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .form-contacto { background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #333; max-width: 600px; margin: 0 auto; }
-        input, textarea { width: 100%; padding: 15px; margin: 10px 0; background: #000; color: #fff; border: 1px solid #444; border-radius: 8px; box-sizing: border-box; }
-        .float-wa { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 1000; text-decoration: none; }
-        footer { background: #000; padding: 20px; text-align: center; border-top: 2px solid var(--rojo); margin-top: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -59,41 +38,73 @@
 </header>
 
 <div class="info-box">
-    <div class="location-label">Vallegrande</div>
     <div class="data-row">
-        <div class="info-item"><i class="fas fa-clock" style="color:var(--rojo)"></i> <span id="clock">00:00</span></div>
-        <div class="info-item"><i class="fas fa-thermometer-half" style="color:var(--rojo)"></i> <span id="temp">--</span>°C</div>
-        <div class="info-item"><i class="fas fa-wind" style="color:var(--rojo)"></i> <span id="wind">--</span> km/h</div>
-        <div class="info-item"><i class="fas fa-cloud" style="color:var(--rojo)"></i> <span id="desc">Cargando...</span></div>
-        <div class="info-item"><i class="fas fa-umbrella" style="color:var(--rojo)"></i> <span id="rain">0</span>% lluvia</div>
+        <div class="info-item"><i class="fas fa-clock"></i> <span id="clock">00:00</span></div>
+        <div class="info-item"><i class="fas fa-thermometer-half"></i> <span id="temp">--</span>°C</div>
+        <div class="info-item"><i class="fas fa-cloud"></i> <span id="desc">Cargando...</span></div>
     </div>
 </div>
 
-<div class="container">
-    <div id="inicio" class="seccion active">
-        <div class="reproductor-card">
-            <h1>RADIO EN VIVO</h1>
-            <p style="font-size: 1.2em;">Vallegrande, Bolivia</p>
-            <button id="play-btn" onclick="toggleAudio()"><i id="p-icon" class="fas fa-play"></i></button>
-            <div class="vol-container">
-                <i class="fas fa-volume-up"></i>
-                <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.8" style="width: 150px; cursor: pointer;">
-            </div>
-            <p id="status" style="margin-top: 15px;">Toca para escuchar</p>
-        </div>
-    </div>
+<div id="inicio" class="seccion active">
+    <h1>Sección Radio</h1>
+    <p>Contenido de Radio aquí.</p>
+</div>
 
-    <div id="videos" class="seccion">
-        <div class="sub-nav">
-            <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLÁSICOS</button>
-            <button onclick="cambiarVideo('live')" id="sub-btn-live">TRANSMISIÓN EN VIVO</button>
-        </div>
-        <div id="clasico-box" class="video-box active">
-            <div class="iframe-container">
-                <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
-            </div>
-        </div>
-        <div id="live-box" class="video-box">
-            <div style="background:#1a1a1a; padding:40px; border-radius:15px; text-align:center; display:flex; flex-direction:column; gap:15px;">
-                <h3>¿Estamos transmitiendo?</h3>
-                <a href="
+<div id="videos" class="seccion">
+    <h1>Sección Videos</h1>
+    <p>Contenido de Videos aquí.</p>
+</div>
+
+<div id="redes" class="seccion">
+    <h1>Sección Redes</h1>
+</div>
+
+<div id="contacto" class="seccion">
+    <h1>Sección Contacto</h1>
+</div>
+
+<script>
+    // 1. Lógica de Navegación
+    function ir(id) {
+        console.log("Cambiando a: " + id); // Para depurar, abre F12 en tu navegador
+        
+        // Ocultar todas las secciones
+        document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
+        // Quitar clase activa de botones
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        
+        // Mostrar sección destino
+        document.getElementById(id).classList.add('active');
+        // Activar botón
+        document.getElementById('btn-' + id).classList.add('active');
+    }
+
+    // 2. Lógica Clima
+    async function obtenerClima() {
+        const apiKey = '67990054779e52bafeb9bd5eb11949d';
+        const lat = -18.47; 
+        const lon = -64.10;
+        try {
+            const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=es`;
+            const response = await fetch(url);
+            const data = await response.json();
+            document.getElementById('temp').textContent = Math.round(data.main.temp);
+            document.getElementById('desc').textContent = data.weather[0].description;
+        } catch (error) {
+            console.log("Error en API clima, pero la web sigue funcionando");
+        }
+    }
+
+    // 3. Reloj
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('clock').textContent = now.toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'});
+    }
+
+    // Iniciar funciones al cargar
+    obtenerClima();
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>
+</body>
+</html>
