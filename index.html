@@ -19,11 +19,8 @@
         .seccion { display: none; width: 100%; max-width: 950px; }
         .seccion.active { display: block; }
         
-        /* Reproductor Radio */
-        .reproductor-card { 
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop'); 
-            background-size: cover; background-position: center; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px 20px; text-align: center;
-        }
+        /* Radio */
+        .reproductor-card { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop'); background-size: cover; background-position: center; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px 20px; text-align: center; }
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
         .vol-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
         
@@ -36,6 +33,12 @@
         .iframe-container { aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
         
+        /* Mundial 2026 */
+        .mundial-header { text-align: center; margin-bottom: 25px; }
+        .mundial-card { background: #111; border: 1px solid #333; border-radius: 15px; overflow: hidden; margin-bottom: 20px; }
+        .mundial-card-header { background: var(--rojo); padding: 12px 20px; font-weight: bold; font-size: 1.1em; display: flex; align-items: center; gap: 10px; }
+        .mundial-iframe { width: 100%; border: none; display: block; }
+
         /* Redes */
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -46,7 +49,6 @@
         
         /* Flotante WhatsApp */
         .float-wa { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 1000; text-decoration: none; }
-
         footer { background: #000; padding: 20px; text-align: center; border-top: 2px solid var(--rojo); margin-top: 20px; font-weight: bold; }
     </style>
 </head>
@@ -57,13 +59,13 @@
     <nav id="main-nav">
         <button onclick="ir('inicio')" id="btn-inicio" class="active">RADIO</button>
         <button onclick="ir('videos')" id="btn-videos">VIDEOS</button>
+        <button onclick="ir('mundial')" id="btn-mundial">MUNDIAL 2026</button>
         <button onclick="ir('redes')" id="btn-redes">REDES</button>
         <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
     </nav>
 </header>
 
 <div class="container">
-    <!-- RADIO -->
     <div id="inicio" class="seccion active">
         <div class="reproductor-card">
             <h1>RADIO EN VIVO</h1>
@@ -77,45 +79,61 @@
         </div>
     </div>
 
-    <!-- VIDEOS -->
     <div id="videos" class="seccion">
         <div class="sub-nav">
             <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLÁSICOS</button>
             <button onclick="cambiarVideo('live')" id="sub-btn-live">TRANSMISIÓN EN VIVO</button>
         </div>
-        
         <div id="clasico-box" class="video-box active">
             <div class="iframe-container">
                 <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
             </div>
         </div>
-
         <div id="live-box" class="video-box">
-            <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                <button onclick="cargarLive('https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A')" style="background:var(--rojo); color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">VER EN VIVO</button>
-                <button onclick="cargarLive('https://www.youtube.com/embed/videoseries?list=UUUJY-xgeGJokDh-5Ho_Wb9A')" style="background:#333; color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">VER LISTA DE VIDEOS</button>
-            </div>
-            <div class="iframe-container">
-                <iframe id="frame-live" src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A" allowfullscreen></iframe>
+            <div style="background:#1a1a1a; padding:40px; border-radius:15px; text-align:center; display:flex; flex-direction:column; gap:15px;">
+                <h3>¿Estamos transmitiendo?</h3>
+                <a href="https://www.youtube.com/@mundolaboralradio/live" target="_blank" style="background:var(--rojo); color:white; padding:15px; border-radius:8px; text-decoration:none; font-weight:bold;">HAGA CLIC PARA VER EN VIVO</a>
+                <a href="https://studio.youtube.com/channel/UCUJY-xgeGJokDh-5Ho_Wb9A/videos/live" target="_blank" style="background:#333; color:white; padding:15px; border-radius:8px; text-decoration:none; font-weight:bold;">VER LISTA DE VIDEOS</a>
             </div>
         </div>
     </div>
 
-    <!-- REDES -->
+    <div id="mundial" class="seccion">
+        <div class="mundial-header">
+            <h1><i class="fas fa-futbol" style="color:var(--rojo)"></i> MUNDIAL 2026</h1>
+            <p>Estados Unidos · México · Canadá</p>
+        </div>
+        <div class="sub-nav">
+            <button onclick="cambiarMundial('partidos')" id="sub-btn-partidos" class="active">PARTIDOS</button>
+            <button onclick="cambiarMundial('tabla')" id="sub-btn-tabla">TABLA DE POSICIONES</button>
+        </div>
+        <div id="mundial-partidos" class="video-box active">
+            <div class="mundial-card">
+                <div class="mundial-card-header"><i class="fas fa-calendar-alt"></i> Calendario de Partidos</div>
+                <iframe class="mundial-iframe" src="https://www.sportbusy.com/embed/world-cup" height="600" loading="lazy"></iframe>
+            </div>
+        </div>
+        <div id="mundial-tabla" class="video-box">
+            <div class="mundial-card">
+                <div class="mundial-card-header"><i class="fas fa-table"></i> Tabla de Posiciones</div>
+                <iframe class="mundial-iframe" src="https://www.sportbusy.com/widget/standings/?league=world-cup" height="600" loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+
     <div id="redes" class="seccion">
         <div class="grid-redes">
-            <a href="https://mundolaboral.radio.com.bo/" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#444"><i class="fas fa-globe"></i> Web</a>
-            <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#34a853"><i class="fab fa-google-play"></i> App</a>
-            <a href="https://facebook.com/MundoLaboralRadio" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#1877F2"><i class="fab fa-facebook"></i> Facebook</a>
-            <a href="https://www.youtube.com/@mundolaboralradio" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#FF0000"><i class="fab fa-youtube"></i> YouTube</a>
-            <a href="https://www.tiktok.com/@carlosfer_1971" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#000"><i class="fab fa-tiktok"></i> TikTok</a>
-            <a href="https://www.instagram.com/carlosfernandoaguilare/" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#bc1888"><i class="fab fa-instagram"></i> Instagram</a>
-            <a href="https://t.me/+OlAmHfkWb3I2MzEx" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#0088cc"><i class="fab fa-telegram"></i> Telegram</a>
-            <a href="https://chat.whatsapp.com/BMDRQO15kyPCFxomtgtIyX" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#25D366"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="https://mundolaboral.radio.com.bo/" class="card-red" style="background:#444"><i class="fas fa-globe"></i> Web</a>
+            <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" class="card-red" style="background:#34a853"><i class="fab fa-google-play"></i> App</a>
+            <a href="https://facebook.com/MundoLaboralRadio" class="card-red" style="background:#1877F2"><i class="fab fa-facebook"></i> Facebook</a>
+            <a href="https://www.youtube.com/@mundolaboralradio" class="card-red" style="background:#FF0000"><i class="fab fa-youtube"></i> YouTube</a>
+            <a href="https://www.tiktok.com/@carlosfer_1971" class="card-red" style="background:#000"><i class="fab fa-tiktok"></i> TikTok</a>
+            <a href="https://www.instagram.com/carlosfernandoaguilare/" class="card-red" style="background:#bc1888"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="https://t.me/+OlAmHfkWb3I2MzEx" class="card-red" style="background:#0088cc"><i class="fab fa-telegram"></i> Telegram</a>
+            <a href="https://chat.whatsapp.com/BMDRQO15kyPCFxomtgtIyX" class="card-red" style="background:#25D366"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         </div>
     </div>
 
-    <!-- CONTACTO -->
     <div id="contacto" class="seccion">
         <div class="form-contacto">
             <h2 style="margin-top:0;">Contacto</h2>
@@ -126,7 +144,7 @@
     </div>
 </div>
 
-<a href="https://wa.me/59168785216" target="_blank" rel="noopener noreferrer" class="float-wa"><i class="fab fa-whatsapp"></i></a>
+<a href="https://wa.me/59168785216" class="float-wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
 <footer>Mundo Laboral Radio. Vallegrande 2026</footer>
 
@@ -150,8 +168,16 @@
         }
     }
 
-    function cargarLive(url) {
-        document.getElementById('frame-live').src = url;
+    function cambiarMundial(tipo) {
+        document.querySelectorAll('#mundial .video-box').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('#mundial .sub-nav button').forEach(b => b.classList.remove('active'));
+        if(tipo === 'partidos') {
+            document.getElementById('mundial-partidos').classList.add('active');
+            document.getElementById('sub-btn-partidos').classList.add('active');
+        } else {
+            document.getElementById('mundial-tabla').classList.add('active');
+            document.getElementById('sub-btn-tabla').classList.add('active');
+        }
     }
 
     const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
