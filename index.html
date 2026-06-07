@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Mundo Laboral Radio</title>
+    <title>Mundo Laboral Radio | Vallegrande 2026</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <style>
         :root { --rojo: #ff4d4d; --negro: #0d0d11; --gris: #16161d; --texto: #ffffff; }
@@ -32,16 +32,17 @@
         .iframe-container { aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
         
-        /* Live Buttons */
-        .live-action-box { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; background: #1a1a1a; padding: 40px; border-radius: 15px; border: 1px solid #333; }
-        .btn-link { background: var(--rojo); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; width: 300px; text-align: center; display: block; transition: 0.3s; }
-        .btn-link:hover { opacity: 0.9; }
-        .btn-link-sec { background: #333; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; width: 300px; text-align: center; display: block; }
-
         /* Redes */
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; }
+        .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; }
         
+        /* Contacto y Formulario */
+        .form-contacto { background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #333; max-width: 600px; margin: 0 auto; }
+        input, textarea { width: 100%; padding: 15px; margin: 10px 0; background: #000; color: #fff; border: 1px solid #444; border-radius: 8px; box-sizing: border-box; }
+        
+        /* Flotante WhatsApp */
+        .float-wa { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 1000; text-decoration: none; }
+
         footer { background: #000; padding: 20px; text-align: center; border-top: 2px solid var(--rojo); margin-top: 20px; font-weight: bold; }
     </style>
 </head>
@@ -68,41 +69,49 @@
 
     <div id="videos" class="seccion">
         <div class="sub-nav">
-            <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLÁSICO</button>
+            <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLÁSICOS</button>
             <button onclick="cambiarVideo('live')" id="sub-btn-live">TRANSMISIÓN EN VIVO</button>
         </div>
-        
         <div id="clasico-box" class="video-box active">
             <div class="iframe-container">
                 <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
             </div>
         </div>
-        
         <div id="live-box" class="video-box">
-            <div class="live-action-box">
+            <div style="background:#1a1a1a; padding:40px; border-radius:15px; text-align:center; display:flex; flex-direction:column; gap:15px;">
                 <h3>¿Estamos transmitiendo?</h3>
-                <a href="https://www.youtube.com/@mundolaboralradio/live" target="_blank" class="btn-link">HAGA CLIC PARA VER EN VIVO</a>
-                <a href="https://studio.youtube.com/channel/UCUJY-xgeGJokDh-5Ho_Wb9A/videos/live?filter=%5B%5D&sort=%7B%22columnType%22%3A%22date%22%2C%22sortOrder%22%3A%22DESCENDING%22%7D" target="_blank" class="btn-link-sec">VER LISTA DE VIDEOS EN VIVO</a>
+                <a href="https://www.youtube.com/@mundolaboralradio/live" target="_blank" style="background:var(--rojo); color:white; padding:15px; border-radius:8px; text-decoration:none; font-weight:bold;">HAGA CLIC PARA VER EN VIVO</a>
+                <a href="https://studio.youtube.com/channel/UCUJY-xgeGJokDh-5Ho_Wb9A/videos/live" target="_blank" style="background:#333; color:white; padding:15px; border-radius:8px; text-decoration:none; font-weight:bold;">VER LISTA DE VIDEOS</a>
             </div>
         </div>
     </div>
 
     <div id="redes" class="seccion">
         <div class="grid-redes">
-            <a href="https://facebook.com/MundoLaboralRadio" target="_blank" class="card-red" style="background:#1877F2">Facebook</a>
-            <a href="https://www.youtube.com/@mundolaboralradio" target="_blank" class="card-red" style="background:#FF0000">YouTube</a>
+            <a href="https://mundolaboral.radio.com.bo/" class="card-red" style="background:#444"><i class="fas fa-globe"></i> Web</a>
+            <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" class="card-red" style="background:#34a853"><i class="fab fa-google-play"></i> App</a>
+            <a href="https://facebook.com/MundoLaboralRadio" class="card-red" style="background:#1877F2"><i class="fab fa-facebook"></i> Facebook</a>
+            <a href="https://www.youtube.com/@mundolaboralradio" class="card-red" style="background:#FF0000"><i class="fab fa-youtube"></i> YouTube</a>
+            <a href="https://www.tiktok.com/@carlosfer_1971" class="card-red" style="background:#000"><i class="fab fa-tiktok"></i> TikTok</a>
+            <a href="https://www.instagram.com/carlosfernandoaguilare/" class="card-red" style="background:#bc1888"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="https://t.me/+OlAmHfkWb3I2MzEx" class="card-red" style="background:#0088cc"><i class="fab fa-telegram"></i> Telegram</a>
+            <a href="https://chat.whatsapp.com/BMDRQO15kyPCFxomtgtIyX" class="card-red" style="background:#25D366"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         </div>
     </div>
 
     <div id="contacto" class="seccion">
-        <div style="background: #1a1a1a; padding: 30px; border-radius: 15px;">
-            <h2 style="text-align:center">Contacto</h2>
-            <p style="text-align:center">Contáctanos vía WhatsApp para consultas.</p>
+        <div class="form-contacto">
+            <h2 style="margin-top:0;">Contacto</h2>
+            <input type="text" id="c-nombre" placeholder="Tu nombre">
+            <textarea id="c-mensaje" rows="5" placeholder="Tu mensaje"></textarea>
+            <button onclick="enviarWA()" style="background:var(--rojo); color:white; border:none; padding:15px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer;">ENVIAR POR WHATSAPP</button>
         </div>
     </div>
 </div>
 
-<footer>Mundo Laboral Radio</footer>
+<a href="https://wa.me/59168785216" class="float-wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+<footer>Mundo Laboral Radio. Vallegrande 2026</footer>
 
 <script>
     function ir(id) {
@@ -131,6 +140,13 @@
         const status = document.getElementById("status");
         if (!sonando) { radio.play(); icon.className = "fas fa-pause"; status.innerText = "SONANDO..."; sonando = true; } 
         else { radio.pause(); icon.className = "fas fa-play"; status.innerText = "Toca para escuchar"; sonando = false; }
+    }
+
+    function enviarWA() {
+        const msg = document.getElementById('c-mensaje').value;
+        const nombre = document.getElementById('c-nombre').value;
+        if(nombre && msg) window.open(`https://wa.me/59168785216?text=Hola soy ${nombre}, ${encodeURIComponent(msg)}`, '_blank');
+        else alert("Por favor completa tu nombre y mensaje.");
     }
 </script>
 </body>
