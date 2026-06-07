@@ -25,6 +25,14 @@
         
         .countdown-box { background: #16161d; border: 1px solid var(--rojo); padding: 30px; border-radius: 15px; text-align: center; margin-bottom: 20px; }
         #contadorMundial { font-size: 2em; font-weight: bold; color: var(--rojo); margin-top: 10px; }
+
+        .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
+        
+        .form-contacto { background: var(--gris); padding: 25px; border-radius: 15px; max-width: 500px; margin: 0 auto; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #000; color: #fff; border: 1px solid #444; border-radius: 8px; box-sizing: border-box; }
+        
+        footer { background: #000; padding: 20px; text-align: center; border-top: 2px solid var(--rojo); margin-top: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -35,18 +43,26 @@
         <button onclick="ir('inicio')" id="btn-inicio" class="active">RADIO</button>
         <button onclick="ir('videos')" id="btn-videos">VIDEOS</button>
         <button onclick="ir('mundial')" id="btn-mundial">MUNDIAL 2026</button>
+        <button onclick="ir('redes')" id="btn-redes">REDES</button>
+        <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
     </nav>
 </header>
 
 <div class="container">
+    <!-- INICIO -->
     <div id="inicio" class="seccion active">
         <div class="reproductor-card">
             <h1>RADIO EN VIVO</h1>
             <button id="play-btn" onclick="toggleAudio()"><i id="p-icon" class="fas fa-play"></i></button>
             <p id="status">Toca para escuchar</p>
+            <div style="margin-top: 20px;">
+                <label>Volumen:</label>
+                <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.8">
+            </div>
         </div>
     </div>
 
+    <!-- VIDEOS -->
     <div id="videos" class="seccion">
         <h2 style="text-align: center;">Transmisión en Vivo</h2>
         <div class="tv-container">
@@ -54,25 +70,47 @@
         </div>
     </div>
 
+    <!-- MUNDIAL -->
     <div id="mundial" class="seccion">
         <div class="countdown-box">
             <h3>Falta para el inicio de la fiesta mundialista</h3>
             <div id="contadorMundial">Calculando...</div>
         </div>
         <div style="text-align: center; padding: 20px;">
-            <p>El centro de estadísticas se activará automáticamente al inicio del torneo.</p>
             <a href="https://www.fifa.com/fifaplus/es/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" style="background: var(--rojo); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold;">IR AL SITIO OFICIAL FIFA</a>
         </div>
     </div>
+
+    <!-- REDES -->
+    <div id="redes" class="seccion">
+        <div class="grid-redes">
+            <a href="https://www.facebook.com/MundoLaboralRadio" target="_blank" class="card-red" style="background:#1877F2">Facebook</a>
+            <a href="https://www.tiktok.com/@carlosfer_1971" target="_blank" class="card-red" style="background:#000">TikTok</a>
+            <a href="https://wa.me/59168785216" target="_blank" class="card-red" style="background:#25D366">WhatsApp</a>
+        </div>
+    </div>
+
+    <!-- CONTACTO -->
+    <div id="contacto" class="seccion">
+        <div class="form-contacto">
+            <input type="text" id="c-nombre" placeholder="Tu nombre">
+            <textarea id="c-mensaje" placeholder="Tu mensaje"></textarea>
+            <button onclick="enviarWA()" style="background:var(--rojo); color:white; border:none; padding:15px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer;">ENVIAR WHATSAPP</button>
+        </div>
+    </div>
 </div>
+
+<footer>Mundo Laboral Radio. Vallegrande 2026</footer>
 
 <script>
     // Navegación
     function ir(id) {
         document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        document.getElementById('btn-' + id).classList.add('active');
+        const target = document.getElementById(id);
+        const btn = document.getElementById('btn-' + id);
+        if(target) target.classList.add('active');
+        if(btn) btn.classList.add('active');
     }
 
     // Audio
@@ -80,14 +118,29 @@
     let sonando = false;
     function toggleAudio() {
         const icon = document.getElementById("p-icon");
+        const status = document.getElementById("status");
         if (!sonando) {
             radio.play();
             icon.className = "fas fa-pause";
+            status.innerText = "SONANDO...";
             sonando = true;
         } else {
             radio.pause();
             icon.className = "fas fa-play";
+            status.innerText = "Toca para escuchar";
             sonando = false;
+        }
+    }
+    document.getElementById('vol-slider').oninput = function() { radio.volume = this.value; };
+
+    // WhatsApp
+    function enviarWA() {
+        const msg = document.getElementById('c-mensaje').value;
+        const nombre = document.getElementById('c-nombre').value;
+        if(nombre && msg) {
+            window.open(`https://wa.me/59168785216?text=Hola soy ${nombre}, ${encodeURIComponent(msg)}`, '_blank');
+        } else {
+            alert("Completa tu nombre y mensaje.");
         }
     }
 
@@ -98,7 +151,8 @@
         const diff = fechaMundial - ahora;
         const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
         const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        document.getElementById("contadorMundial").innerHTML = `${dias} DÍAS ${horas} HORAS`;
+        const contador = document.getElementById("contadorMundial");
+        if(contador) contador.innerHTML = `${dias} DÍAS ${horas} HORAS`;
     }, 1000);
 </script>
 </body>
