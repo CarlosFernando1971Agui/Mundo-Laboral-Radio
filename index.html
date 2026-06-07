@@ -15,8 +15,13 @@
         nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         nav button.active { background: var(--rojo); border-color: var(--rojo); }
 
-        .container { flex: 1; padding: 20px; display: flex; justify-content: center; }
-        .seccion { display: none; width: 100%; max-width: 950px; }
+        /* Contenedor principal con Banners */
+        .wrapper { display: flex; justify-content: center; gap: 20px; padding: 20px; flex: 1; width: 100%; box-sizing: border-box; }
+        .banner-side { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; }
+        .banner-img { width: 100%; border-radius: 10px; border: 1px solid var(--rojo); display: block; }
+
+        .container { flex: 1; max-width: 950px; }
+        .seccion { display: none; width: 100%; }
         .seccion.active { display: block; }
 
         /* Reproductor Radio */
@@ -38,32 +43,9 @@
 
         /* Mundial 2026 */
         .mundial-header { text-align: center; margin-bottom: 25px; }
-        .mundial-header h1 { font-size: 2em; margin: 0; }
-        .mundial-header p { color: #aaa; margin: 5px 0 0; }
-        .mundial-card {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 15px;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-        .mundial-card-header {
-            background: var(--rojo);
-            padding: 12px 20px;
-            font-weight: bold;
-            font-size: 1.1em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .mundial-card-body {
-            padding: 0;
-        }
-        .mundial-iframe {
-            width: 100%;
-            border: none;
-            display: block;
-        }
+        .mundial-card { background: #111; border: 1px solid #333; border-radius: 15px; overflow: hidden; margin-bottom: 20px; }
+        .mundial-card-header { background: var(--rojo); padding: 12px 20px; font-weight: bold; font-size: 1.1em; display: flex; align-items: center; gap: 10px; }
+        .mundial-iframe { width: 100%; border: none; display: block; }
 
         /* Redes */
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
@@ -75,8 +57,10 @@
 
         /* Flotante WhatsApp */
         .float-wa { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 1000; text-decoration: none; }
-
         footer { background: #000; padding: 20px; text-align: center; border-top: 2px solid var(--rojo); margin-top: 20px; font-weight: bold; }
+
+        /* Ocultar banners en móviles */
+        @media (max-width: 1100px) { .banner-side { display: none; } }
     </style>
 </head>
 <body>
@@ -92,110 +76,101 @@
     </nav>
 </header>
 
-<div class="container">
-    <div id="inicio" class="seccion active">
-        <div class="reproductor-card">
-            <h1>RADIO EN VIVO</h1>
-            <p style="margin-bottom: 20px; font-size: 1.2em;">Vallegrande, Bolivia</p>
-            <button id="play-btn" onclick="toggleAudio()"><i id="p-icon" class="fas fa-play"></i></button>
-            <div class="vol-container">
-                <i class="fas fa-volume-up"></i>
-                <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.8" style="width: 150px; cursor: pointer;">
-            </div>
-            <p id="status" style="margin-top: 15px;">Toca para escuchar</p>
-        </div>
-    </div>
+<div class="wrapper">
+    <aside class="banner-side">
+        <img src="https://i.postimg.cc/sxpnYN19/ags.jpg" class="banner-img" alt="Ad">
+        <img src="https://i.postimg.cc/NfcCsBPN/publi-fija-junio.jpg" class="banner-img" alt="Ad">
+        <img src="https://i.postimg.cc/HkPtygBT/232310560-401062984939201-7897983293061993896-n.png" class="banner-img" alt="Ad">
+    </aside>
 
-    <div id="videos" class="seccion">
-        <div class="sub-nav">
-            <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLÁSICOS</button>
-            <button onclick="cambiarVideo('live')" id="sub-btn-live">TRANSMISIÓN EN VIVO</button>
-        </div>
-
-        <div id="clasico-box" class="video-box active">
-            <div class="iframe-container">
-                <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
-            </div>
-        </div>
-
-        <div id="live-box" class="video-box">
-            <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                <button onclick="cargarLive('https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A')" style="background:var(--rojo); color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">VER EN VIVO</button>
-                <button onclick="cargarLive('https://www.youtube.com/embed/videoseries?list=UUUJY-xgeGJokDh-5Ho_Wb9A')" style="background:#333; color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">VER LISTA DE VIDEOS</button>
-            </div>
-            <div class="iframe-container">
-                <iframe id="frame-live" src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A" allowfullscreen></iframe>
-            </div>
-        </div>
-    </div>
-
-    <div id="mundial" class="seccion">
-        <div class="mundial-header">
-            <h1><i class="fas fa-futbol" style="color:var(--rojo)"></i> MUNDIAL 2026</h1>
-            <p>Estados Unidos · México · Canadá | 11 junio - 19 julio</p>
-        </div>
-
-        <div class="sub-nav">
-            <button onclick="cambiarMundial('partidos')" id="sub-btn-partidos" class="active">PARTIDOS</button>
-            <button onclick="cambiarMundial('tabla')" id="sub-btn-tabla">TABLA DE POSICIONES</button>
-        </div>
-
-        <div id="mundial-partidos" class="video-box active">
-            <div class="mundial-card">
-                <div class="mundial-card-header">
-                    <i class="fas fa-calendar-alt"></i> Calendario de Partidos - Mundial 2026
+    <div class="container">
+        <div id="inicio" class="seccion active">
+            <div class="reproductor-card">
+                <h1>RADIO EN VIVO</h1>
+                <p style="margin-bottom: 20px; font-size: 1.2em;">Vallegrande, Bolivia</p>
+                <button id="play-btn" onclick="toggleAudio()"><i id="p-icon" class="fas fa-play"></i></button>
+                <div class="vol-container">
+                    <i class="fas fa-volume-up"></i>
+                    <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.8" style="width: 150px; cursor: pointer;">
                 </div>
-                <div class="mundial-card-body">
-                    <iframe 
-                        class="mundial-iframe" 
-                        src="https://www.sportbusy.com/embed/world-cup" 
-                        height="600" 
-                        loading="lazy"
-                        title="Calendario Mundial 2026">
-                    </iframe>
+                <p id="status" style="margin-top: 15px;">Toca para escuchar</p>
+            </div>
+        </div>
+
+        <div id="videos" class="seccion">
+            <div class="sub-nav">
+                <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLÁSICOS</button>
+                <button onclick="cambiarVideo('live')" id="sub-btn-live">TRANSMISIÓN EN VIVO</button>
+            </div>
+
+            <div id="clasico-box" class="video-box active">
+                <div class="iframe-container">
+                    <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <div id="live-box" class="video-box">
+                <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
+                    <button onclick="cargarLive('https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A')" style="background:var(--rojo); color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">VER EN VIVO</button>
+                    <button onclick="cargarLive('https://www.youtube.com/embed/videoseries?list=UUUJY-xgeGJokDh-5Ho_Wb9A')" style="background:#333; color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">VER LISTA DE VIDEOS</button>
+                </div>
+                <div class="iframe-container">
+                    <iframe id="frame-live" src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
 
-        <div id="mundial-tabla" class="video-box">
-            <div class="mundial-card">
-                <div class="mundial-card-header">
-                    <i class="fas fa-table"></i> Tabla de Posiciones - Mundial 2026
+        <div id="mundial" class="seccion">
+            <div class="mundial-header">
+                <h1><i class="fas fa-futbol" style="color:var(--rojo)"></i> MUNDIAL 2026</h1>
+                <p>Estados Unidos · México · Canadá | 11 junio - 19 julio</p>
+            </div>
+            <div class="sub-nav">
+                <button onclick="cambiarMundial('partidos')" id="sub-btn-partidos" class="active">PARTIDOS</button>
+                <button onclick="cambiarMundial('tabla')" id="sub-btn-tabla">TABLA DE POSICIONES</button>
+            </div>
+            <div id="mundial-partidos" class="video-box active">
+                <div class="mundial-card">
+                    <div class="mundial-card-header"><i class="fas fa-calendar-alt"></i> Calendario de Partidos - Mundial 2026</div>
+                    <iframe class="mundial-iframe" src="https://www.sportbusy.com/embed/world-cup" height="600" loading="lazy"></iframe>
                 </div>
-                <div class="mundial-card-body">
-                    <iframe 
-                        class="mundial-iframe" 
-                        src="https://www.sportbusy.com/widget/standings/?league=world-cup" 
-                        height="600" 
-                        loading="lazy"
-                        title="Tabla de Posiciones Mundial 2026">
-                    </iframe>
+            </div>
+            <div id="mundial-tabla" class="video-box">
+                <div class="mundial-card">
+                    <div class="mundial-card-header"><i class="fas fa-table"></i> Tabla de Posiciones - Mundial 2026</div>
+                    <iframe class="mundial-iframe" src="https://www.sportbusy.com/widget/standings/?league=world-cup" height="600" loading="lazy"></iframe>
                 </div>
+            </div>
+        </div>
+
+        <div id="redes" class="seccion">
+            <div class="grid-redes">
+                <a href="https://mundolaboral.radio.com.bo/" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#444"><i class="fas fa-globe"></i> Web</a>
+                <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#34a853"><i class="fab fa-google-play"></i> App</a>
+                <a href="https://facebook.com/MundoLaboralRadio" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#1877F2"><i class="fab fa-facebook"></i> Facebook</a>
+                <a href="https://www.youtube.com/@mundolaboralradio" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#FF0000"><i class="fab fa-youtube"></i> YouTube</a>
+                <a href="https://www.tiktok.com/@carlosfer_1971" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#000"><i class="fab fa-tiktok"></i> TikTok</a>
+                <a href="https://www.instagram.com/carlosfernandoaguilare/" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#bc1888"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="https://t.me/+OlAmHfkWb3I2MzEx" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#0088cc"><i class="fab fa-telegram"></i> Telegram</a>
+                <a href="https://chat.whatsapp.com/BMDRQO15kyPCFxomtgtIyX" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#25D366"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            </div>
+        </div>
+
+        <div id="contacto" class="seccion">
+            <div class="form-contacto">
+                <h2 style="margin-top:0;">Contacto</h2>
+                <input type="text" id="c-nombre" placeholder="Tu nombre">
+                <textarea id="c-mensaje" rows="5" placeholder="Tu mensaje"></textarea>
+                <button onclick="enviarWA()" style="background:var(--rojo); color:white; border:none; padding:15px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer;">ENVIAR POR WHATSAPP</button>
             </div>
         </div>
     </div>
 
-    <div id="redes" class="seccion">
-        <div class="grid-redes">
-            <a href="https://mundolaboral.radio.com.bo/" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#444"><i class="fas fa-globe"></i> Web</a>
-            <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#34a853"><i class="fab fa-google-play"></i> App</a>
-            <a href="https://facebook.com/MundoLaboralRadio" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#1877F2"><i class="fab fa-facebook"></i> Facebook</a>
-            <a href="https://www.youtube.com/@mundolaboralradio" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#FF0000"><i class="fab fa-youtube"></i> YouTube</a>
-            <a href="https://www.tiktok.com/@carlosfer_1971" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#000"><i class="fab fa-tiktok"></i> TikTok</a>
-            <a href="https://www.instagram.com/carlosfernandoaguilare/" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#bc1888"><i class="fab fa-instagram"></i> Instagram</a>
-            <a href="https://t.me/+OlAmHfkWb3I2MzEx" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#0088cc"><i class="fab fa-telegram"></i> Telegram</a>
-            <a href="https://chat.whatsapp.com/BMDRQO15kyPCFxomtgtIyX" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#25D366"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-        </div>
-    </div>
-
-    <div id="contacto" class="seccion">
-        <div class="form-contacto">
-            <h2 style="margin-top:0;">Contacto</h2>
-            <input type="text" id="c-nombre" placeholder="Tu nombre">
-            <textarea id="c-mensaje" rows="5" placeholder="Tu mensaje"></textarea>
-            <button onclick="enviarWA()" style="background:var(--rojo); color:white; border:none; padding:15px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer;">ENVIAR POR WHATSAPP</button>
-        </div>
-    </div>
+    <aside class="banner-side">
+        <img src="https://i.postimg.cc/XYDgCbQV/Imagen-de-Whats-App-2024-02-18-a-las-13-11-48-5cb62194.jpg" class="banner-img" alt="Ad">
+        <img src="https://i.postimg.cc/HkPtygBL/Logotipo-2020-CST.jpg" class="banner-img" alt="Ad">
+        <img src="https://i.postimg.cc/g2BKZWNk/Sin-titulo.jpg" class="banner-img" alt="Ad">
+    </aside>
 </div>
 
 <a href="https://wa.me/59168785216" target="_blank" rel="noopener noreferrer" class="float-wa"><i class="fab fa-whatsapp"></i></a>
