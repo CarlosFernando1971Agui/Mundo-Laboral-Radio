@@ -19,9 +19,19 @@
         .seccion { display: none; width: 100%; max-width: 950px; }
         .seccion.active { display: block; }
         
-        /* Audio Player */
-        .reproductor-card { background: #1a1a1a; border: 1px solid var(--rojo); border-radius: 20px; padding: 40px; text-align: center; }
+        /* Reproductor Estilo mundo laboral radio1.jpg */
+        .reproductor-card { 
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop'); 
+            background-size: cover; 
+            background-position: center; 
+            border: 1px solid var(--rojo); 
+            border-radius: 20px; 
+            padding: 50px 20px; 
+            text-align: center; 
+            position: relative;
+        }
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
+        .vol-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
         
         /* Video Section */
         .sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
@@ -62,17 +72,16 @@
     <div id="inicio" class="seccion active">
         <div class="reproductor-card">
             <h1>RADIO EN VIVO</h1>
-            <!-- Micrófono restaurado -->
-            <i class="fas fa-microphone" style="font-size: 60px; color: var(--rojo); margin-bottom: 20px; display: block;"></i>
+            <p style="margin-bottom: 20px; font-size: 1.2em;">Vallegrande, Bolivia</p>
             
             <button id="play-btn" onclick="toggleAudio()"><i id="p-icon" class="fas fa-play"></i></button>
-            <p id="status">Toca para escuchar</p>
             
-            <!-- Control de volumen restaurado -->
-            <div style="margin-top: 20px;">
-                <label style="margin-right: 10px;">Volumen:</label>
+            <div class="vol-container">
+                <i class="fas fa-volume-up"></i>
                 <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.8" style="width: 150px; cursor: pointer;">
             </div>
+            
+            <p id="status" style="margin-top: 15px;">Toca para escuchar</p>
         </div>
     </div>
 
@@ -151,7 +160,6 @@
         else { radio.pause(); icon.className = "fas fa-play"; status.innerText = "Toca para escuchar"; sonando = false; }
     }
 
-    // Volumen
     document.getElementById('vol-slider').oninput = function() { radio.volume = this.value; };
 
     function enviarWA() {
