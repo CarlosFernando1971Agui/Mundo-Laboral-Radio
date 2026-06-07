@@ -20,16 +20,23 @@
         .reproductor-card { background: #1a1a1a; border: 1px solid var(--rojo); border-radius: 20px; padding: 40px; text-align: center; }
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
         
-        /* Estilos para el Sub-Menú de Videos */
-        .video-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
-        .video-nav button { background: #222; border: 1px solid #444; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; }
-        .video-nav button.active { background: var(--rojo); border-color: var(--rojo); }
-        .video-subseccion { display: none; }
-        .video-subseccion.active { display: block; }
+        /* Estilos para Sub-Menús (Videos y Mundial) */
+        .sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        .sub-nav button { background: #222; border: 1px solid #444; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; }
+        .sub-nav button.active { background: var(--rojo); border-color: var(--rojo); }
+        .sub-seccion { display: none; }
+        .sub-seccion.active { display: block; }
 
         .tv-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
         
+        /* Estilos para Tarjetas del Mundial */
+        .fixture-container { display: flex; flex-direction: column; gap: 15px; }
+        .partido-card { background: var(--gris); border: 1px solid #333; border-left: 5px solid var(--rojo); border-radius: 8px; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .partido-info { font-size: 13px; color: #aaa; }
+        .partido-equipos { font-size: 16px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        .resultado-marcador { background: #000; padding: 5px 15px; border-radius: 5px; font-weight: 900; color: var(--rojo); font-size: 18px; border: 1px solid #222; }
+
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
         .card-red:hover { transform: scale(1.02); opacity: 0.9; }
@@ -47,6 +54,7 @@
     <nav id="main-nav">
         <button onclick="ir('inicio')" id="btn-inicio" class="active">RADIO</button>
         <button onclick="ir('videos')" id="btn-videos">VIDEOS</button>
+        <button onclick="ir('mundial')" id="btn-mundial">MUNDIAL</button> <!-- NUEVO BOTÓN -->
         <button onclick="ir('redes')" id="btn-redes">REDES</button>
         <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
     </nav>
@@ -63,20 +71,78 @@
     </div>
 
     <div id="videos" class="seccion">
-        <div class="video-nav">
+        <div class="sub-nav">
             <button id="sub-btn-playlist" class="active" onclick="verVideo('playlist')"><i class="fas fa-list"></i> PLAYLIST / RECIENTES</button>
             <button id="sub-btn-live" onclick="verVideo('live')" title="haz clic para ver la transmisión en vivo"><i class="fas fa-circle" style="color:#ff4d4d"></i> TRANSMISIÓN EN VIVO</button>
         </div>
-
-        <div id="video-playlist" class="video-subseccion active">
+        <div id="video-playlist" class="sub-seccion active">
             <div class="tv-container">
                 <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
             </div>
         </div>
-
-        <div id="video-live" class="video-subseccion">
+        <div id="video-live" class="sub-seccion">
             <div class="tv-container">
-                <iframe src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/live_stream?channel=AQUÍ_PONES_TU_ID_DE_CANAL_QUE_EMPIEZA_CON_UC" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN MUNDIAL -->
+    <div id="mundial" class="seccion">
+        <div class="sub-nav">
+            <button id="sub-btn-fixture" class="active" onclick="verMundial('fixture')"><i class="far fa-calendar-alt"></i> FIXTURE / ROL</button>
+            <button id="sub-btn-resultados" onclick="verMundial('resultados')"><i class="fas fa-trophy"></i> ULTIMOS RESULTADOS</button>
+        </div>
+
+        <!-- Subsección Fixture (Partidos por jugar) -->
+        <div id="mundial-fixture" class="sub-seccion active">
+            <h2>Próximos Partidos</h2>
+            <div class="fixture-container">
+                
+                <!-- Partido de ejemplo 1 (Puedes clonar o cambiar los textos fácilmente) -->
+                <div class="partido-card">
+                    <div class="partido-info">
+                        <div><strong>Grupo A - Fecha 1</strong></div>
+                        <div>11 de Junio - 16:00</div>
+                    </div>
+                    <div class="partido-equipos">
+                        <span>México</span> <span>vs</span> <span>Rival 1</span>
+                    </div>
+                    <div class="resultado-marcador">-- : --</div>
+                </div>
+
+                <!-- Partido de ejemplo 2 -->
+                <div class="partido-card">
+                    <div class="partido-info">
+                        <div><strong>Grupo B - Fecha 1</strong></div>
+                        <div>12 de Junio - 20:00</div>
+                    </div>
+                    <div class="partido-equipos">
+                        <span>Estados Unidos</span> <span>vs</span> <span>Rival 2</span>
+                    </div>
+                    <div class="resultado-marcador">-- : --</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Subsección Resultados (Partidos ya jugados) -->
+        <div id="mundial-resultados" class="sub-seccion">
+            <h2>Resultados Recientes</h2>
+            <div class="fixture-container">
+                
+                <!-- Resultado de ejemplo -->
+                <div class="partido-card">
+                    <div class="partido-info">
+                        <div><strong>Grupo A</strong></div>
+                        <div>Finalizado</div>
+                    </div>
+                    <div class="partido-equipos">
+                        <span>Equipo A</span> <span>vs</span> <span>Equipo B</span>
+                    </div>
+                    <div class="resultado-marcador">2 - 1</div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -114,15 +180,27 @@
     }
 
     function verVideo(tipo) {
-        document.querySelectorAll('.video-subseccion').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.video-nav button').forEach(b => b.classList.remove('active'));
-        
+        document.querySelectorAll('#videos .sub-seccion').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('#videos .sub-nav button').forEach(b => b.classList.remove('active'));
         if(tipo === 'live') {
             document.getElementById('video-live').classList.add('active');
             document.getElementById('sub-btn-live').classList.add('active');
         } else {
             document.getElementById('video-playlist').classList.add('active');
             document.getElementById('sub-btn-playlist').classList.add('active');
+        }
+    }
+
+    // Nueva función para alternar subsecciones del Mundial
+    function verMundial(tipo) {
+        document.querySelectorAll('#mundial .sub-seccion').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('#mundial .sub-nav button').forEach(b => b.classList.remove('active'));
+        if(tipo === 'resultados') {
+            document.getElementById('mundial-resultados').classList.add('active');
+            document.getElementById('sub-btn-resultados').classList.add('active');
+        } else {
+            document.getElementById('mundial-fixture').classList.add('active');
+            document.getElementById('sub-btn-fixture').classList.add('active');
         }
     }
 
