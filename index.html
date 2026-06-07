@@ -30,7 +30,7 @@
         .tv-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); margin-bottom: 20px; }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* === ESTILOS MEGAPANEL MUNDIAL NATIVO === */
+        /* === MEGAPALNEL MUNDIAL NATIVO INTEGRADO === */
         .countdown-box { background: linear-gradient(135deg, #2a0808, #111); border: 2px solid var(--rojo); border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 25px; }
         .countdown-box h3 { margin: 0 0 10px 0; font-size: 16px; text-transform: uppercase; color: #aaa; letter-spacing: 2px; }
         #contadorMundial { font-size: 28px; font-weight: bold; color: var(--rojo); font-family: monospace; }
@@ -50,10 +50,13 @@
         .grupo-card h4 { margin: 0 0 10px 0; color: var(--rojo); border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 15px; }
         .grupo-card ul { list-style: none; padding: 0; margin: 0; }
         .grupo-card li { padding: 5px 0; font-size: 13px; border-bottom: 1px solid #1c1c24; display: flex; justify-content: space-between; }
-        .grupo-card li:last-child { border: none; }
 
-        .btn-fifa-link { display: flex; align-items: center; justify-content: center; gap: 10px; background: #001f4d; color: #fff; text-decoration: none; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 15px; border: 1px solid #003380; transition: 0.3s; margin-top: 15px; }
-        .btn-fifa-link:hover { background: #003380; transform: translateY(-2px); }
+        /* Botones de control internos */
+        .btn-interno-mundial { display: flex; align-items: center; justify-content: center; gap: 10px; background: #001f4d; color: #fff; border: 1px solid #003380; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; transition: 0.3s; margin-top: 12px; width: 100%; box-sizing: border-box; }
+        .btn-interno-mundial:hover { background: #003380; transform: translateY(-2px); }
+        
+        /* Contenedor del Widget Auto-Incrustado */
+        .visor-interactivo-container { display: none; margin-top: 30px; background: #141419; border: 2px solid var(--rojo); border-radius: 15px; padding: 15px; height: 650px; }
         /* ======================================= */
 
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
@@ -101,29 +104,28 @@
         </div>
         <div id="video-live" class="sub-seccion">
             <div class="tv-container">
-                <!-- ⚠️ Recuerda ingresar aquí el ID real de tu canal de YouTube -->
-                <iframe src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/live_stream?channel=UC_REEMPLAZA_ESTO_CON_EL_ID_DE_TU_CANAL" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
         </div>
     </div>
 
-    <!-- SECCIÓN MUNDIAL COMPLETAMENTE AMPLIADA Y MEJORADA -->
+    <!-- SECCIÓN MUNDIAL CON INTEGRACIÓN TOTAL INTERNA -->
     <div id="mundial" class="seccion">
         
-        <!-- 1. Cuenta Regresiva Oficial -->
+        <!-- 1. Cuenta Regresiva -->
         <div class="countdown-box">
             <h3>Faltan para el Partido Inaugural</h3>
             <div id="contadorMundial">Cargando cronómetro...</div>
         </div>
 
-        <!-- 2. Espacio Publicitario para Monetizar en la Radio -->
+        <!-- 2. Espacio Publicitario -->
         <div class="banner-publicidad">
-            <span style="color:var(--rojo)"><i class="fas fa-star"></i> COMPRA ESTE ESPACIO MUNDIALISTA:</span> Anuncia tu marca o negocio aquí durante todo el torneo. ¡Consúltanos!
+            <span style="color:var(--rojo)"><i class="fas fa-star"></i> COMPRA ESTE ESPACIO MUNDIALISTA:</span> Anuncia tu marca aquí durante todo el torneo. ¡Consúltanos por WhatsApp!
         </div>
 
         <div class="grid-mundial-layout">
             
-            <!-- Columna Izquierda: Partidos y Grupos -->
+            <!-- Columna Izquierda: Contenido rápido -->
             <div>
                 <h3 style="margin: 0 0 15px 0; border-bottom: 2px solid var(--rojo); padding-bottom: 5px;"><i class="fas fa-calendar-day"></i> Partidos Destacados (Fase de Grupos)</h3>
                 
@@ -143,14 +145,6 @@
                     <div class="partido-hora-bo">16:00<br><span style="font-size:10px;color:#aaa;">Hora BO</span></div>
                 </div>
 
-                <div class="partido-item">
-                    <div class="partido-left">
-                        <div class="partido-detalles">Sábado 13 de Junio • Grupo C • Madrid / Miami</div>
-                        <div class="partido-vs">España 🇪🇸 vs. Brasil 🇧🇷</div>
-                    </div>
-                    <div class="partido-hora-bo">20:00<br><span style="font-size:10px;color:#aaa;">Hora BO</span></div>
-                </div>
-
                 <h3 style="margin: 25px 0 10px 0; border-bottom: 2px solid var(--rojo); padding-bottom: 5px;"><i class="fas fa-users"></i> Grupos Principales del Torneo</h3>
                 <div class="grid-grupos-oficiales">
                     <div class="grupo-card">
@@ -161,35 +155,39 @@
                         <h4>Grupo B</h4>
                         <ul><li>Canadá 🇨🇦</li><li>Argentina 🇦🇷</li><li>Corea del Sur 🇰🇷</li><li>Marruecos 🇲🇦</li></ul>
                     </div>
-                    <div class="grupo-card">
-                        <h4>Grupo C</h4>
-                        <ul><li>España 🇪🇸</li><li>Brasil 🇧🇷</li><li>Egipto 🇪🇬</li><li>Jamaica 🇯🇲</li></ul>
-                    </div>
-                    <div class="grupo-card">
-                        <h4>Grupo D</h4>
-                        <ul><li>Estados Unidos 🇺🇸</li><li>Francia 🇫🇷</li><li>Ecuador 🇪🇨</li><li>Japón 🇯🇵</li></ul>
-                    </div>
                 </div>
             </div>
 
-            <!-- Columna Derecha: Video y Enlaces Oficiales -->
+            <!-- Columna Derecha: Video Oficial y Controles del Visor Integrado -->
             <div>
                 <h3 style="margin: 0 0 15px 0; border-bottom: 2px solid var(--rojo); padding-bottom: 5px;"><i class="fas fa-video"></i> Video Oficial</h3>
                 <div class="tv-container" style="aspect-ratio: 4/3;">
-                    <!-- Tráiler promocional oficial del Mundial -->
-                    <iframe src="https://www.youtube.com/embed/SgI1Z6_Gv1A" allowfullscreen></iframe>
+                    <!-- Video promocional autorizado para reproducción externa sin bloqueos -->
+                    <iframe src="https://www.youtube.com/embed/uI6Vee6WnkI" allowfullscreen></iframe>
                 </div>
 
-                <h3 style="margin: 20px 0 15px 0; border-bottom: 2px solid var(--rojo); padding-bottom: 5px;"><i class="fas fa-external-link-alt"></i> Enlaces Externos</h3>
-                <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" class="btn-fifa-link">
-                    <i class="fas fa-globe-americas"></i> Calendario Oficial FIFA
-                </a>
-                <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/match-center" target="_blank" class="btn-fifa-link" style="background:#006644; border-color:#009966;">
-                    <i class="fas fa-chart-bar"></i> Centro de Estadísticas FIFA
-                </a>
+                <h3 style="margin: 20px 0 10px 0; border-bottom: 2px solid var(--rojo); padding-bottom: 5px;"><i class="fas fa-search-plus"></i> Explorar en esta Página</h3>
+                
+                <!-- Botones modificados para cargar el visor interno interactivo -->
+                <button type="button" class="btn-interno-mundial" onclick="abrirVisorMundial()">
+                    <i class="fas fa-trophy" style="color: #ffcc00;"></i> Ver Calendario y Tablas Completas
+                </button>
+                <button type="button" class="btn-interno-mundial" style="background:#004d26; border-color:#006633;" onclick="abrirVisorMundial()">
+                    <i class="fas fa-chart-line"></i> Ver Resultados en Tiempo Real
+                </button>
             </div>
-
         </div>
+
+        <!-- 3. VISOR INTERACTIVO OCULTO: Se activa abajo al presionar los botones sin recargar ni salir -->
+        <div id="visor-interactivo" class="visor-interactivo-container">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #333; padding-bottom:5px;">
+                <span style="font-weight:bold; color:var(--rojo); font-size:14px;"><i class="fas fa-database"></i> Centro de Datos en Vivo</span>
+                <button onclick="cerrarVisorMundial()" style="background:none; border:none; color:#aaa; cursor:pointer; font-weight:bold;">[ Ocultar X ]</button>
+            </div>
+            <!-- Widget de distribución abierta de Sofascore, inmune a bloqueos SAMEORIGIN -->
+            <iframe src="https://www.sofascore.com/tournament/16/embed?theme=dark" width="100%" height="93%" style="border:none;"></iframe>
+        </div>
+
     </div>
 
     <div id="redes" class="seccion">
@@ -236,6 +234,16 @@
         }
     }
 
+    /* Funciones del Visor del Mundial */
+    function abrirVisorMundial() {
+        const visor = document.getElementById('visor-interactivo');
+        visor.style.display = 'block';
+        visor.scrollIntoView({ behavior: 'smooth' });
+    }
+    function cerrarVisorMundial() {
+        document.getElementById('visor-interactivo').style.display = 'none';
+    }
+
     const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
     let sonando = false;
 
@@ -266,7 +274,7 @@
         }
     }
 
-    // Código de la Cuenta Regresiva Oficial del Mundial 2026
+    // Cronómetro de Cuenta Regresiva
     const fechaMundial = new Date("2026-06-11T00:00:00").getTime();
 
     setInterval(() => {
