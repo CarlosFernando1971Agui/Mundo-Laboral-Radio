@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Mundo Laboral Radio | Vallegrande 2026</title>
+    <title>Mundo Laboral Radio | Vallegrande</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <style>
         :root { --rojo: #ff4d4d; --negro: #0d0d11; --gris: #16161d; --texto: #ffffff; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--negro); color: var(--texto); margin: 0; padding: 0; }
         
-        /* Banners Laterales Fijos */
-        .banner-lateral { position: fixed; top: 100px; width: 160px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
+        /* Banners Laterales */
+        .banner-lateral { position: fixed; top: 100px; width: 150px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; }
         .banner-left { left: 10px; }
         .banner-right { right: 10px; }
-        .banner-lateral img { width: 100%; border-radius: 8px; border: 1px solid #333; transition: transform 0.3s; }
-        .banner-lateral img:hover { transform: scale(1.05); }
-
-        /* Ocultar banners en pantallas medianas/pequeñas */
+        .banner-lateral img { width: 100%; border-radius: 8px; border: 1px solid #333; }
         @media (max-width: 1350px) { .banner-lateral { display: none; } }
 
         header { background: #000; padding: 25px 0; border-bottom: 2px solid var(--rojo); text-align: center; }
@@ -26,43 +23,32 @@
         nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         nav button.active { background: var(--rojo); border-color: var(--rojo); }
         
-        .container { padding: 0 20px 20px 20px; display: flex; justify-content: center; }
+        .container { padding: 0 20px 20px 20px; display: flex; justify-content: center; min-height: 300px; }
         .seccion { display: none; width: 100%; max-width: 950px; }
         .seccion.active { display: block; }
         
         /* Reproductor */
         .reproductor-card { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop'); background-size: cover; background-position: center; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px 20px; text-align: center; }
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; transition: 0.3s; }
-        .vol-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
-        
-        /* Videos */
-        .sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-        .sub-nav button { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
-        .sub-nav button.active { background: var(--rojo); }
-        .video-box { display: none; }
-        .video-box.active { display: block; }
-        .iframe-container { aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
-        iframe { width: 100%; height: 100%; border: none; }
         
         /* Redes y Contacto */
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; }
         .form-contacto { background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #333; max-width: 600px; margin: 0 auto; }
-        input, textarea { width: 100%; padding: 15px; margin: 10px 0; background: #000; color: #fff; border: 1px solid #444; border-radius: 8px; box-sizing: border-box; }
+        input, textarea { width: 100%; padding: 15px; margin: 10px 0; background: #000; color: #fff; border: 1px solid #444; border-radius: 8px; }
     </style>
 </head>
 <body>
 
 <div class="banner-lateral banner-left">
-    <img src="https://i.postimg.cc/sxpnYN19/ags.jpg" alt="Anuncio">
-    <img src="https://i.postimg.cc/NfcCsBPN/publi-fija-junio.jpg" alt="Anuncio">
-    <img src="https://i.postimg.cc/HkPtygBT/232310560-401062984939201-7897983293061993896-n.png" alt="Anuncio">
+    <img src="https://i.postimg.cc/sxpnYN19/ags.jpg" alt="A1">
+    <img src="https://i.postimg.cc/NfcCsBPN/publi-fija-junio.jpg" alt="A2">
+    <img src="https://i.postimg.cc/HkPtygBT/232310560-401062984939201-7897983293061993896-n.png" alt="A3">
 </div>
-
 <div class="banner-lateral banner-right">
-    <img src="https://i.postimg.cc/XYDgCbQV/Imagen-de-Whats-App-2024-02-18-a-las-13-11-48-5cb62194.jpg" alt="Anuncio">
-    <img src="https://i.postimg.cc/HkPtygBL/Logotipo-2020-CST.jpg" alt="Anuncio">
-    <img src="https://i.postimg.cc/g2BKZWNk/Sin-titulo.jpg" alt="Anuncio">
+    <img src="https://i.postimg.cc/XYDgCbQV/Imagen-de-Whats-App-2024-02-18-a-las-13-11-48-5cb62194.jpg" alt="A4">
+    <img src="https://i.postimg.cc/HkPtygBL/Logotipo-2020-CST.jpg" alt="A5">
+    <img src="https://i.postimg.cc/g2BKZWNk/Sin-titulo.jpg" alt="A6">
 </div>
 
 <header>
@@ -81,50 +67,33 @@
             <h1>RADIO EN VIVO</h1>
             <p>Vallegrande, Bolivia</p>
             <button id="play-btn" onclick="toggleAudio()"><i id="p-icon" class="fas fa-play"></i></button>
-            <div class="vol-container">
-                <i class="fas fa-volume-up"></i>
-                <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.8" style="width: 150px; cursor: pointer;">
-            </div>
             <p id="status">Toca para escuchar</p>
         </div>
     </div>
 
     <div id="videos" class="seccion">
-        <div class="sub-nav">
-            <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLÁSICOS</button>
-            <button onclick="cambiarVideo('live')" id="sub-btn-live">EN VIVO</button>
-        </div>
-        <div id="clasico-box" class="video-box active">
-            <div class="iframe-container">
-                <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
-            </div>
-        </div>
-        <div id="live-box" class="video-box">
-            <div class="iframe-container">
-                <iframe src="https://www.youtube.com/embed/live_stream?channel=UC-tuo6y_22s22s22s" allowfullscreen></iframe>
-            </div>
-        </div>
+        <div style="text-align:center;"><h2>Sección Videos</h2><p>Contenido de videos aquí.</p></div>
     </div>
 
     <div id="redes" class="seccion">
         <div class="grid-redes">
-            <a href="https://mundolaboral.radio.com.bo/" class="card-red" style="background:#444">WEB</a>
-            <a href="https://facebook.com/MundoLaboralRadio" class="card-red" style="background:#1877F2">FACEBOOK</a>
-            <a href="https://www.youtube.com/@mundolaboralradio" class="card-red" style="background:#FF0000">YOUTUBE</a>
+            <a href="#" class="card-red" style="background:#1877F2">FACEBOOK</a>
+            <a href="#" class="card-red" style="background:#FF0000">YOUTUBE</a>
         </div>
     </div>
 
     <div id="contacto" class="seccion">
         <div class="form-contacto">
             <h2>Contacto</h2>
-            <input type="text" id="c-nombre" placeholder="Tu nombre">
-            <textarea id="c-mensaje" rows="5" placeholder="Tu mensaje"></textarea>
-            <button onclick="enviarWA()" style="background:var(--rojo); color:white; border:none; padding:15px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer;">ENVIAR POR WHATSAPP</button>
+            <input type="text" placeholder="Tu nombre">
+            <textarea rows="5" placeholder="Tu mensaje"></textarea>
+            <button style="background:var(--rojo); color:white; border:none; padding:15px; width:100%; border-radius:8px; cursor:pointer;">ENVIAR</button>
         </div>
     </div>
 </div>
 
 <script>
+    // Función de navegación
     function ir(id) {
         document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('active'));
@@ -132,24 +101,24 @@
         document.getElementById('btn-' + id).classList.add('active');
     }
 
+    // Lógica Radio
     const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
     let sonando = false;
     function toggleAudio() {
         const icon = document.getElementById("p-icon");
         const status = document.getElementById("status");
-        if (!sonando) { radio.play(); icon.className = "fas fa-pause"; status.innerText = "SONANDO..."; sonando = true; } 
-        else { radio.pause(); icon.className = "fas fa-play"; status.innerText = "Toca para escuchar"; sonando = false; }
+        if (!sonando) { 
+            radio.play(); 
+            icon.className = "fas fa-pause"; 
+            status.innerText = "SONANDO..."; 
+            sonando = true; 
+        } else { 
+            radio.pause(); 
+            icon.className = "fas fa-play"; 
+            status.innerText = "Toca para escuchar"; 
+            sonando = false; 
+        }
     }
-    document.getElementById('vol-slider').addEventListener('input', (e) => radio.volume = e.target.value);
-
-    function cambiarVideo(tipo) {
-        document.querySelectorAll('.video-box').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('.sub-nav button').forEach(b => b.classList.remove('active'));
-        document.getElementById(tipo + '-box').classList.add('active');
-        document.getElementById('sub-btn-' + tipo).classList.add('active');
-    }
-
-    function enviarWA() {
-        const nombre = document.getElementById('c-nombre').value;
-        const msg = document.getElementById('c-mensaje').value;
-        window.open(`
+</script>
+</body>
+</html>
