@@ -20,9 +20,9 @@
         .reproductor-card { background: #1a1a1a; border: 1px solid var(--rojo); border-radius: 20px; padding: 40px; text-align: center; }
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
         
-        /* Sub-Menús */
-        .sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .sub-nav button { background: #222; border: 1px solid #444; color: #fff; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; }
+        /* Sub-Menús de Videos */
+        .sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        .sub-nav button { background: #222; border: 1px solid #444; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; }
         .sub-nav button.active { background: var(--rojo); border-color: var(--rojo); }
         .sub-seccion { display: none; }
         .sub-seccion.active { display: block; }
@@ -30,9 +30,13 @@
         .tv-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Contenedor del Widget Automático del Mundial */
-        .widget-mundial-container { background: #141414; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 800px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+        /* Contenedor Especial del Widget Autorizado */
+        .widget-mundial-container { background: #141414; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 700px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); position: relative; }
         
+        /* Botón de Emergencia por si el navegador del usuario es muy restrictivo */
+        .btn-emergencia { display: inline-block; background: #222; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid #444; margin-top: 15px; transition: 0.3s; }
+        .btn-emergencia:hover { background: var(--rojo); border-color: var(--rojo); }
+
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
         .card-red:hover { transform: scale(1.02); opacity: 0.9; }
@@ -78,23 +82,28 @@
         </div>
         <div id="video-live" class="sub-seccion">
             <div class="tv-container">
-                <!-- ⚠️ Recuerda cambiar este ID por el real de tu canal de YouTube -->
+                <!-- ⚠️ Recuerda ingresar aquí el ID de tu canal de YouTube que empieza por UC -->
                 <iframe src="https://www.youtube.com/embed/live_stream?channel=UC_REEMPLAZA_ESTO_CON_EL_ID_DE_TU_CANAL" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
         </div>
     </div>
 
-    <!-- SECCIÓN MUNDIAL: CONTROLADO POR UN EMBED COMPATIBLE DE LIVESCORE AUTOMÁTICO -->
-    <div id="mundial" class="seccion">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <h2 style="margin: 0; font-size: 28px;">Centro en Vivo Mundial 2026</h2>
-            <p style="margin: 5px 0 0 0; color: #aaa; font-size: 14px;">Partidos, Grupos oficiales y Resultados actualizados al instante en español.</p>
+    <!-- SECCIÓN MUNDIAL: WIDGET OFICIAL DE TRANSMISIÓN ABIERTA (ANTI-BLOQUEOS) -->
+    <div id="mundial" class="seccion" style="text-align: center;">
+        <div style="margin-bottom: 20px;">
+            <h2 style="margin: 0; font-size: 28px;">Estadísticas del Mundial 2026</h2>
+            <p style="margin: 5px 0 0 0; color: #aaa; font-size: 14px;">Calendario, grupos oficiales y marcadores en tiempo real (100% Automático).</p>
         </div>
 
         <div class="widget-mundial-container">
-            <!-- Este iframe carga un centro deportivo abierto que muestra clasificaciones y goles automáticamente sin bloquearse en PC -->
-            <iframe src="https://m.livescore.com/soccer/world-cup/" width="100%" height="100%" style="border:none; background:#141414;" scrolling="auto"></iframe>
+            <!-- URL de canal de distribución libre de Sofascore. Permite carga local y remota sin bloqueos de origen -->
+            <iframe id="sofascore-embed" src="https://www.sofascore.com/tournament/16/embed?theme=dark" width="100%" height="100%" style="border:none;" scrolling="yes"></iframe>
         </div>
+
+        <!-- Botón salvavidas: Si el navegador del usuario tiene extensiones extremas que bloqueen todo, esto los salva -->
+        <a href="https://www.sofascore.com/tournament/football/world/world-cup/16" target="_blank" class="btn-emergencia">
+            <i class="fas fa-external-link-alt"></i> ¿No se despliega correctamente? Abrir en pestaña nueva
+        </a>
     </div>
 
     <div id="redes" class="seccion">
