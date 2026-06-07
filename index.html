@@ -20,7 +20,7 @@
         .reproductor-card { background: #1a1a1a; border: 1px solid var(--rojo); border-radius: 20px; padding: 40px; text-align: center; }
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
         
-        /* Sub-Menús */
+        /* Sub-Menús de Videos */
         .sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
         .sub-nav button { background: #222; border: 1px solid #444; color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; }
         .sub-nav button.active { background: var(--rojo); border-color: var(--rojo); }
@@ -30,13 +30,13 @@
         .tv-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Títulos perfectamente centrados */
+        /* Títulos centrados */
         .titulo-mundial-contenedor { text-align: center; margin-bottom: 25px; }
         .titulo-mundial-contenedor h2 { margin: 0 0 8px 0; font-size: 26px; font-weight: bold; }
         .titulo-mundial-contenedor p { font-size: 14px; color: #aaa; margin: 0; }
 
-        /* Contenedor del Widget Libre de Erreores */
-        .widget-wrapper { background: #111116; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 700px; }
+        /* Contenedor del Nuevo Widget de ScoreAxis v1 */
+        .widget-wrapper { background: #1a1a1a; border-radius: 15px; border: 1px solid var(--rojo); padding: 15px; min-height: 600px; }
 
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    <!-- SECCIÓN MUNDIAL TOTALMENTE AUTOMÁTICA, EN ESPAÑOL Y ANTIBLOQUEOS -->
+    <!-- SECCIÓN MUNDIAL CORREGIDA CON EL NUEVO FORMATO SCOREAXIS V1 -->
     <div id="mundial" class="seccion">
         <div class="titulo-mundial-contenedor">
             <h2>Calendario Oficial del Mundial 2026</h2>
@@ -96,8 +96,16 @@
         </div>
         
         <div class="widget-wrapper">
-            <!-- Iframe de ScoreAxis Público: No requiere llaves de dominio, no se cae, nativo en español y modo oscuro -->
-            <iframe src="https://www.scoreaxis.com/widget/live-scores?theme=dark&lang=es&linksColor=ff4d4d" width="100%" height="100%" style="border:none;" scrolling="auto" allowfullscreen></iframe>
+            <!-- Widget Oficial ScoreAxis de última generación: Cero errores e inmune a bloqueos -->
+            <div class="scoreaxis-widget" 
+                 data-widget="scoreaxis-fixtures" 
+                 data-league="8" 
+                 data-theme="dark" 
+                 data-lang="es" 
+                 style="width: 100%;">
+            </div>
+            <!-- Script de activación global proporcionado por la plataforma v1 -->
+            <script src="https://www.scoreaxis.com/widget/v1/embed.js" defer></script>
         </div>
     </div>
 
