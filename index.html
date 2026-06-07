@@ -16,10 +16,7 @@
         nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         nav button.active { background: var(--rojo); border-color: var(--rojo); }
         
-        /* Barra de estado (Solo reloj) */
-        .status-bar { background: #1a1a1a; max-width: 950px; margin: 0 auto 20px auto; padding: 15px; border-radius: 10px; border: 1px solid var(--rojo); text-align: center; font-weight: bold; }
-        
-        /* Secciones */
+        /* Contenido */
         .seccion { display: none; padding: 20px; text-align: center; max-width: 950px; margin: 0 auto; }
         .seccion.active { display: block; }
     </style>
@@ -35,11 +32,6 @@
         <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
     </nav>
 </header>
-
-<!-- Barra limpia solo con reloj -->
-<div class="status-bar">
-    <i class="fas fa-clock" style="color:var(--rojo)"></i> <span id="clock">00:00</span>
-</div>
 
 <div id="inicio" class="seccion active">
     <h1>RADIO EN VIVO</h1>
@@ -60,26 +52,17 @@
 </div>
 
 <script>
-    // Lógica de navegación
+    // Lógica de navegación simple
     function ir(id) {
-        // Ocultar todo
+        // Ocultar todas las secciones
         document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
+        // Quitar clase activa de todos los botones
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
         
-        // Mostrar objetivo
+        // Mostrar la sección seleccionada y activar su botón
         document.getElementById(id).classList.add('active');
         document.getElementById('btn-' + id).classList.add('active');
     }
-
-    // Lógica del Reloj
-    function updateClock() {
-        const now = new Date();
-        document.getElementById('clock').textContent = now.toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'});
-    }
-    
-    // Iniciar reloj
-    setInterval(updateClock, 1000);
-    updateClock();
 </script>
 </body>
 </html>
