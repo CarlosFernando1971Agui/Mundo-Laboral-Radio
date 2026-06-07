@@ -14,7 +14,7 @@
         nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         nav button.active { background: var(--rojo); border-color: var(--rojo); }
         .container { flex: 1; padding: 20px; display: flex; justify-content: center; }
-        .seccion { display: none; width: 100%; max-width: 900px; }
+        .seccion { display: none; width: 100%; max-width: 950px; }
         .seccion.active { display: block; }
         
         .reproductor-card { background: #1a1a1a; border: 1px solid var(--rojo); border-radius: 20px; padding: 40px; text-align: center; }
@@ -30,22 +30,9 @@
         .tv-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* --- NUEVO MÓDULO NATIVO DEL MUNDIAL --- */
-        .mundial-hub { background: #141414; border-radius: 15px; border: 1px solid var(--rojo); padding: 20px; }
-        .partido-card { background: var(--gris); border-radius: 10px; padding: 15px; margin-bottom: 12px; border-left: 4px solid var(--rojo); display: flex; justify-content: space-between; align-items: center; }
-        .partido-info { font-size: 13px; color: #aaa; }
-        .partido-equipos { font-size: 16px; font-weight: bold; margin-top: 5px; }
-        .partido-hora { background: #000; padding: 6px 12px; border-radius: 6px; border: 1px solid #333; font-size: 14px; color: var(--rojo); font-weight: bold; text-align: center; }
+        /* Contenedor del Widget Automático del Mundial */
+        .widget-mundial-container { background: #141414; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 800px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
         
-        .grid-grupos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; }
-        .grupo-box { background: var(--gris); border-radius: 10px; padding: 15px; border: 1px solid #25252b; }
-        .grupo-box h4 { margin: 0 0 10px 0; color: var(--rojo); border-bottom: 1px solid #333; padding-bottom: 5px; text-transform: uppercase; }
-        .grupo-box ul { list-style: none; padding: 0; margin: 0; }
-        .grupo-box li { padding: 6px 0; border-bottom: 1px solid #222; font-size: 14px; display: flex; justify-content: space-between; }
-        .grupo-box li:last-child { border: none; }
-        .banner-publicidad { background: linear-gradient(45deg, #222, #111); border: 1px dashed var(--rojo); text-align: center; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #888; font-size: 13px; }
-        /* -------------------------------------- */
-
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
         .card-red:hover { transform: scale(1.02); opacity: 0.9; }
@@ -91,72 +78,22 @@
         </div>
         <div id="video-live" class="sub-seccion">
             <div class="tv-container">
+                <!-- ⚠️ Recuerda cambiar este ID por el real de tu canal de YouTube -->
                 <iframe src="https://www.youtube.com/embed/live_stream?channel=UC_REEMPLAZA_ESTO_CON_EL_ID_DE_TU_CANAL" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
         </div>
     </div>
 
+    <!-- SECCIÓN MUNDIAL: CONTROLADO POR UN EMBED COMPATIBLE DE LIVESCORE AUTOMÁTICO -->
     <div id="mundial" class="seccion">
-        <div class="banner-publicidad">
-            <i class="fas fa-ad"></i> ESPACIO DISPONIBLE PARA AUSPICIADOR LOCAL - CONTACTATE CON LA RADIO
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h2 style="margin: 0; font-size: 28px;">Centro en Vivo Mundial 2026</h2>
+            <p style="margin: 5px 0 0 0; color: #aaa; font-size: 14px;">Partidos, Grupos oficiales y Resultados actualizados al instante en español.</p>
         </div>
 
-        <div class="sub-nav">
-            <button id="mun-btn-partidos" class="active" onclick="verMundialTab('partidos')"><i class="fas fa-calendar-alt"></i> PARTIDOS CLAVE</button>
-            <button id="mun-btn-grupos" onclick="verMundialTab('grupos')"><i class="fas fa-trophy"></i> GRUPOS DEL MUNDIAL</button>
-        </div>
-
-        <div class="mundial-hub">
-            <div id="mun-partidos" class="sub-seccion active">
-                <h3 style="margin-top:0; border-bottom:1px solid #333; padding-bottom:10px;">Próximos Partidos (Hora de Bolivia)</h3>
-                
-                <div class="partido-card">
-                    <div class="partido-left">
-                        <div class="partido-info">Jueves 11 de Junio • Grupo A (Inaugural)</div>
-                        <div class="partido-equipos">México 🇲🇽 vs. Por Definir</div>
-                    </div>
-                    <div class="partido-hora">18:00<br><span style="font-size:10px;color:#aaa;">BO</span></div>
-                </div>
-
-                <div class="partido-card">
-                    <div class="partido-left">
-                        <div class="partido-info">Viernes 12 de Junio • Grupo B</div>
-                        <div class="partido-equipos">Canadá 🇨🇦 vs. Por Definir</div>
-                    </div>
-                    <div class="partido-hora">16:00<br><span style="font-size:10px;color:#aaa;">BO</span></div>
-                </div>
-
-                <div class="partido-card">
-                    <div class="partido-left">
-                        <div class="partido-info">Viernes 12 de Junio • Grupo D</div>
-                        <div class="partido-equipos">Estados Unidos 🇺🇸 vs. Por Definir</div>
-                    </div>
-                    <div class="partido-hora">21:00<br><span style="font-size:10px;color:#aaa;">BO</span></div>
-                </div>
-                
-                <p style="font-size: 12px; color: #777; text-align: center; margin-top: 15px;">Los resultados se irán actualizando durante las transmisiones de Mundo Laboral.</p>
-            </div>
-
-            <div id="mun-grupos" class="sub-seccion">
-                <div class="grid-grupos">
-                    <div class="grupo-box">
-                        <h4>Grupo A</h4>
-                        <ul><li>México 🇲🇽</li><li>Por definir</li><li>Por definir</li><li>Por definir</li></ul>
-                    </div>
-                    <div class="grupo-box">
-                        <h4>Grupo B</h4>
-                        <ul><li>Canadá 🇨🇦</li><li>Por definir</li><li>Por definir</li><li>Por definir</li></ul>
-                    </div>
-                    <div class="grupo-box">
-                        <h4>Grupo D</h4>
-                        <ul><li>Estados Unidos 🇺🇸</li><li>Por definir</li><li>Por definir</li><li>Por definir</li></ul>
-                    </div>
-                    <div class="grupo-box">
-                        <h4>Otros Grupos</h4>
-                        <ul style="color:#777;"><li>Argentina 🇦🇷</li><li>Brasil 🇧🇷</li><li>España 🇪🇸</li><li>Francia 🇫🇷</li></ul>
-                    </div>
-                </div>
-            </div>
+        <div class="widget-mundial-container">
+            <!-- Este iframe carga un centro deportivo abierto que muestra clasificaciones y goles automáticamente sin bloquearse en PC -->
+            <iframe src="https://m.livescore.com/soccer/world-cup/" width="100%" height="100%" style="border:none; background:#141414;" scrolling="auto"></iframe>
         </div>
     </div>
 
@@ -201,18 +138,6 @@
         } else {
             document.getElementById('video-playlist').classList.add('active');
             document.getElementById('sub-btn-playlist').classList.add('active');
-        }
-    }
-
-    function verMundialTab(tab) {
-        document.querySelectorAll('.mundial-hub .sub-seccion').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('#mundial .sub-nav button').forEach(b => b.classList.remove('active'));
-        if(tab === 'grupos') {
-            document.getElementById('mun-grupos').classList.add('active');
-            document.getElementById('mun-btn-grupos').classList.add('active');
-        } else {
-            document.getElementById('mun-partidos').classList.add('active');
-            document.getElementById('mun-btn-partidos').classList.add('active');
         }
     }
 
