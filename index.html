@@ -30,13 +30,13 @@
         .tv-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Títulos centrados para la sección Mundial */
+        /* Títulos centrados */
         .titulo-mundial-contenedor { text-align: center; margin-bottom: 25px; }
         .titulo-mundial-contenedor h2 { margin: 0 0 8px 0; font-size: 26px; }
         .titulo-mundial-contenedor p { font-size: 14px; color: #aaa; margin: 0; }
 
-        /* Contenedor del Widget del Mundial (FC Tables Oficial) */
-        .widget-wrapper { background: #1a1a1a; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 680px; }
+        /* Contenedor del nuevo Widget Autolimpiable */
+        .widget-wrapper { background: #1a1a1a; border-radius: 15px; border: 1px solid var(--rojo); padding: 10px; min-height: 650px; }
 
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    <!-- SECCIÓN MUNDIAL TOTALMENTE AUTOMÁTICA, EN ESPAÑOL Y CENTRADA -->
+    <!-- SECCIÓN MUNDIAL INDESTRUCTIBLE CON SCRIPT -->
     <div id="mundial" class="seccion">
         <div class="titulo-mundial-contenedor">
             <h2>Calendario Oficial del Mundial 2026</h2>
@@ -96,8 +96,9 @@
         </div>
         
         <div class="widget-wrapper">
-            <!-- Widget de FC Tables Abierto: Configurado con hora de Bolivia, Idioma Español y Estilo de la Radio -->
-            <iframe src="https://www.fctables.com/iframe/livescore/?lang_id=2&timezone=America/La_Paz&width=100%&height=680&font=Segoe%20UI&font_size=14&radius=12&bg_color=1a1a1a&font_color=ffffff&line_color=333333&link_color=ff4d4d&championship_color=ff4d4d&index_color=ff4d4d&border_color=ff4d4d&bg_header=ff4d4d&font_header=ffffff&header_line=ff4d4d&show_logo=0" width="100%" height="100%" style="border:none;" scrolling="auto" allowfullscreen></iframe>
+            <!-- Widget Dinámico de SofaScore: Cero iframes rígidos, en español y compatible con modo oscuro -->
+            <div class="sofascore-widget" data-id="tournament:16" data-theme="dark" data-height="650" data-show-title="false" data-language="es"></div>
+            <script type="text/javascript" src="https://widgets.sofascore.com/bundle.js" async></script>
         </div>
     </div>
 
