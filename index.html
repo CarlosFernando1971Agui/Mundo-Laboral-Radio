@@ -4,6 +4,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Mundo Laboral Radio | Vallegrande</title>
+    <!-- Font Awesome para los iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <style>
         :root { --rojo: #ff4d4d; --negro: #0d0d11; --gris: #16161d; --texto: #ffffff; }
@@ -31,16 +32,17 @@
         .reproductor-card { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop'); background-size: cover; background-position: center; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px 20px; text-align: center; }
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
         
-        /* Seccion Videos */
-        .sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-        .sub-nav button { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
-        .sub-nav button.active { background: var(--rojo); }
-        .iframe-container { aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); background:#000; }
+        /* Seccion Videos - Diseño Mejorado */
+        .video-ui { text-align: center; padding: 40px; }
+        .btn-vid-big { display: block; width: 100%; padding: 20px; margin: 10px 0; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; text-transform: uppercase; }
+        .btn-live { background: var(--rojo); }
+        .btn-list { background: #333; }
+        .iframe-container { aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); background:#000; margin-top:20px;}
         iframe { width: 100%; height: 100%; border: none; }
         
-        /* Redes - 8 botones */
+        /* Redes - Iconos */
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; }
+        .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; }
         
         /* Contacto */
         .form-contacto { background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #333; max-width: 600px; margin: 0 auto; }
@@ -88,31 +90,28 @@
 
     <!-- VIDEOS -->
     <div id="videos" class="seccion">
-        <div class="sub-nav">
-            <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLÁSICOS</button>
-            <button onclick="cambiarVideo('live')" id="sub-btn-live">EN VIVO</button>
+        <div id="video-home" class="video-ui">
+            <h2>¿Estamos transmitiendo?</h2>
+            <button class="btn-vid-big btn-live" onclick="loadVideo('live')">HAGA CLIC PARA VER EN VIVO</button>
+            <button class="btn-vid-big btn-list" onclick="loadVideo('list')">VER LISTA DE VIDEOS</button>
         </div>
-        <!-- Clásicos (Visible por defecto) -->
-        <div id="v-clasico" class="iframe-container">
-            <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC"></iframe>
-        </div>
-        <!-- En Vivo (Oculto por defecto) -->
-        <div id="v-live" class="iframe-container" style="display:none;">
-            <iframe src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A"></iframe>
+        <div id="video-player" class="iframe-container" style="display:none;">
+            <button onclick="resetVideos()" style="margin-bottom:10px; background:#444; color:white; border:none; padding:5px 10px; cursor:pointer;">&laquo; Volver atrás</button>
+            <iframe id="iframe-src" src=""></iframe>
         </div>
     </div>
 
     <!-- REDES -->
     <div id="redes" class="seccion">
         <div class="grid-redes">
-            <a href="#" class="card-red" style="background:#444">WEB</a>
-            <a href="#" class="card-red" style="background:#1877F2">FACEBOOK</a>
-            <a href="#" class="card-red" style="background:#FF0000">YOUTUBE</a>
-            <a href="#" class="card-red" style="background:#000000">TIKTOK</a>
-            <a href="#" class="card-red" style="background:#E1306C">INSTAGRAM</a>
-            <a href="#" class="card-red" style="background:#1DA1F2">X (TWITTER)</a>
-            <a href="#" class="card-red" style="background:#25D366">GRUPO WHATSAPP</a>
-            <a href="#" class="card-red" style="background:#25D366">CANAL WHATSAPP</a>
+            <a href="#" class="card-red" style="background:#444"><i class="fas fa-globe"></i> WEB</a>
+            <a href="#" class="card-red" style="background:#1877F2"><i class="fab fa-facebook"></i> FACEBOOK</a>
+            <a href="#" class="card-red" style="background:#FF0000"><i class="fab fa-youtube"></i> YOUTUBE</a>
+            <a href="#" class="card-red" style="background:#000000"><i class="fab fa-tiktok"></i> TIKTOK</a>
+            <a href="#" class="card-red" style="background:#E1306C"><i class="fab fa-instagram"></i> INSTAGRAM</a>
+            <a href="#" class="card-red" style="background:#1DA1F2"><i class="fab fa-x-twitter"></i> X (TWITTER)</a>
+            <a href="#" class="card-red" style="background:#25D366"><i class="fab fa-whatsapp"></i> GRUPO WHATSAPP</a>
+            <a href="#" class="card-red" style="background:#25D366"><i class="fab fa-whatsapp"></i> CANAL WHATSAPP</a>
         </div>
     </div>
 
@@ -127,7 +126,7 @@
     </div>
 </div>
 
-<footer>Creado por Mundo Laboral Radio &copy; 2026</footer>
+<footer>Mundo Laboral Radio. Vallegrande 2026</footer>
 
 <!-- WhatsApp Flotante -->
 <a href="https://wa.me/59170000000" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
@@ -140,11 +139,25 @@
         document.getElementById('btn-' + id).classList.add('active');
     }
 
-    function cambiarVideo(tipo) {
-        document.getElementById('v-clasico').style.display = (tipo === 'clasico') ? 'block' : 'none';
-        document.getElementById('v-live').style.display = (tipo === 'live') ? 'block' : 'none';
-        document.getElementById('sub-btn-clasico').classList.toggle('active', tipo === 'clasico');
-        document.getElementById('sub-btn-live').classList.toggle('active', tipo === 'live');
+    function loadVideo(tipo) {
+        const player = document.getElementById('video-player');
+        const iframe = document.getElementById('iframe-src');
+        const home = document.getElementById('video-home');
+        
+        home.style.display = 'none';
+        player.style.display = 'block';
+        
+        if (tipo === 'live') {
+            iframe.src = "https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A";
+        } else {
+            iframe.src = "https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC";
+        }
+    }
+
+    function resetVideos() {
+        document.getElementById('video-home').style.display = 'block';
+        document.getElementById('video-player').style.display = 'none';
+        document.getElementById('iframe-src').src = "";
     }
 
     const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
