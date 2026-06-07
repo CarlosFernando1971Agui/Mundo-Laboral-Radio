@@ -4,7 +4,6 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Mundo Laboral Radio | Vallegrande</title>
-    <!-- Font Awesome para los iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <style>
         :root { --rojo: #ff4d4d; --negro: #0d0d11; --gris: #16161d; --texto: #ffffff; }
@@ -32,17 +31,17 @@
         .reproductor-card { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop'); background-size: cover; background-position: center; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px 20px; text-align: center; }
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
         
-        /* Seccion Videos - Diseño Mejorado */
-        .video-ui { text-align: center; padding: 40px; }
-        .btn-vid-big { display: block; width: 100%; padding: 20px; margin: 10px 0; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; text-transform: uppercase; }
+        /* Videos - Landing Page Estilo imagen_181.png */
+        .video-landing { text-align: center; padding: 40px 20px; }
+        .btn-vid-action { display: block; width: 100%; max-width: 800px; margin: 15px auto; padding: 20px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; font-size: 16px; text-transform: uppercase; }
         .btn-live { background: var(--rojo); }
         .btn-list { background: #333; }
-        .iframe-container { aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); background:#000; margin-top:20px;}
+        .iframe-container { aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); background:#000; margin-top:20px; }
         iframe { width: 100%; height: 100%; border: none; }
         
-        /* Redes - Iconos */
+        /* Redes - Con Iconos */
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; }
         
         /* Contacto */
         .form-contacto { background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #333; max-width: 600px; margin: 0 auto; }
@@ -90,13 +89,17 @@
 
     <!-- VIDEOS -->
     <div id="videos" class="seccion">
-        <div id="video-home" class="video-ui">
+        <!-- Landing Page del Video -->
+        <div id="videos-landing" class="video-landing">
             <h2>¿Estamos transmitiendo?</h2>
-            <button class="btn-vid-big btn-live" onclick="loadVideo('live')">HAGA CLIC PARA VER EN VIVO</button>
-            <button class="btn-vid-big btn-list" onclick="loadVideo('list')">VER LISTA DE VIDEOS</button>
+            <button class="btn-vid-action btn-live" onclick="loadVideo('live')">HAGA CLIC PARA VER EN VIVO</button>
+            <button class="btn-vid-action btn-list" onclick="loadVideo('list')">VER LISTA DE VIDEOS</button>
         </div>
-        <div id="video-player" class="iframe-container" style="display:none;">
-            <button onclick="resetVideos()" style="margin-bottom:10px; background:#444; color:white; border:none; padding:5px 10px; cursor:pointer;">&laquo; Volver atrás</button>
+        <!-- Reproductor -->
+        <div id="videos-player" class="iframe-container" style="display:none;">
+            <div style="padding:10px; background:#000;">
+                <button onclick="backToLanding()" style="background:#444; color:white; border:none; padding:8px 15px; cursor:pointer; border-radius:5px;"><i class="fas fa-arrow-left"></i> Volver</button>
+            </div>
             <iframe id="iframe-src" src=""></iframe>
         </div>
     </div>
@@ -140,11 +143,11 @@
     }
 
     function loadVideo(tipo) {
-        const player = document.getElementById('video-player');
+        const landing = document.getElementById('videos-landing');
+        const player = document.getElementById('videos-player');
         const iframe = document.getElementById('iframe-src');
-        const home = document.getElementById('video-home');
         
-        home.style.display = 'none';
+        landing.style.display = 'none';
         player.style.display = 'block';
         
         if (tipo === 'live') {
@@ -154,9 +157,9 @@
         }
     }
 
-    function resetVideos() {
-        document.getElementById('video-home').style.display = 'block';
-        document.getElementById('video-player').style.display = 'none';
+    function backToLanding() {
+        document.getElementById('videos-landing').style.display = 'block';
+        document.getElementById('videos-player').style.display = 'none';
         document.getElementById('iframe-src').src = "";
     }
 
