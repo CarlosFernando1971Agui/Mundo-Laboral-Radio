@@ -13,12 +13,32 @@
         .brand-name { font-size: 30px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
         
         nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-        nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         nav button.active { background: var(--rojo); border-color: var(--rojo); }
         
-        /* Contenido */
-        .seccion { display: none; padding: 20px; text-align: center; max-width: 950px; margin: 0 auto; }
+        .container { padding: 0 20px 20px 20px; display: flex; justify-content: center; }
+        .seccion { display: none; width: 100%; max-width: 950px; }
         .seccion.active { display: block; }
+        
+        /* Reproductor */
+        .reproductor-card { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop'); background-size: cover; background-position: center; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px 20px; text-align: center; }
+        #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; transition: 0.3s; }
+        .vol-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
+        
+        /* Videos */
+        .sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .sub-nav button { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .sub-nav button.active { background: var(--rojo); }
+        .video-box { display: none; }
+        .video-box.active { display: block; }
+        .iframe-container { aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
+        iframe { width: 100%; height: 100%; border: none; }
+        
+        /* Redes y Contacto */
+        .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; }
+        .form-contacto { background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #333; max-width: 600px; margin: 0 auto; }
+        input, textarea { width: 100%; padding: 15px; margin: 10px 0; background: #000; color: #fff; border: 1px solid #444; border-radius: 8px; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -33,35 +53,92 @@
     </nav>
 </header>
 
-<div id="inicio" class="seccion active">
-    <h1>RADIO EN VIVO</h1>
-    <p>Vallegrande, Bolivia</p>
-</div>
+<div class="container">
+    <!-- Radio -->
+    <div id="inicio" class="seccion active">
+        <div class="reproductor-card">
+            <h1>RADIO EN VIVO</h1>
+            <p>Vallegrande, Bolivia</p>
+            <button id="play-btn" onclick="toggleAudio()"><i id="p-icon" class="fas fa-play"></i></button>
+            <div class="vol-container">
+                <i class="fas fa-volume-up"></i>
+                <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.8" style="width: 150px; cursor: pointer;">
+            </div>
+            <p id="status">Toca para escuchar</p>
+        </div>
+    </div>
 
-<div id="videos" class="seccion">
-    <h1>Sección Videos</h1>
-    <p>Contenido de videos.</p>
-</div>
+    <!-- Videos -->
+    <div id="videos" class="seccion">
+        <div class="sub-nav">
+            <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLÁSICOS</button>
+            <button onclick="cambiarVideo('live')" id="sub-btn-live">EN VIVO</button>
+        </div>
+        <div id="clasico-box" class="video-box active">
+            <div class="iframe-container">
+                <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
+            </div>
+        </div>
+        <div id="live-box" class="video-box">
+            <div class="iframe-container">
+                <iframe src="https://www.youtube.com/embed/live_stream?channel=UC-tuo6y_22s22s22s" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
 
-<div id="redes" class="seccion">
-    <h1>Sección Redes</h1>
-</div>
+    <!-- Redes -->
+    <div id="redes" class="seccion">
+        <div class="grid-redes">
+            <a href="https://mundolaboral.radio.com.bo/" class="card-red" style="background:#444">WEB</a>
+            <a href="https://facebook.com/MundoLaboralRadio" class="card-red" style="background:#1877F2">FACEBOOK</a>
+            <a href="https://www.youtube.com/@mundolaboralradio" class="card-red" style="background:#FF0000">YOUTUBE</a>
+        </div>
+    </div>
 
-<div id="contacto" class="seccion">
-    <h1>Sección Contacto</h1>
+    <!-- Contacto -->
+    <div id="contacto" class="seccion">
+        <div class="form-contacto">
+            <h2>Contacto</h2>
+            <input type="text" id="c-nombre" placeholder="Tu nombre">
+            <textarea id="c-mensaje" rows="5" placeholder="Tu mensaje"></textarea>
+            <button onclick="enviarWA()" style="background:var(--rojo); color:white; border:none; padding:15px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer;">ENVIAR POR WHATSAPP</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    // Lógica de navegación simple
+    // Navegación
     function ir(id) {
-        // Ocultar todas las secciones
         document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
-        // Quitar clase activa de todos los botones
-        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-        
-        // Mostrar la sección seleccionada y activar su botón
+        document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         document.getElementById('btn-' + id).classList.add('active');
+    }
+
+    // Radio
+    const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
+    let sonando = false;
+    function toggleAudio() {
+        const icon = document.getElementById("p-icon");
+        const status = document.getElementById("status");
+        if (!sonando) { radio.play(); icon.className = "fas fa-pause"; status.innerText = "SONANDO..."; sonando = true; } 
+        else { radio.pause(); icon.className = "fas fa-play"; status.innerText = "Toca para escuchar"; sonando = false; }
+    }
+    document.getElementById('vol-slider').addEventListener('input', (e) => radio.volume = e.target.value);
+
+    // Video Switcher
+    function cambiarVideo(tipo) {
+        document.querySelectorAll('.video-box').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.sub-nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById(tipo + '-box').classList.add('active');
+        document.getElementById('sub-btn-' + tipo).classList.add('active');
+    }
+
+    // Contacto
+    function enviarWA() {
+        const nombre = document.getElementById('c-nombre').value;
+        const msg = document.getElementById('c-mensaje').value;
+        window.open(`https://wa.me/59170000000?text=Hola, soy ${nombre}. ${msg}`, '_blank');
     }
 </script>
 </body>
