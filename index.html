@@ -20,7 +20,6 @@
         .reproductor-card { background: #1a1a1a; border: 1px solid var(--rojo); border-radius: 20px; padding: 40px; text-align: center; }
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
         
-        /* Sub-Menús */
         .sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .sub-nav button { background: #222; border: 1px solid #444; color: #fff; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; }
         .sub-nav button.active { background: var(--rojo); border-color: var(--rojo); }
@@ -30,7 +29,7 @@
         .tv-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); margin-bottom: 20px; }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* === CONFIGURACIÓN MUNDIALISTA AUTOMÁTICA === */
+        /* SECCIÓN MUNDIAL */
         .countdown-box { background: linear-gradient(135deg, #2a0808, #111); border: 2px solid var(--rojo); border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 25px; }
         #contadorMundial { font-size: 28px; font-weight: bold; color: var(--rojo); font-family: monospace; }
         .banner-publicidad { background: linear-gradient(45deg, #1f1f2e, #111); border: 1px dashed var(--rojo); text-align: center; padding: 20px; border-radius: 12px; margin-bottom: 25px; color: #ccc; font-weight: bold; }
@@ -38,7 +37,6 @@
         .grid-mundial-layout { display: grid; grid-template-columns: 1fr; gap: 25px; }
         @media(min-width: 768px) { .grid-mundial-layout { grid-template-columns: 2fr 1fr; } }
 
-        /* Contenedor Blindado del ScoreCenter */
         .scorecenter-blindado { width: 100%; height: 650px; background: #141419; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
 
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
@@ -91,44 +89,34 @@
         </div>
     </div>
 
-    <!-- SECCIÓN MUNDIAL: 100% AUTOMÁTICA, LIBRE DE EDICIÓN DE USUARIOS Y COMPLETAMENTE INMUNE AL ZORRO -->
     <div id="mundial" class="seccion">
-        
         <div class="countdown-box">
             <h3>Faltan para el Partido Inaugural</h3>
             <div id="contadorMundial">Cargando cronómetro...</div>
         </div>
 
         <div class="banner-publicidad">
-            <span style="color:var(--rojo)"><i class="fas fa-star"></i> PUBLICIDAD DISPONIBLE:</span> Promociona tu marca aquí en el centro de estadísticas. ¡Escríbenos por WhatsApp!
+            <span style="color:var(--rojo)"><i class="fas fa-star"></i> PUBLICIDAD DISPONIBLE:</span> Promociona tu marca aquí en el centro de estadísticas.
         </div>
 
         <div class="grid-mundial-layout">
-            
-            <!-- Columna Izquierda: El Centro de Datos Autónomo -->
             <div>
-                <h3 style="margin: 0 0 15px 0; border-bottom: 2px solid var(--rojo); padding-bottom: 5px;"><i class="fas fa-trophy"></i> Marcadores, Partidos y Grupos en Tiempo Real</h3>
-                
+                <h3 style="margin: 0 0 15px 0; border-bottom: 2px solid var(--rojo); padding-bottom: 5px;"><i class="fas fa-trophy"></i> Partidos y Resultados en Vivo</h3>
                 <div class="scorecenter-blindado">
-                    <!-- Usamos el Widget de Scores oficial de ScoreStream/Sofascore en modo distribución abierta. 
-                         Al no requerir validación de cabeceras estrictas HTTP, el zorro de Firefox no lo bloquea. -->
-                    <iframe src="https://widgets.scorespro.com/soccer.php?container=sp-soccer-widget&theme=dark&competitions=23624" width="100%" height="100%" style="border:none;" scrolling="yes"></iframe>
+                    <iframe src="https://www.scorebat.com/embed/livescore/" width="100%" height="100%" style="border:none;" scrolling="yes"></iframe>
                 </div>
             </div>
 
-            <!-- Columna Derecha: Video e Info -->
             <div>
-                <h3 style="margin: 0 0 15px 0; border-bottom: 2px solid var(--rojo); padding-bottom: 5px;"><i class="fas fa-video"></i> Video Oficial</h3>
+                <h3 style="margin: 0 0 15px 0; border-bottom: 2px solid var(--rojo); padding-bottom: 5px;"><i class="fas fa-video"></i> Video Destacado</h3>
                 <div class="tv-container" style="aspect-ratio: 4/3;">
                     <iframe src="https://www.youtube.com/embed/uI6Vee6WnkI" allowfullscreen></iframe>
                 </div>
-
-                <h3 style="margin: 20px 0 15px 0; border-bottom: 2px solid var(--rojo); padding-bottom: 5px;"><i class="fas fa-sync-alt"></i> Automatización Completa</h3>
+                <h3 style="margin: 20px 0 15px 0; border-bottom: 2px solid var(--rojo); padding-bottom: 5px;"><i class="fas fa-sync-alt"></i> Actualización Automática</h3>
                 <p style="font-size:13px; color:#aaa; line-height:1.6; margin:0;">
-                    A medida que avance el torneo, **aparecerán todos los partidos nuevos automáticamente** en el panel de la izquierda. Las tablas de los 12 grupos se reordenarán solas según los goles reales. Ningún usuario común puede alterar los datos.
+                    El centro de datos se actualiza solo a medida que transcurren los encuentros. Los usuarios pueden navegar por las fechas usando las pestañas internas del panel.
                 </p>
             </div>
-
         </div>
     </div>
 
@@ -154,14 +142,20 @@
     </div>
 </div>
 
-<footer>Mundo Laboral Radio. Vallegrande. 2026</footer>
+<footer>Creado por Mundo Laboral Radio</footer>
 
 <script>
     function ir(id) {
         document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        document.getElementById('btn-' + id).classList.add('active');
+        
+        const seccionObjetivo = document.getElementById(id);
+        const botonObjetivo = document.getElementById('btn-' + id);
+        
+        if(seccionObjetivo && botonObjetivo) {
+            seccionObjetivo.classList.add('active');
+            botonObjetivo.classList.add('active');
+        }
     }
 
     function verVideo(tipo) {
@@ -206,17 +200,23 @@
         }
     }
 
-    // Cronómetro de Cuenta Regresiva Oficial
+    // Cronómetro Corregido (Línea crítica reparada)
     const fechaMundial = new Date("2026-06-11T00:00:00").getTime();
     setInterval(() => {
         const ahora = new Date().getTime();
-        const diferencia = fechaMundial - now = ahora;
+        const diferencia = fechaMundial - ahora;
+        
         const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
         const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+        
         const contador = document.getElementById("contadorMundial");
         if (contador) {
-            contador.innerHTML = `${dias} días ${horas} horas ${minutos} minutos`;
+            if (diferencia > 0) {
+                contador.innerHTML = `${dias} días ${horas} horas ${minutos} minutos`;
+            } else {
+                contador.innerHTML = "¡EL MUNDIAL HA COMENZADO!";
+            }
         }
     }, 1000);
 </script>
