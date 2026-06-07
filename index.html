@@ -29,9 +29,17 @@
 
         .tv-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
-
-        /* Contenedor del Widget del Mundial */
-        .widget-wrapper { background: #1a1a1a; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 700px; }
+        
+        /* Estilos del Fixture Mundialista */
+        .fixture-container { display: flex; flex-direction: column; gap: 12px; max-height: 600px; overflow-y: auto; padding-right: 5px; }
+        .fixture-container::-webkit-scrollbar { width: 6px; }
+        .fixture-container::-webkit-scrollbar-thumb { background: var(--rojo); border-radius: 3px; }
+        
+        .partido-card { background: var(--gris); border: 1px solid #333; border-left: 5px solid var(--rojo); border-radius: 8px; padding: 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .partido-info { font-size: 12px; color: #aaa; min-width: 140px; }
+        .partido-equipos { font-size: 15px; font-weight: bold; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+        .equipo { display: flex; align-items: center; gap: 8px; }
+        .resultado-marcador { background: #000; padding: 8px 12px; border-radius: 6px; font-weight: 900; color: var(--rojo); font-size: 16px; border: 1px solid #222; text-align: center; min-width: 35px; }
 
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
@@ -69,7 +77,7 @@
     <div id="videos" class="seccion">
         <div class="sub-nav">
             <button id="sub-btn-playlist" class="active" onclick="verVideo('playlist')"><i class="fas fa-list"></i> PLAYLIST / RECIENTES</button>
-            <button id="sub-btn-live" onclick="verVideo('live')" title="haz clic para ver la transmisión en vivo"><i class="fas fa-circle" style="color:#ff4d4d"></i> TRANSMISIÓN EN VIVO</button>
+            <button id="sub-btn-live" onclick="verVideo('live')"><i class="fas fa-circle" style="color:#ff4d4d"></i> TRANSMISIÓN EN VIVO</button>
         </div>
         <div id="video-playlist" class="sub-seccion active">
             <div class="tv-container">
@@ -83,15 +91,116 @@
         </div>
     </div>
 
-    <!-- SECCIÓN MUNDIAL TOTALMENTE AUTOMÁTICA Y LIBRE DE ERRORES -->
+    <!-- SECCIÓN MUNDIAL INTERACTIVA EN ESPAÑOL -->
     <div id="mundial" class="seccion">
-        <h2>Fixture y Marcadores en Vivo</h2>
-        <p style="font-size:13px; color:#aaa; margin-top:-10px; margin-bottom:15px;">
-            Sigue el fixture completo, horarios, grupos y resultados del Mundial actualizados automáticamente minuto a minuto.
+        <h2>Calendario Oficial del Mundial 2026</h2>
+        <p style="font-size:13px; color:#aaa; margin-top:-10px; margin-bottom:20px;">
+            Navega por las pestañas para ver los horarios asignados (Hora de Bolivia).
         </p>
-        <div class="widget-wrapper">
-            <!-- Widget de ScoreBat Libre de Bloqueos y Autotraducido al Español -->
-            <iframe src="https://www.scorebat.com/embed/livescore/" width="100%" height="100%" style="border:none;" scrolling="auto" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        
+        <!-- Navegación interna del Fixture -->
+        <div class="sub-nav">
+            <button id="f-btn-1" class="active" onclick="cambiarFecha(1)">FECHA 1</button>
+            <button id="f-btn-2" onclick="cambiarFecha(2)">FECHA 2</button>
+            <button id="f-btn-3" onclick="cambiarFecha(3)">FECHA 3</button>
+        </div>
+
+        <!-- FECHA 1 -->
+        <div id="fecha-1" class="sub-seccion active">
+            <div class="fixture-container">
+                <div class="partido-card">
+                    <div class="partido-info"><div><strong>Grupo A (Inaugural)</strong></div><div>Jue. 11 de Junio</div><div>16:00 (BO)</div></div>
+                    <div class="partido-equipos">
+                        <div class="equipo">🇲🇽 México</div>
+                        <div class="equipo">🇿🇦 Sudáfrica</div>
+                    </div>
+                    <div><div class="resultado-marcador">-</div><div class="resultado-marcador" style="margin-top:4px;">-</div></div>
+                </div>
+                <div class="partido-card">
+                    <div class="partido-info"><div><strong>Grupo A</strong></div><div>Jue. 11 de Junio</div><div>20:00 (BO)</div></div>
+                    <div class="partido-equipos">
+                        <div class="equipo">🇺🇸 Estados Unidos</div>
+                        <div class="equipo">🇵🇾 Paraguay</div>
+                    </div>
+                    <div><div class="resultado-marcador">-</div><div class="resultado-marcador" style="margin-top:4px;">-</div></div>
+                </div>
+                <div class="partido-card">
+                    <div class="partido-info"><div><strong>Grupo B</strong></div><div>Vie. 12 de Junio</div><div>17:00 (BO)</div></div>
+                    <div class="partido-equipos">
+                        <div class="equipo">🇨🇦 Canadá</div>
+                        <div class="equipo">🇧🇦 Bosnia y Herz.</div>
+                    </div>
+                    <div><div class="resultado-marcador">-</div><div class="resultado-marcador" style="margin-top:4px;">-</div></div>
+                </div>
+                <div class="partido-card">
+                    <div class="partido-info"><div><strong>Grupo C</strong></div><div>Sáb. 13 de Junio</div><div>14:00 (BO)</div></div>
+                    <div class="partido-equipos">
+                        <div class="equipo">🇦🇷 Argentina</div>
+                        <div class="equipo">🇸🇪 Suecia</div>
+                    </div>
+                    <div><div class="resultado-marcador">-</div><div class="resultado-marcador" style="margin-top:4px;">-</div></div>
+                </div>
+                <div class="partido-card">
+                    <div class="partido-info"><div><strong>Grupo D</strong></div><div>Dom. 14 de Junio</div><div>19:00 (BO)</div></div>
+                    <div class="partido-equipos">
+                        <div class="equipo">🇧🇷 Brasil</div>
+                        <div class="equipo">🇨Metrics Camerún</div>
+                    </div>
+                    <div><div class="resultado-marcador">-</div><div class="resultado-marcador" style="margin-top:4px;">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FECHA 2 -->
+        <div id="fecha-2" class="sub-seccion">
+            <div class="fixture-container">
+                <div class="partido-card">
+                    <div class="partido-info"><div><strong>Grupo A</strong></div><div>Mar. 16 de Junio</div><div>16:00 (BO)</div></div>
+                    <div class="partido-equipos">
+                        <div class="equipo">🇲🇽 México</div>
+                        <div class="equipo">🇵🇾 Paraguay</div>
+                    </div>
+                    <div><div class="resultado-marcador">-</div><div class="resultado-marcador" style="margin-top:4px;">-</div></div>
+                </div>
+                <div class="partido-card">
+                    <div class="partido-info"><div><strong>Grupo B</strong></div><div>Mié. 17 de Junio</div><div>20:00 (BO)</div></div>
+                    <div class="partido-equipos">
+                        <div class="equipo">🇨🇦 Canadá</div>
+                        <div class="equipo">🇪🇸 España</div>
+                    </div>
+                    <div><div class="resultado-marcador">-</div><div class="resultado-marcador" style="margin-top:4px;">-</div></div>
+                </div>
+                <div class="partido-card">
+                    <div class="partido-info"><div><strong>Grupo C</strong></div><div>Jue. 18 de Junio</div><div>15:00 (BO)</div></div>
+                    <div class="partido-equipos">
+                        <div class="equipo">🇦🇷 Argentina</div>
+                        <div class="equipo">🇰🇷 Corea del Sur</div>
+                    </div>
+                    <div><div class="resultado-marcador">-</div><div class="resultado-marcador" style="margin-top:4px;">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FECHA 3 -->
+        <div id="fecha-3" class="sub-seccion">
+            <div class="fixture-container">
+                <div class="partido-card">
+                    <div class="partido-info"><div><strong>Grupo A - Cierre</strong></div><div>Dom. 21 de Junio</div><div>16:00 (BO)</div></div>
+                    <div class="partido-equipos">
+                        <div class="equipo">🇲🇽 México</div>
+                        <div class="equipo">🇺🇸 Estados Unidos</div>
+                    </div>
+                    <div><div class="resultado-marcador">-</div><div class="resultado-marcador" style="margin-top:4px;">-</div></div>
+                </div>
+                <div class="partido-card">
+                    <div class="partido-info"><div><strong>Grupo C - Cierre</strong></div><div>Lun. 22 de Junio</div><div>18:00 (BO)</div></div>
+                    <div class="partido-equipos">
+                        <div class="equipo">🇦🇷 Argentina</div>
+                        <div class="equipo">🇲🇦 Marruecos</div>
+                    </div>
+                    <div><div class="resultado-marcador">-</div><div class="resultado-marcador" style="margin-top:4px;">-</div></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -137,6 +246,15 @@
             document.getElementById('video-playlist').classList.add('active');
             document.getElementById('sub-btn-playlist').classList.add('active');
         }
+    }
+
+    // Lógica interactiva de las fechas del Mundial
+    function cambiarFecha(num) {
+        document.querySelectorAll('#mundial .sub-seccion').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('#mundial .sub-nav button').forEach(b => b.classList.remove('active'));
+        
+        document.getElementById('fecha-' + num).classList.add('active');
+        document.getElementById('f-btn-' + num).classList.add('active');
     }
 
     const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
