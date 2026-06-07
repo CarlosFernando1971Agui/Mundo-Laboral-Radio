@@ -35,8 +35,8 @@
         .titulo-mundial-contenedor h2 { margin: 0 0 8px 0; font-size: 26px; }
         .titulo-mundial-contenedor p { font-size: 14px; color: #aaa; margin: 0; }
 
-        /* Contenedor del nuevo Widget Autolimpiable */
-        .widget-wrapper { background: #1a1a1a; border-radius: 15px; border: 1px solid var(--rojo); padding: 10px; min-height: 650px; }
+        /* Contenedor del nuevo Widget Blindado */
+        .widget-wrapper { background: #1a1a1a; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 700px; }
 
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    <!-- SECCIÓN MUNDIAL INDESTRUCTIBLE CON SCRIPT -->
+    <!-- SECCIÓN MUNDIAL TOTALMENTE AUTOMÁTICA, EN ESPAÑOL Y ANTIBLOQUEOS -->
     <div id="mundial" class="seccion">
         <div class="titulo-mundial-contenedor">
             <h2>Calendario Oficial del Mundial 2026</h2>
@@ -96,9 +96,8 @@
         </div>
         
         <div class="widget-wrapper">
-            <!-- Widget Dinámico de SofaScore: Cero iframes rígidos, en español y compatible con modo oscuro -->
-            <div class="sofascore-widget" data-id="tournament:16" data-theme="dark" data-height="650" data-show-title="false" data-language="es"></div>
-            <script type="text/javascript" src="https://widgets.sofascore.com/bundle.js" async></script>
+            <!-- Iframe de SofaScore directo: Evita bloqueos de seguridad locales, idioma español forzado y tema oscuro -->
+            <iframe src="https://widgets.sofascore.com/es/embed/tournament/16?theme=dark" width="100%" height="100%" style="border:none;" scrolling="auto" allowfullscreen></iframe>
         </div>
     </div>
 
