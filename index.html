@@ -31,7 +31,7 @@
         .reproductor-card { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop'); background-size: cover; background-position: center; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px 20px; text-align: center; }
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
         
-        /* Videos - Landing Page Estilo imagen_181.png */
+        /* Videos */
         .video-landing { text-align: center; padding: 40px 20px; }
         .btn-vid-action { display: block; width: 100%; max-width: 800px; margin: 15px auto; padding: 20px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; font-size: 16px; text-transform: uppercase; }
         .btn-live { background: var(--rojo); }
@@ -39,32 +39,21 @@
         .iframe-container { aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); background:#000; margin-top:20px; }
         iframe { width: 100%; height: 100%; border: none; }
         
-        /* Redes - Con Iconos */
+        /* Redes - Funcionales */
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; }
+        .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.1em; transition: 0.3s; }
+        .card-red:hover { opacity: 0.8; }
         
         /* Contacto */
         .form-contacto { background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #333; max-width: 600px; margin: 0 auto; }
         input, textarea { width: 100%; padding: 15px; margin: 10px 0; background: #000; color: #fff; border: 1px solid #444; border-radius: 8px; box-sizing: border-box; }
         
         /* Footer y WhatsApp */
-        footer { text-align: center; padding: 20px; color: #666; font-size: 14px; border-top: 1px solid #333; margin-top: 40px; }
+        footer { text-align: center; padding: 20px; color: #666; font-size: 15px; border-top: 1px solid #333; margin-top: 40px; }
         .wa-float { position: fixed; bottom: 20px; right: 20px; background: #25D366; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
-
-<!-- Banners Laterales -->
-<div class="banner-lateral banner-left">
-    <img src="https://i.postimg.cc/sxpnYN19/ags.jpg">
-    <img src="https://i.postimg.cc/NfcCsBPN/publi-fija-junio.jpg">
-    <img src="https://i.postimg.cc/HkPtygBT/232310560-401062984939201-7897983293061993896-n.png">
-</div>
-<div class="banner-lateral banner-right">
-    <img src="https://i.postimg.cc/XYDgCbQV/Imagen-de-Whats-App-2024-02-18-a-las-13-11-48-5cb62194.jpg">
-    <img src="https://i.postimg.cc/HkPtygBL/Logotipo-2020-CST.jpg">
-    <img src="https://i.postimg.cc/g2BKZWNk/Sin-titulo.jpg">
-</div>
 
 <header>
     <div class="brand-name">MUNDO <span style="color:var(--rojo)">LABORAL</span> RADIO</div>
@@ -89,13 +78,11 @@
 
     <!-- VIDEOS -->
     <div id="videos" class="seccion">
-        <!-- Landing Page del Video -->
         <div id="videos-landing" class="video-landing">
             <h2>¿Estamos transmitiendo?</h2>
             <button class="btn-vid-action btn-live" onclick="loadVideo('live')">HAGA CLIC PARA VER EN VIVO</button>
             <button class="btn-vid-action btn-list" onclick="loadVideo('list')">VER LISTA DE VIDEOS</button>
         </div>
-        <!-- Reproductor -->
         <div id="videos-player" class="iframe-container" style="display:none;">
             <div style="padding:10px; background:#000;">
                 <button onclick="backToLanding()" style="background:#444; color:white; border:none; padding:8px 15px; cursor:pointer; border-radius:5px;"><i class="fas fa-arrow-left"></i> Volver</button>
@@ -107,14 +94,16 @@
     <!-- REDES -->
     <div id="redes" class="seccion">
         <div class="grid-redes">
-            <a href="#" class="card-red" style="background:#444"><i class="fas fa-globe"></i> WEB</a>
-            <a href="#" class="card-red" style="background:#1877F2"><i class="fab fa-facebook"></i> FACEBOOK</a>
-            <a href="#" class="card-red" style="background:#FF0000"><i class="fab fa-youtube"></i> YOUTUBE</a>
-            <a href="#" class="card-red" style="background:#000000"><i class="fab fa-tiktok"></i> TIKTOK</a>
-            <a href="#" class="card-red" style="background:#E1306C"><i class="fab fa-instagram"></i> INSTAGRAM</a>
-            <a href="#" class="card-red" style="background:#1DA1F2"><i class="fab fa-x-twitter"></i> X (TWITTER)</a>
-            <a href="#" class="card-red" style="background:#25D366"><i class="fab fa-whatsapp"></i> GRUPO WHATSAPP</a>
-            <a href="#" class="card-red" style="background:#25D366"><i class="fab fa-whatsapp"></i> CANAL WHATSAPP</a>
+            <!-- Web oficial -->
+            <a href="https://mundolaboral.radio.com.bo" target="_blank" class="card-red" style="background:#444"><i class="fas fa-globe"></i> WEB</a>
+            <a href="#" target="_blank" class="card-red" style="background:#1877F2"><i class="fab fa-facebook"></i> FACEBOOK</a>
+            <a href="#" target="_blank" class="card-red" style="background:#FF0000"><i class="fab fa-youtube"></i> YOUTUBE</a>
+            <a href="#" target="_blank" class="card-red" style="background:#000000"><i class="fab fa-tiktok"></i> TIKTOK</a>
+            <a href="#" target="_blank" class="card-red" style="background:#E1306C"><i class="fab fa-instagram"></i> INSTAGRAM</a>
+            <a href="#" target="_blank" class="card-red" style="background:#1DA1F2"><i class="fab fa-x-twitter"></i> X (TWITTER)</a>
+            <a href="#" target="_blank" class="card-red" style="background:#25D366"><i class="fab fa-whatsapp"></i> WHATSAPP</a>
+            <!-- Link a Play Store -->
+            <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" target="_blank" class="card-red" style="background:#4285F4"><i class="fab fa-google-play"></i> APP PLAY STORE</a>
         </div>
     </div>
 
@@ -131,7 +120,6 @@
 
 <footer>Mundo Laboral Radio. Vallegrande 2026</footer>
 
-<!-- WhatsApp Flotante -->
 <a href="https://wa.me/59170000000" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
 
 <script>
@@ -146,10 +134,8 @@
         const landing = document.getElementById('videos-landing');
         const player = document.getElementById('videos-player');
         const iframe = document.getElementById('iframe-src');
-        
         landing.style.display = 'none';
         player.style.display = 'block';
-        
         if (tipo === 'live') {
             iframe.src = "https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A";
         } else {
