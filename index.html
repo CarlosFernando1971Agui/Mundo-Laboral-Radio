@@ -37,8 +37,8 @@
         .partido-equipos { font-size: 16px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
         .resultado-marcador { background: #000; padding: 5px 15px; border-radius: 5px; font-weight: 900; color: var(--rojo); font-size: 18px; border: 1px solid #222; }
 
-        /* Contenedor del Widget Automático */
-        .widget-mundial { width: 100%; height: 600px; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; background: #fff; }
+        /* Contenedor del nuevo Widget de Resultados */
+        .widget-wrapper { background: #111116; border-radius: 15px; border: 1px solid var(--rojo); padding: 10px; min-height: 500px; }
 
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
@@ -90,18 +90,17 @@
         </div>
     </div>
 
-    <!-- SECCIÓN MUNDIAL -->
+    <!-- SECCIÓN MUNDIAL CORREGIDA -->
     <div id="mundial" class="seccion">
         <div class="sub-nav">
             <button id="sub-btn-fixture" class="active" onclick="verMundial('fixture')"><i class="far fa-calendar-alt"></i> PRIMEROS PARTIDOS</button>
             <button id="sub-btn-resultados" onclick="verMundial('resultados')"><i class="fas fa-sync-alt"></i> TODO EN VIVO (AUTO)</button>
         </div>
 
-        <!-- Subsección 1: Primeros Partidos Reales Confirmados -->
+        <!-- Subsección 1: Primeros Partidos -->
         <div id="mundial-fixture" class="sub-seccion active">
             <h2>Fixture de Apertura (Hora Local Bolivia)</h2>
             <div class="fixture-container">
-                
                 <div class="partido-card">
                     <div class="partido-info">
                         <div><strong>Grupo A - ¡Inaugural!</strong></div>
@@ -112,18 +111,6 @@
                     </div>
                     <div class="resultado-marcador">-- : --</div>
                 </div>
-
-                <div class="partido-card">
-                    <div class="partido-info">
-                        <div><strong>Grupo A - Fecha 1</strong></div>
-                        <div>Viernes 12 de Junio - 23:00</div>
-                    </div>
-                    <div class="partido-equipos">
-                        <span>Corea del Sur 🇰🇷</span> <span>vs</span> <span>Rep. Checa 🇨🇿</span>
-                    </div>
-                    <div class="resultado-marcador">-- : --</div>
-                </div>
-
                 <div class="partido-card">
                     <div class="partido-info">
                         <div><strong>Grupo B - Fecha 1</strong></div>
@@ -134,7 +121,6 @@
                     </div>
                     <div class="resultado-marcador">-- : --</div>
                 </div>
-
                 <div class="partido-card">
                     <div class="partido-info">
                         <div><strong>Grupo D - Fecha 1</strong></div>
@@ -145,17 +131,16 @@
                     </div>
                     <div class="resultado-marcador">-- : --</div>
                 </div>
-
             </div>
         </div>
 
-        <!-- Subsección 2: Centro de Resultados Automático de todo el Mundial -->
+        <!-- Subsección 2: Centro de Resultados (CON WIDGET PERMITIDO Y LIBRE DE ERRORES) -->
         <div id="mundial-resultados" class="sub-seccion">
-            <h2>Resultados, Grupos y Calendario Completo</h2>
-            <p style="font-size:13px; color:#aaa; margin-top:-10px; margin-bottom:15px;">Este panel se actualiza automáticamente segundo a segundo con datos oficiales de la competición.</p>
-            <div class="widget-mundial">
-                <!-- Widget deportivo responsivo embebido -->
-                <iframe src="https://m.livescore.in/es/futbol/mundial/campeonato-mundial/" style="width:100%; height:100%; border:none;"></iframe>
+            <h2>Resultados y Estadísticas en Vivo</h2>
+            <p style="font-size:13px; color:#aaa; margin-top:-10px; margin-bottom:15px;">Marcadores interactivos actualizados minuto a minuto.</p>
+            <div class="widget-wrapper">
+                <!-- Usamos una plataforma abierta que sí permite incrustación limpia en Vercel -->
+                <iframe src="https://www.scoreaxis.com/widget/live-scores?autoHeight=1&bodyBackground=%23111116&textColor=%23ffffff&linkColor=%23ff4d4d&font=Segoe%20UI" style="width:100%; height:600px; border:none;"></iframe>
             </div>
         </div>
     </div>
