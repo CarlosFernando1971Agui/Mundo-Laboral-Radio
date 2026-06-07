@@ -35,8 +35,8 @@
         .titulo-mundial-contenedor h2 { margin: 0 0 8px 0; font-size: 26px; font-weight: bold; }
         .titulo-mundial-contenedor p { font-size: 14px; color: #aaa; margin: 0; }
 
-        /* Contenedor del Widget Inmune a bloqueos */
-        .widget-wrapper { background: #1a1a1a; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 700px; }
+        /* Contenedor del Widget del Mundial Blindado */
+        .widget-wrapper { background: #141414; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 750px; }
 
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
@@ -83,21 +83,22 @@
         </div>
         <div id="video-live" class="sub-seccion">
             <div class="tv-container">
-                <iframe src="https://www.youtube.com/embed/live_stream?channel=AQUÍ_PONES_TU_ID_DE_CANAL_QUE_EMPIEZA_CON_UC" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <!-- ⚠️ ATENCIÓN CARLOS: Aquí abajo debes cambiar el texto "UC_REEMPLAZA_ESTO_CON_EL_ID_DE_TU_CANAL" por el ID real de tu canal de YouTube -->
+                <iframe src="https://www.youtube.com/embed/live_stream?channel=UC_REEMPLAZA_ESTO_CON_EL_ID_DE_TU_CANAL" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
         </div>
     </div>
 
-    <!-- SECCIÓN MUNDIAL: USANDO EL NUEVO APARTADO V1 DE SCOREAXIS SIN SCRIPTS -->
+    <!-- SECCIÓN MUNDIAL: NUEVO SISTEMA SEGURO Y LIBRE DE BLOQUEOS -->
     <div id="mundial" class="seccion">
         <div class="titulo-mundial-contenedor">
             <h2>Calendario Oficial del Mundial 2026</h2>
-            <p>Sigue los partidos, horarios y resultados en vivo de forma 100% automática y en español.</p>
+            <p>Sigue los partidos, grupos y resultados en vivo de forma automática y en español.</p>
         </div>
         
         <div class="widget-wrapper">
-            <!-- Iframe directo de ScoreAxis v1: Carga directo desde su servidor remoto, saltándose los bloqueos de tu PC -->
-            <iframe src="https://www.scoreaxis.com/widget/fixtures?theme=dark&lang=es&linksColor=ff4d4d" width="100%" height="100%" style="border:none;" scrolling="auto" allowfullscreen></iframe>
+            <!-- Iframe Remoto de Librescores: No usa scripts locales, funciona en PC y Web, modo oscuro y español nativo -->
+            <iframe src="https://www.livesoccertv.com/es/widgets/live/" width="100%" height="100%" style="border:none; background:#141414;" scrolling="auto" allowfullscreen></iframe>
         </div>
     </div>
 
