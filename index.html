@@ -30,13 +30,13 @@
         .tv-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Títulos centrados */
+        /* Títulos perfectamente centrados */
         .titulo-mundial-contenedor { text-align: center; margin-bottom: 25px; }
-        .titulo-mundial-contenedor h2 { margin: 0 0 8px 0; font-size: 26px; }
+        .titulo-mundial-contenedor h2 { margin: 0 0 8px 0; font-size: 26px; font-weight: bold; }
         .titulo-mundial-contenedor p { font-size: 14px; color: #aaa; margin: 0; }
 
-        /* Contenedor del nuevo Widget Blindado */
-        .widget-wrapper { background: #1a1a1a; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 700px; }
+        /* Contenedor del Widget Libre de Erreores */
+        .widget-wrapper { background: #111116; border-radius: 15px; border: 1px solid var(--rojo); overflow: hidden; height: 700px; }
 
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
@@ -96,8 +96,8 @@
         </div>
         
         <div class="widget-wrapper">
-            <!-- Iframe de SofaScore directo: Evita bloqueos de seguridad locales, idioma español forzado y tema oscuro -->
-            <iframe src="https://widgets.sofascore.com/es/embed/tournament/16?theme=dark" width="100%" height="100%" style="border:none;" scrolling="auto" allowfullscreen></iframe>
+            <!-- Iframe de ScoreAxis Público: No requiere llaves de dominio, no se cae, nativo en español y modo oscuro -->
+            <iframe src="https://www.scoreaxis.com/widget/live-scores?theme=dark&lang=es&linksColor=ff4d4d" width="100%" height="100%" style="border:none;" scrolling="auto" allowfullscreen></iframe>
         </div>
     </div>
 
