@@ -7,38 +7,53 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <style>
         :root { --rojo: #ff4d4d; --negro: #0d0d11; --gris: #16161d; --texto: #ffffff; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--negro); color: var(--texto); margin: 0; padding: 0; }
-        
+        body { font-family: 'Segoe UI', sans-serif; background: var(--negro); color: var(--texto); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
         header { background: #000; padding: 25px 0; border-bottom: 2px solid var(--rojo); text-align: center; }
         .brand-name { font-size: 30px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
         
-        nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        nav { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
         nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         nav button.active { background: var(--rojo); border-color: var(--rojo); }
         
-        .container { padding: 0 20px 20px 20px; display: flex; justify-content: center; }
+        .container { flex: 1; padding: 20px; display: flex; justify-content: center; }
         .seccion { display: none; width: 100%; max-width: 950px; }
         .seccion.active { display: block; }
         
-        /* Reproductor */
-        .reproductor-card { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop'); background-size: cover; background-position: center; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px 20px; text-align: center; }
-        #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; transition: 0.3s; }
+        /* Reproductor Estilo mundo laboral radio1.jpg */
+        .reproductor-card { 
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop'); 
+            background-size: cover; 
+            background-position: center; 
+            border: 1px solid var(--rojo); 
+            border-radius: 20px; 
+            padding: 50px 20px; 
+            text-align: center; 
+            position: relative;
+        }
+        #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
         .vol-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
         
-        /* Videos */
+        /* Video Section */
         .sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
         .sub-nav button { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
         .sub-nav button.active { background: var(--rojo); }
-        .video-box { display: none; }
+        .video-box { display: none; width: 100%; }
         .video-box.active { display: block; }
-        .iframe-container { aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
+        .iframe-container { aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
         
-        /* Redes y Contacto */
+        /* Redes */
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; }
+        .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        
+        /* Contacto */
         .form-contacto { background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #333; max-width: 600px; margin: 0 auto; }
         input, textarea { width: 100%; padding: 15px; margin: 10px 0; background: #000; color: #fff; border: 1px solid #444; border-radius: 8px; box-sizing: border-box; }
+        
+        /* Flotante WhatsApp */
+        .float-wa { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 1000; text-decoration: none; }
+
+        footer { background: #000; padding: 20px; text-align: center; border-top: 2px solid var(--rojo); margin-top: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -54,25 +69,26 @@
 </header>
 
 <div class="container">
-    <!-- Radio -->
     <div id="inicio" class="seccion active">
         <div class="reproductor-card">
             <h1>RADIO EN VIVO</h1>
-            <p>Vallegrande, Bolivia</p>
+            <p style="margin-bottom: 20px; font-size: 1.2em;">Vallegrande, Bolivia</p>
+            
             <button id="play-btn" onclick="toggleAudio()"><i id="p-icon" class="fas fa-play"></i></button>
+            
             <div class="vol-container">
                 <i class="fas fa-volume-up"></i>
                 <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="0.8" style="width: 150px; cursor: pointer;">
             </div>
-            <p id="status">Toca para escuchar</p>
+            
+            <p id="status" style="margin-top: 15px;">Toca para escuchar</p>
         </div>
     </div>
 
-    <!-- Videos -->
     <div id="videos" class="seccion">
         <div class="sub-nav">
             <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLÁSICOS</button>
-            <button onclick="cambiarVideo('live')" id="sub-btn-live">EN VIVO</button>
+            <button onclick="cambiarVideo('live')" id="sub-btn-live">TRANSMISIÓN EN VIVO</button>
         </div>
         <div id="clasico-box" class="video-box active">
             <div class="iframe-container">
@@ -80,25 +96,30 @@
             </div>
         </div>
         <div id="live-box" class="video-box">
-            <div class="iframe-container">
-                <iframe src="https://www.youtube.com/embed/live_stream?channel=UC-tuo6y_22s22s22s" allowfullscreen></iframe>
+            <div style="background:#1a1a1a; padding:40px; border-radius:15px; text-align:center; display:flex; flex-direction:column; gap:15px;">
+                <h3>¿Estamos transmitiendo?</h3>
+                <a href="https://www.youtube.com/@mundolaboralradio/live" target="_blank" style="background:var(--rojo); color:white; padding:15px; border-radius:8px; text-decoration:none; font-weight:bold;">HAGA CLIC PARA VER EN VIVO</a>
+                <a href="https://studio.youtube.com/channel/UCUJY-xgeGJokDh-5Ho_Wb9A/videos/live" target="_blank" style="background:#333; color:white; padding:15px; border-radius:8px; text-decoration:none; font-weight:bold;">VER LISTA DE VIDEOS</a>
             </div>
         </div>
     </div>
 
-    <!-- Redes -->
     <div id="redes" class="seccion">
         <div class="grid-redes">
-            <a href="https://mundolaboral.radio.com.bo/" class="card-red" style="background:#444">WEB</a>
-            <a href="https://facebook.com/MundoLaboralRadio" class="card-red" style="background:#1877F2">FACEBOOK</a>
-            <a href="https://www.youtube.com/@mundolaboralradio" class="card-red" style="background:#FF0000">YOUTUBE</a>
+            <a href="https://mundolaboral.radio.com.bo/" class="card-red" style="background:#444"><i class="fas fa-globe"></i> Web</a>
+            <a href="https://play.google.com/store/apps/details?id=mundo.laboralradio2" class="card-red" style="background:#34a853"><i class="fab fa-google-play"></i> App</a>
+            <a href="https://facebook.com/MundoLaboralRadio" class="card-red" style="background:#1877F2"><i class="fab fa-facebook"></i> Facebook</a>
+            <a href="https://www.youtube.com/@mundolaboralradio" class="card-red" style="background:#FF0000"><i class="fab fa-youtube"></i> YouTube</a>
+            <a href="https://www.tiktok.com/@carlosfer_1971" class="card-red" style="background:#000"><i class="fab fa-tiktok"></i> TikTok</a>
+            <a href="https://www.instagram.com/carlosfernandoaguilare/" class="card-red" style="background:#bc1888"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="https://t.me/+OlAmHfkWb3I2MzEx" class="card-red" style="background:#0088cc"><i class="fab fa-telegram"></i> Telegram</a>
+            <a href="https://chat.whatsapp.com/BMDRQO15kyPCFxomtgtIyX" class="card-red" style="background:#25D366"><i class="fab fa-whatsapp"></i> WhatsApp</a>
         </div>
     </div>
 
-    <!-- Contacto -->
     <div id="contacto" class="seccion">
         <div class="form-contacto">
-            <h2>Contacto</h2>
+            <h2 style="margin-top:0;">Contacto</h2>
             <input type="text" id="c-nombre" placeholder="Tu nombre">
             <textarea id="c-mensaje" rows="5" placeholder="Tu mensaje"></textarea>
             <button onclick="enviarWA()" style="background:var(--rojo); color:white; border:none; padding:15px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer;">ENVIAR POR WHATSAPP</button>
@@ -106,8 +127,11 @@
     </div>
 </div>
 
+<a href="https://wa.me/59168785216" class="float-wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+<footer>Mundo Laboral Radio. Vallegrande 2026</footer>
+
 <script>
-    // Navegación
     function ir(id) {
         document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('active'));
@@ -115,7 +139,18 @@
         document.getElementById('btn-' + id).classList.add('active');
     }
 
-    // Radio
+    function cambiarVideo(tipo) {
+        document.querySelectorAll('.video-box').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.sub-nav button').forEach(b => b.classList.remove('active'));
+        if(tipo === 'clasico') {
+            document.getElementById('clasico-box').classList.add('active');
+            document.getElementById('sub-btn-clasico').classList.add('active');
+        } else {
+            document.getElementById('live-box').classList.add('active');
+            document.getElementById('sub-btn-live').classList.add('active');
+        }
+    }
+
     const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
     let sonando = false;
     function toggleAudio() {
@@ -124,21 +159,14 @@
         if (!sonando) { radio.play(); icon.className = "fas fa-pause"; status.innerText = "SONANDO..."; sonando = true; } 
         else { radio.pause(); icon.className = "fas fa-play"; status.innerText = "Toca para escuchar"; sonando = false; }
     }
-    document.getElementById('vol-slider').addEventListener('input', (e) => radio.volume = e.target.value);
 
-    // Video Switcher
-    function cambiarVideo(tipo) {
-        document.querySelectorAll('.video-box').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('.sub-nav button').forEach(b => b.classList.remove('active'));
-        document.getElementById(tipo + '-box').classList.add('active');
-        document.getElementById('sub-btn-' + tipo).classList.add('active');
-    }
+    document.getElementById('vol-slider').oninput = function() { radio.volume = this.value; };
 
-    // Contacto
     function enviarWA() {
-        const nombre = document.getElementById('c-nombre').value;
         const msg = document.getElementById('c-mensaje').value;
-        window.open(`https://wa.me/59170000000?text=Hola, soy ${nombre}. ${msg}`, '_blank');
+        const nombre = document.getElementById('c-nombre').value;
+        if(nombre && msg) window.open(`https://wa.me/59168785216?text=Hola soy ${nombre}, ${encodeURIComponent(msg)}`, '_blank');
+        else alert("Por favor completa tu nombre y mensaje.");
     }
 </script>
 </body>
