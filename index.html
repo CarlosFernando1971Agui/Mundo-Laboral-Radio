@@ -10,26 +10,32 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--negro); color: var(--texto); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
         header { background: #000; padding: 25px 0; border-bottom: 2px solid var(--rojo); text-align: center; }
         .brand-name { font-size: 30px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
-        nav { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
-        nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        nav button.active { background: var(--rojo); border-color: var(--rojo); }
-        
-        .wrapper { display: flex; justify-content: center; padding: 20px; flex: 1; }
-        .container { flex: 1; max-width: 900px; }
-        .seccion { display: none; } .seccion.active { display: block; }
-        
-        /* Tarjetas de contenido */
-        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 20px; margin-bottom: 20px; }
-        .card h3 { color: var(--rojo); margin-top: 0; }
-        .iframe-video { width: 100%; aspect-ratio: 16/9; border-radius: 10px; border: none; }
-        
-        /* Grid de Redes */
-        .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        .btn-red { background: #333; padding: 15px; text-align: center; border-radius: 10px; text-decoration: none; color: white; border: 1px solid #444; }
 
-        /* Botón Flotante */
-        .float-wa { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 1000; }
-        footer { text-align: center; padding: 20px; color: #666; }
+        nav { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+        nav button { background: var(--gris); border: 1px solid #333; color: #fff; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        nav button.active { background: var(--rojo); border-color: var(--rojo); }
+
+        .wrapper { display: flex; justify-content: center; gap: 20px; padding: 20px; flex: 1; width: 100%; box-sizing: border-box; }
+        .banner-side { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; }
+        .banner-img { width: 100%; border-radius: 10px; border: 1px solid var(--rojo); display: block; }
+
+        .container { flex: 1; max-width: 950px; }
+        .seccion { display: none; width: 100%; }
+        .seccion.active { display: block; }
+        
+        .reproductor-card { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=800&auto=format&fit=crop'); background-size: cover; background-position: center; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px 20px; text-align: center; }
+        #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
+        .vol-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
+        
+        .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .card-red { background: #1a1a1a; padding: 15px; border-radius: 10px; color: white; text-decoration: none; text-align: center; border: 1px solid #444; }
+
+        .form-contacto { background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #333; }
+        .btn-enviar { background: var(--rojo); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+        
+        .float-wa { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 1000; text-decoration: none; }
+        footer { background: #000; padding: 20px; text-align: center; border-top: 2px solid var(--rojo); margin-top: 20px; font-weight: bold; }
+        @media (max-width: 1100px) { .banner-side { display: none; } }
     </style>
 </head>
 <body>
@@ -41,62 +47,63 @@
         <button onclick="ir('videos')" id="btn-videos">VIDEOS</button>
         <button onclick="ir('mundial')" id="btn-mundial">MUNDIAL 2026</button>
         <button onclick="ir('redes')" id="btn-redes">REDES</button>
-        <button onclick="ir('noticias')" id="btn-noticias">NOTICIAS</button>
         <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
     </nav>
 </header>
 
 <div class="wrapper">
+    <aside class="banner-side">
+        <img src="banner1.jpg" class="banner-img" alt="Banner">
+        <img src="banner2.jpg" class="banner-img" alt="Banner">
+    </aside>
+
     <div class="container">
         <div id="inicio" class="seccion active">
-            <div class="card" style="text-align:center;">
+            <div class="reproductor-card">
                 <h1>RADIO EN VIVO</h1>
-                <button id="play-btn" onclick="toggleAudio()" style="background:var(--rojo); border:none; padding:20px 40px; border-radius:50px; color:white; font-size:20px; cursor:pointer;">
-                    <i id="p-icon" class="fas fa-play"></i> Reproducir
-                </button>
+                <button id="play-btn" onclick="toggleAudio()"><i id="p-icon" class="fas fa-play"></i></button>
+                <div class="vol-container">
+                    <i class="fas fa-volume-down"></i>
+                    <input type="range" id="vol-slider" min="0" max="1" step="0.1" value="1" oninput="setVol(this.value)">
+                    <i class="fas fa-volume-up"></i>
+                </div>
             </div>
         </div>
-
         <div id="videos" class="seccion">
-            <div class="card">
-                <h3>Video Destacado</h3>
-                <iframe class="iframe-video" src="https://www.youtube.com/embed/TU_ID_VIDEO_AQUI"></iframe>
-            </div>
+            <h2>Videos Destacados</h2>
+            <div class="iframe-container"><iframe src="https://www.youtube.com/embed/TU_VIDEO"></iframe></div>
         </div>
-
         <div id="mundial" class="seccion">
-            <div class="card">
-                <h3>Cobertura Mundial 2026</h3>
-                <p>Próximamente contenido exclusivo sobre el Mundial.</p>
+            <h2>Mundial 2026</h2>
+            <div class="mundial-card">
+                <div class="mundial-card-header">Datos del Mundial</div>
+                <p style="padding: 20px;">Aquí están tus datos del mundial que ya tenías...</p>
             </div>
         </div>
-
         <div id="redes" class="seccion">
             <div class="grid-redes">
-                <a href="#" class="btn-red"><i class="fab fa-facebook"></i> Facebook</a>
-                <a href="#" class="btn-red"><i class="fab fa-tiktok"></i> TikTok</a>
-                <a href="#" class="btn-red"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="#" class="card-red"><i class="fab fa-facebook fa-2x"></i><br>Facebook</a>
+                <a href="#" class="card-red"><i class="fab fa-tiktok fa-2x"></i><br>TikTok</a>
+                <a href="#" class="card-red"><i class="fab fa-instagram fa-2x"></i><br>Instagram</a>
+                <a href="#" class="card-red"><i class="fab fa-youtube fa-2x"></i><br>YouTube</a>
+                <a href="#" class="card-red"><i class="fab fa-twitter fa-2x"></i><br>Twitter</a>
+                <a href="#" class="card-red"><i class="fab fa-linkedin fa-2x"></i><br>LinkedIn</a>
+                <a href="#" class="card-red"><i class="fab fa-twitch fa-2x"></i><br>Twitch</a>
+                <a href="#" class="card-red"><i class="fab fa-telegram fa-2x"></i><br>Telegram</a>
             </div>
         </div>
-
-        <div id="noticias" class="seccion">
-            <div class="card">
-                <h3>Noticia 1</h3>
-                <p>Aquí irá el resumen de la noticia laboral más importante del día.</p>
-            </div>
-        </div>
-
         <div id="contacto" class="seccion">
-            <div class="card">
-                <h3>Envíanos un mensaje</h3>
-                <input type="text" placeholder="Tu Nombre" style="width:100%; padding:10px; margin-bottom:10px; background:#000; border:1px solid #444; color:white;">
-                <textarea placeholder="Tu mensaje" style="width:100%; padding:10px; background:#000; border:1px solid #444; color:white;"></textarea>
-            </div>
+            <form class="form-contacto">
+                <input type="text" placeholder="Tu Nombre">
+                <input type="email" placeholder="Tu Email">
+                <textarea rows="5" placeholder="Tu mensaje"></textarea>
+                <button type="button" class="btn-enviar">Enviar Mensaje</button>
+            </form>
         </div>
     </div>
 </div>
 
-<a href="https://wa.me/591XXXXXXXX" class="float-wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
+<a href="https://wa.me/591" class="float-wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
 <footer>&copy; 2026 Mundo Laboral Radio</footer>
 
@@ -114,6 +121,7 @@
         if (!sonando) { radio.play(); icon.className = "fas fa-pause"; sonando = true; } 
         else { radio.pause(); icon.className = "fas fa-play"; sonando = false; }
     }
+    function setVol(v) { radio.volume = v; }
 </script>
 </body>
 </html>
