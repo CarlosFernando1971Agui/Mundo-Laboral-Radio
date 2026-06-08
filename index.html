@@ -47,6 +47,19 @@
         .mundial-card-header { background: var(--rojo); padding: 12px 20px; font-weight: bold; font-size: 1.1em; display: flex; align-items: center; gap: 10px; }
         .mundial-iframe { width: 100%; border: none; display: block; }
 
+        /* Noticias Section */
+        .noticias-header { text-align: center; margin-bottom: 25px; }
+        .noticias-header h1 { margin-bottom: 5px; }
+        .noticias-header p { color: #aaa; font-size: 0.95em; }
+        .noticias-card { background: #111; border: 1px solid #333; border-radius: 15px; overflow: hidden; margin-bottom: 20px; }
+        .noticias-card-header { background: var(--rojo); padding: 12px 20px; font-weight: bold; font-size: 1.1em; display: flex; align-items: center; gap: 10px; }
+        .noticias-iframe { width: 100%; border: none; display: block; height: 800px; }
+        .noticias-sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .noticias-sub-nav button { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .noticias-sub-nav button.active { background: var(--rojo); }
+        .noticias-box { display: none; width: 100%; }
+        .noticias-box.active { display: block; }
+
         /* Redes */
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -71,6 +84,7 @@
         <button onclick="ir('inicio')" id="btn-inicio" class="active">RADIO</button>
         <button onclick="ir('videos')" id="btn-videos">VIDEOS</button>
         <button onclick="ir('mundial')" id="btn-mundial">MUNDIAL 2026</button>
+        <button onclick="ir('noticias')" id="btn-noticias">NOTICIAS</button>
         <button onclick="ir('redes')" id="btn-redes">REDES</button>
         <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
     </nav>
@@ -143,6 +157,44 @@
             </div>
         </div>
 
+        <!-- ====== SECCIÓN NOTICIAS - DESDE MUNDO LABORAL RADIO ====== -->
+        <div id="noticias" class="seccion">
+            <div class="noticias-header">
+                <h1><i class="fas fa-newspaper" style="color:var(--rojo)"></i> NOTICIAS</h1>
+                <p>Información actualizada desde Mundo Laboral Radio</p>
+            </div>
+            <div class="noticias-sub-nav">
+                <button onclick="cambiarNoticias('vallegrande')" id="sub-btn-vallegrande" class="active"><i class="fas fa-map-marker-alt"></i> VALLEGRANDE</button>
+                <button onclick="cambiarNoticias('vallescruceños')" id="sub-btn-vallescruceños"><i class="fas fa-mountain"></i> VALLES CRUCEÑOS</button>
+                <button onclick="cambiarNoticias('bolivia')" id="sub-btn-bolivia"><i class="fas fa-globe-americas"></i> BOLIVIA</button>
+            </div>
+
+            <!-- NOTICIAS VALLEGRANDE -->
+            <div id="noticias-vallegrande" class="noticias-box active">
+                <div class="noticias-card">
+                    <div class="noticias-card-header"><i class="fas fa-map-marker-alt"></i> Noticias de Vallegrande - Mundo Laboral Radio</div>
+                    <iframe class="noticias-iframe" src="https://mundolaboral.radio.com.bo/Vallegrande" loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <!-- NOTICIAS VALLES CRUCEÑOS -->
+            <div id="noticias-vallescruceños" class="noticias-box">
+                <div class="noticias-card">
+                    <div class="noticias-card-header"><i class="fas fa-mountain"></i> Noticias de Valles Cruceños - Mundo Laboral Radio</div>
+                    <iframe class="noticias-iframe" src="https://mundolaboral.radio.com.bo/Valle%20Cruce%C3%B1os" loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <!-- NOTICIAS BOLIVIA -->
+            <div id="noticias-bolivia" class="noticias-box">
+                <div class="noticias-card">
+                    <div class="noticias-card-header"><i class="fas fa-globe-americas"></i> Noticias de Bolivia - Mundo Laboral Radio</div>
+                    <iframe class="noticias-iframe" src="https://mundolaboral.radio.com.bo/Bolivia" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+        <!-- ====== FIN SECCIÓN NOTICIAS ====== -->
+
         <div id="redes" class="seccion">
             <div class="grid-redes">
                 <a href="https://mundolaboral.radio.com.bo/" target="_blank" rel="noopener noreferrer" class="card-red" style="background:#444"><i class="fas fa-globe"></i> Web</a>
@@ -206,6 +258,21 @@
         } else {
             document.getElementById('mundial-tabla').classList.add('active');
             document.getElementById('sub-btn-tabla').classList.add('active');
+        }
+    }
+
+    function cambiarNoticias(tipo) {
+        document.querySelectorAll('.noticias-box').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.noticias-sub-nav button').forEach(b => b.classList.remove('active'));
+        if(tipo === 'vallegrande') {
+            document.getElementById('noticias-vallegrande').classList.add('active');
+            document.getElementById('sub-btn-vallegrande').classList.add('active');
+        } else if(tipo === 'vallescruceños') {
+            document.getElementById('noticias-vallescruceños').classList.add('active');
+            document.getElementById('sub-btn-vallescruceños').classList.add('active');
+        } else {
+            document.getElementById('noticias-bolivia').classList.add('active');
+            document.getElementById('sub-btn-bolivia').classList.add('active');
         }
     }
 
