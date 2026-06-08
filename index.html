@@ -17,6 +17,8 @@
 
         .wrapper { display: flex; justify-content: center; gap: 20px; padding: 20px; flex: 1; width: 100%; box-sizing: border-box; }
         .banner-side { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; }
+        
+        /* ESTO MANTIENE EL TAMAÑO FIJO Y EVITA QUE SE DEFORMEN */
         .banner-img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; border: 1px solid var(--rojo); display: block; background: #222; }
 
         .container { flex: 1; max-width: 950px; }
@@ -27,20 +29,12 @@
         .reproductor-card { background: #111; border: 1px solid var(--rojo); border-radius: 20px; padding: 50px 20px; text-align: center; }
         #play-btn { background: var(--rojo); border: none; width: 80px; height: 80px; border-radius: 50%; color: white; font-size: 30px; cursor: pointer; margin: 20px 0; }
         
-        .sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-        .sub-nav button { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
-        .sub-nav button.active { background: var(--rojo); }
-        .video-box { display: none; width: 100%; }
-        .video-box.active { display: block; }
+        /* Video y Otros */
         .iframe-container { aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
-
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
-        .form-contacto { background: #1a1a1a; padding: 30px; border-radius: 15px; border: 1px solid #333; max-width: 600px; margin: 0 auto; }
-        input, textarea { width: 100%; padding: 15px; margin: 10px 0; background: #000; color: #fff; border: 1px solid #444; border-radius: 8px; box-sizing: border-box; }
-        
         @media (max-width: 1100px) { .banner-side { display: none; } }
     </style>
 </head>
@@ -53,16 +47,15 @@
         <button onclick="ir('videos')" id="btn-videos">VIDEOS</button>
         <button onclick="ir('mundial')" id="btn-mundial">MUNDIAL 2026</button>
         <button onclick="ir('redes')" id="btn-redes">REDES</button>
-        <button onclick="ir('noticias')" id="btn-noticias">NOTICIAS</button>
         <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
     </nav>
 </header>
 
 <div class="wrapper">
     <aside class="banner-side">
-        <img src="TU_ENLACE_AQUÍ_1" class="banner-img" alt="Banner 1">
-        <img src="TU_ENLACE_AQUÍ_2" class="banner-img" alt="Banner 2">
-        <img src="TU_ENLACE_AQUÍ_3" class="banner-img" alt="Banner 3">
+        <img src="TU_ENLACE_AQUI_1" class="banner-img" alt="Ad">
+        <img src="TU_ENLACE_AQUI_2" class="banner-img" alt="Ad">
+        <img src="TU_ENLACE_AQUI_3" class="banner-img" alt="Ad">
     </aside>
 
     <div class="container">
@@ -79,67 +72,45 @@
                 <iframe src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A" allowfullscreen></iframe>
             </div>
         </div>
-
+        
         <div id="mundial" class="seccion">
-            <div class="iframe-container">
-                <iframe src="https://www.sportbusy.com/embed/world-cup"></iframe>
-            </div>
+            <div class="iframe-container"><iframe src="https://www.sportbusy.com/embed/world-cup"></iframe></div>
         </div>
 
         <div id="redes" class="seccion">
-            <div class="grid-redes">
+             <div class="grid-redes">
                 <a href="https://facebook.com/MundoLaboralRadio" class="card-red" style="background:#1877F2">Facebook</a>
                 <a href="https://wa.me/59168785216" class="card-red" style="background:#25D366">WhatsApp</a>
             </div>
         </div>
 
-        <div id="noticias" class="seccion">
-            <div style="background:#1a1a1a; padding:30px; border-radius:15px; border:1px solid var(--rojo);">
-                <h2>Noticias</h2>
-                <p>Aquí irá el resumen de la noticia laboral.</p>
-            </div>
-        </div>
-
         <div id="contacto" class="seccion">
-            <div class="form-contacto">
-                <h2>Contacto</h2>
-                <input type="text" id="c-nombre" placeholder="Tu nombre">
-                <textarea id="c-mensaje" rows="4" placeholder="Tu mensaje"></textarea>
-                <button onclick="enviarWA()" style="background:var(--rojo); color:white; border:none; padding:15px; width:100%; border-radius:8px;">ENVIAR</button>
-            </div>
+            <input type="text" id="c-nombre" placeholder="Nombre">
+            <textarea id="c-mensaje" rows="4" placeholder="Mensaje"></textarea>
+            <button onclick="enviarWA()">Enviar</button>
         </div>
     </div>
 </div>
 
 <script>
-    // Aseguramos que la función esté disponible globalmente
-    window.ir = function(id) {
-        console.log("Cambiando a:", id);
-        // Ocultar todas las secciones
-        document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
-        // Quitar clase activa de botones
+    // JS Robusto para los botones
+    function ir(id) {
+        // Ocultar todas
+        document.querySelectorAll('.seccion').forEach(s => s.style.display = 'none');
         document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('active'));
         
-        // Mostrar sección y activar botón
-        const sec = document.getElementById(id);
-        const btn = document.getElementById('btn-' + id);
-        if(sec) sec.classList.add('active');
-        if(btn) btn.classList.add('active');
-    };
-
-    function enviarWA() {
-        const msg = document.getElementById('c-mensaje').value;
-        const nombre = document.getElementById('c-nombre').value;
-        window.open(`https://wa.me/59168785216?text=Hola soy ${nombre}, ${msg}`, '_blank');
+        // Mostrar la seleccionada
+        const target = document.getElementById(id);
+        if(target) target.style.display = 'block';
+        document.getElementById('btn-' + id).classList.add('active');
     }
 
     const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
     let sonando = false;
     function toggleAudio() {
         const icon = document.getElementById("p-icon");
-        const status = document.getElementById("status");
-        if (!sonando) { radio.play(); icon.className = "fas fa-pause"; status.innerText = "SONANDO..."; sonando = true; } 
-        else { radio.pause(); icon.className = "fas fa-play"; status.innerText = "Toca para escuchar"; sonando = false; }
+        if (!sonando) { radio.play(); icon.className = "fas fa-pause"; sonando = true; } 
+        else { radio.pause(); icon.className = "fas fa-play"; sonando = false; }
     }
 </script>
 </body>
