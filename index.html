@@ -43,7 +43,6 @@
         .mundial-card-header { background: var(--rojo); padding: 12px 20px; font-weight: bold; font-size: 1.1em; display: flex; align-items: center; gap: 10px; }
         .mundial-iframe { width: 100%; border: none; display: block; }
 
-        /* ====== ESTILOS NOTICIAS ====== */
         .noticias-header { text-align: center; margin-bottom: 25px; }
         .noticias-header h1 { margin-bottom: 5px; }
         .noticias-header p { color: #aaa; font-size: 0.95em; }
@@ -97,7 +96,6 @@
         }
         .sin-noticias i { font-size: 48px; color: #444; margin-bottom: 15px; display: block; }
 
-        /* ====== PANEL ADMIN ====== */
         .admin-panel {
             background: #111;
             border: 1px solid var(--rojo);
@@ -196,7 +194,6 @@
         }
         .btn-logout:hover { color: var(--rojo); border-color: var(--rojo); }
 
-        /* ====== MODAL LOGIN ADMIN ====== */
         .login-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -259,26 +256,6 @@
         }
         .btn-login-cancel:hover { color: #fff; }
 
-        /* ====== BANNER MODO ====== */
-        .modo-banner {
-            text-align: center;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 0.85em;
-            font-weight: bold;
-        }
-        .modo-online {
-            background: rgba(0, 200, 0, 0.15);
-            color: #4caf50;
-            border: 1px solid rgba(0, 200, 0, 0.3);
-        }
-        .modo-offline {
-            background: rgba(255, 77, 77, 0.1);
-            color: #ff8a8a;
-            border: 1px solid rgba(255, 77, 77, 0.2);
-        }
-
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
@@ -332,16 +309,14 @@
 
         <div id="videos" class="seccion">
             <div class="sub-nav">
-                <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLÁSICOS</button>
-                <button onclick="cambiarVideo('live')" id="sub-btn-live">TRANSMISIÓN EN VIVO</button>
+                <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLASICOS</button>
+                <button onclick="cambiarVideo('live')" id="sub-btn-live">TRANSMISION EN VIVO</button>
             </div>
-
             <div id="clasico-box" class="video-box active">
                 <div class="iframe-container">
                     <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
                 </div>
             </div>
-
             <div id="live-box" class="video-box">
                 <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
                     <button onclick="cargarLive('https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A')" style="background:var(--rojo); color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">VER EN VIVO</button>
@@ -356,7 +331,7 @@
         <div id="mundial" class="seccion">
             <div class="mundial-header">
                 <h1><i class="fas fa-futbol" style="color:var(--rojo)"></i> MUNDIAL 2026</h1>
-                <p>Estados Unidos · México · Canadá | 11 junio - 19 julio</p>
+                <p>Estados Unidos - Mexico - Canada | 11 junio - 19 julio</p>
             </div>
             <div class="sub-nav">
                 <button onclick="cambiarMundial('partidos')" id="sub-btn-partidos" class="active">PARTIDOS</button>
@@ -376,17 +351,12 @@
             </div>
         </div>
 
-        <!-- ====== SECCIÓN NOTICIAS CON SUPABASE ====== -->
         <div id="noticias" class="seccion">
             <div class="noticias-header">
                 <h1><i class="fas fa-newspaper" style="color:var(--rojo)"></i> NOTICIAS</h1>
-                <p>Información actualizada desde Mundo Laboral Radio</p>
+                <p>Informacion actualizada desde Mundo Laboral Radio</p>
             </div>
 
-            <!-- Banner de modo (online/offline) -->
-            <div id="modo-banner"></div>
-
-            <!-- Barra de admin (solo visible cuando está logueado) -->
             <div id="admin-bar" class="admin-bar">
                 <span><i class="fas fa-shield-alt"></i> MODO ADMINISTRADOR</span>
                 <button class="btn-toggle-admin" onclick="toggleAdminPanel()">
@@ -397,36 +367,30 @@
                 </button>
             </div>
 
-            <!-- Botón de acceso admin (solo visible cuando NO está logueado) -->
             <div id="admin-login-btn" style="text-align:center;">
                 <button class="btn-toggle-admin" onclick="mostrarLoginModal()">
                     <i class="fas fa-lock"></i> Acceso Administrador
                 </button>
             </div>
 
-            <!-- Panel Admin: Crear/Editar Noticia -->
             <div id="admin-panel" class="admin-panel">
                 <h2 id="admin-titulo"><i class="fas fa-plus-circle"></i> Nueva Noticia</h2>
                 <form id="form-noticia" onsubmit="return false;">
                     <input type="hidden" id="n-id" value="">
-                    <label for="n-categoria">Categoría</label>
+                    <label for="n-categoria">Categoria</label>
                     <select id="n-categoria">
                         <option value="vallegrande">Vallegrande</option>
                         <option value="vallescruceños">Valles Cruceños</option>
-                        <option value="pais">País</option>
+                        <option value="pais">Pais</option>
                     </select>
-
-                    <label for="n-titulo">Título de la noticia</label>
-                    <input type="text" id="n-titulo" placeholder="Ej: Inauguración de nueva obra en Vallegrande" required>
-
+                    <label for="n-titulo">Titulo de la noticia</label>
+                    <input type="text" id="n-titulo" placeholder="Ej: Inauguracion de nueva obra en Vallegrande" required>
                     <label for="n-foto">Foto de portada</label>
                     <input type="file" id="n-foto" accept="image/*" onchange="previewFoto(this)">
                     <img id="n-preview" class="preview-img" alt="Vista previa">
                     <input type="hidden" id="n-foto-base64" value="">
-
                     <label for="n-contenido">Contenido / Cuerpo de la noticia</label>
-                    <textarea id="n-contenido" placeholder="Escribe aquí el contenido completo de la noticia..." required></textarea>
-
+                    <textarea id="n-contenido" placeholder="Escribe aqui el contenido completo de la noticia..." required></textarea>
                     <div>
                         <button class="btn-admin" onclick="guardarNoticia()"><i class="fas fa-save"></i> Guardar Noticia</button>
                         <button type="button" class="btn-cancelar" onclick="cancelarEdicion()">Cancelar</button>
@@ -434,29 +398,22 @@
                 </form>
             </div>
 
-            <!-- Sub-navegación de noticias -->
             <div class="noticias-sub-nav">
                 <button onclick="cambiarNoticias('vallegrande')" id="sub-btn-vallegrande" class="active"><i class="fas fa-map-marker-alt"></i> VALLEGRANDE</button>
-                <button onclick="cambiarNoticias('vallescruceños')" id="sub-btn-vallescruceños"><i class="fas fa-mountain"></i> VALLES CRUCEÑOS</button>
-                <button onclick="cambiarNoticias('pais')" id="sub-btn-pais"><i class="fas fa-globe-americas"></i> PAÍS</button>
+                <button onclick="cambiarNoticias('vallescruceños')" id="sub-btn-vallescruceños"><i class="fas fa-mountain"></i> VALLES CRUCENOS</button>
+                <button onclick="cambiarNoticias('pais')" id="sub-btn-pais"><i class="fas fa-globe-americas"></i> PAIS</button>
             </div>
 
-            <!-- NOTICIAS VALLEGRANDE -->
             <div id="noticias-vallegrande" class="noticias-box active">
                 <div id="lista-vallegrande"></div>
             </div>
-
-            <!-- NOTICIAS VALLES CRUCEÑOS -->
             <div id="noticias-vallescruceños" class="noticias-box">
                 <div id="lista-vallescruceños"></div>
             </div>
-
-            <!-- NOTICIAS PAÍS -->
             <div id="noticias-pais" class="noticias-box">
                 <div id="lista-pais"></div>
             </div>
         </div>
-        <!-- ====== FIN SECCIÓN NOTICIAS ====== -->
 
         <div id="redes" class="seccion">
             <div class="grid-redes">
@@ -490,13 +447,12 @@
 
 <a href="https://wa.me/59168785216" target="_blank" rel="noopener noreferrer" class="float-wa"><i class="fab fa-whatsapp"></i></a>
 
-<!-- ====== MODAL LOGIN ADMINISTRADOR ====== -->
 <div id="login-modal" class="login-overlay">
     <div class="login-box">
         <h3><i class="fas fa-lock" style="color:var(--rojo)"></i> Acceso Restringido</h3>
-        <p style="color:#888; font-size:0.9em; margin-bottom:15px;">Ingresá la contraseña para administrar noticias</p>
-        <div id="login-error" class="login-error">Contraseña incorrecta</div>
-        <input type="password" id="login-pass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')verificarPassword()">
+        <p style="color:#888; font-size:0.9em; margin-bottom:15px;">Ingresa la contrasena para administrar noticias</p>
+        <div id="login-error" class="login-error">Contrasena incorrecta</div>
+        <input type="password" id="login-pass" placeholder="Contrasena" onkeydown="if(event.key==='Enter')verificarPassword()">
         <button class="btn-login" onclick="verificarPassword()">INGRESAR</button>
         <button class="btn-login-cancel" onclick="cerrarLoginModal()">Cancelar</button>
     </div>
@@ -504,53 +460,18 @@
 
 <footer>Mundo Laboral Radio. Vallegrande 2026</footer>
 
-<!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
 <script>
-    /* ============================================================
-       CONFIGURACIÓN SUPABASE
-       ============================================================
-       Para que TODOS los visitantes vean las mismas noticias:
-       1. Andá a https://supabase.com y creá una cuenta gratis
-       2. Creá un nuevo proyecto
-       3. Andá a Table Editor → New table → nombre: "noticias"
-          Columnas:
-            - id        : uuid   (default: gen_random_uuid())
-            - categoria : text
-            - titulo    : text
-            - contenido : text
-            - foto      : text
-            - fecha     : timestamptz (default: now())
-            - fecha_edicion : timestamptz
-       4. Andá a Project Settings → API → copiá la URL y la anon public key
-       5. Pegalos acá abajo reemplazando los valores de ejemplo:
-    ============================================================ */
-    const SUPABASE_URL = 'https://dwchiapkvpzodiymlyew.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3Y2hpYXBrdnB6b2RpeW1seWV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NjM4MzcsImV4cCI6MjA5NjUzOTgzN30.r5MSdkAyg-x19Xw4Gjgi5URCqGC8xpuBD8RAAop0Kgk';
-
-    const USE_SUPABASE = SUPABASE_URL && !SUPABASE_URL.includes('TU-PROYECTO') && SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.includes('TU-ANON');
-    let supabase = null;
-    let supabaseConectado = false;
-    if (USE_SUPABASE && window.supabase) {
-        try {
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        } catch(e) {
-            console.error('Error creando cliente Supabase:', e);
-        }
-    }
-
-    /* ====== NAVEGACIÓN GENERAL ====== */
+    // ====== NAVEGACION GENERAL ======
     function ir(id) {
-        document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.seccion').forEach(function(s) { s.classList.remove('active'); });
+        document.querySelectorAll('#main-nav button').forEach(function(b) { b.classList.remove('active'); });
         document.getElementById(id).classList.add('active');
         document.getElementById('btn-' + id).classList.add('active');
     }
 
     function cambiarVideo(tipo) {
-        document.querySelectorAll('.video-box').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('.sub-nav button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.video-box').forEach(function(v) { v.classList.remove('active'); });
+        document.querySelectorAll('.sub-nav button').forEach(function(b) { b.classList.remove('active'); });
         if(tipo === 'clasico') {
             document.getElementById('clasico-box').classList.add('active');
             document.getElementById('sub-btn-clasico').classList.add('active');
@@ -561,8 +482,8 @@
     }
 
     function cambiarMundial(tipo) {
-        document.querySelectorAll('#mundial .video-box').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('#mundial .sub-nav button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('#mundial .video-box').forEach(function(v) { v.classList.remove('active'); });
+        document.querySelectorAll('#mundial .sub-nav button').forEach(function(b) { b.classList.remove('active'); });
         if(tipo === 'partidos') {
             document.getElementById('mundial-partidos').classList.add('active');
             document.getElementById('sub-btn-partidos').classList.add('active');
@@ -576,13 +497,13 @@
         document.getElementById('frame-live').src = url;
     }
 
-    const radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
-    let sonando = false;
+    var radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
+    var sonando = false;
     function toggleAudio() {
-        const icon = document.getElementById("p-icon");
-        const status = document.getElementById("status");
+        var icon = document.getElementById("p-icon");
+        var status = document.getElementById("status");
         if (!sonando) { 
-            radio.play().catch(e => {
+            radio.play().catch(function(e) {
                 console.error("Error al reproducir:", e);
                 status.innerText = "Error al cargar audio";
             }); 
@@ -600,49 +521,26 @@
     document.getElementById('vol-slider').oninput = function() { radio.volume = this.value; };
 
     function enviarWA() {
-        const msg = document.getElementById('c-mensaje').value;
-        const nombre = document.getElementById('c-nombre').value;
-        if(nombre && msg) window.open(`https://wa.me/59168785216?text=Hola soy ${nombre}, ${encodeURIComponent(msg)}`, '_blank');
+        var msg = document.getElementById('c-mensaje').value;
+        var nombre = document.getElementById('c-nombre').value;
+        if(nombre && msg) window.open('https://wa.me/59168785216?text=Hola soy ' + nombre + ', ' + encodeURIComponent(msg), '_blank');
         else alert("Por favor completa tu nombre y mensaje.");
     }
 
-    /* ====== SISTEMA DE NOTICIAS ====== */
-    const STORAGE_KEY = 'mlr_noticias_v1';
-    const ADMIN_PASS = 'mlr2026';
-    const ADMIN_SESSION_KEY = 'mlr_admin_session';
+    // ====== SISTEMA DE NOTICIAS ======
+    var STORAGE_KEY = 'mlr_noticias_v1';
+    var ADMIN_PASS = 'mlr2026';
+    var ADMIN_SESSION_KEY = 'mlr_admin_session';
 
     function isAdminMode() {
         return sessionStorage.getItem(ADMIN_SESSION_KEY) === '1';
     }
 
-    async function actualizarModoBanner() {
-        const banner = document.getElementById('modo-banner');
-        if (!USE_SUPABASE || !supabase) {
-            banner.innerHTML = '<div class="modo-banner modo-offline"><i class="fas fa-exclamation-triangle"></i> MODO LOCAL — Supabase no configurado. Las noticias solo se ven en este dispositivo.</div>';
-            return;
-        }
-        // Test de conexión real
-        try {
-            const { data, error } = await supabase.from('noticias').select('id', { count: 'exact', head: true });
-            if (error) throw error;
-            supabaseConectado = true;
-            banner.innerHTML = '<div class="modo-banner modo-online"><i class="fas fa-cloud"></i> MODO ONLINE — Conectado a Supabase. Las noticias se ven en todos los dispositivos.</div>';
-        } catch(e) {
-            supabaseConectado = false;
-            console.error('Error conectando a Supabase:', e);
-            let msg = e.message || 'Error desconocido';
-            if (msg.includes('Invalid API key')) msg = 'Clave API inválida. Revisá la clave "anon public" en Project Settings → API.';
-            if (msg.includes('does not exist')) msg = 'La tabla "noticias" no existe. Creala en Table Editor.';
-            banner.innerHTML = '<div class="modo-banner modo-offline"><i class="fas fa-times-circle"></i> ERROR SUPABASE: ' + msg + '<br><small>Modo local activado temporalmente.</small></div>';
-        }
-    }
-
     function actualizarUIAdmin() {
-        const admin = isAdminMode();
-        const bar = document.getElementById('admin-bar');
-        const loginBtn = document.getElementById('admin-login-btn');
-        const panel = document.getElementById('admin-panel');
-
+        var admin = isAdminMode();
+        var bar = document.getElementById('admin-bar');
+        var loginBtn = document.getElementById('admin-login-btn');
+        var panel = document.getElementById('admin-panel');
         if (admin) {
             bar.classList.add('active');
             loginBtn.style.display = 'none';
@@ -657,7 +555,7 @@
         document.getElementById('login-modal').classList.add('active');
         document.getElementById('login-pass').value = '';
         document.getElementById('login-error').classList.remove('active');
-        setTimeout(() => document.getElementById('login-pass').focus(), 100);
+        setTimeout(function() { document.getElementById('login-pass').focus(); }, 100);
     }
 
     function cerrarLoginModal() {
@@ -665,7 +563,7 @@
     }
 
     function verificarPassword() {
-        const input = document.getElementById('login-pass').value.trim();
+        var input = document.getElementById('login-pass').value.trim();
         if (input === ADMIN_PASS) {
             sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
             cerrarLoginModal();
@@ -685,10 +583,10 @@
     }
 
     function previewFoto(input) {
-        const preview = document.getElementById('n-preview');
-        const hidden = document.getElementById('n-foto-base64');
+        var preview = document.getElementById('n-preview');
+        var hidden = document.getElementById('n-foto-base64');
         if (input.files && input.files[0]) {
-            const reader = new FileReader();
+            var reader = new FileReader();
             reader.onload = function(e) {
                 preview.src = e.target.result;
                 preview.style.display = 'block';
@@ -703,7 +601,7 @@
             mostrarLoginModal();
             return;
         }
-        const panel = document.getElementById('admin-panel');
+        var panel = document.getElementById('admin-panel');
         panel.classList.toggle('active');
     }
 
@@ -717,134 +615,83 @@
         document.getElementById('admin-panel').classList.remove('active');
     }
 
-    /* ====== BASE DE DATOS: SUPABASE O LOCALSTORAGE ====== */
-
-    async function obtenerNoticiasDB() {
-        if (supabaseConectado && supabase) {
-            const { data, error } = await supabase
-                .from('noticias')
-                .select('*')
-                .order('fecha', { ascending: false });
-            if (error) {
-                console.error('Error Supabase:', error);
-                return [];
-            }
-            return data || [];
-        } else {
-            try {
-                const data = localStorage.getItem(STORAGE_KEY);
-                return data ? JSON.parse(data) : [];
-            } catch(e) {
-                return [];
-            }
+    function obtenerNoticias() {
+        try {
+            var data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : [];
+        } catch(e) {
+            return [];
         }
     }
 
-    async function guardarNoticiaDB(noticia) {
-        if (supabaseConectado && supabase) {
-            if (noticia.id) {
-                const { error } = await supabase
-                    .from('noticias')
-                    .update({
-                        categoria: noticia.categoria,
-                        titulo: noticia.titulo,
-                        contenido: noticia.contenido,
-                        foto: noticia.foto,
-                        fecha_edicion: new Date().toISOString()
-                    })
-                    .eq('id', noticia.id);
-                if (error) console.error('Error update:', error);
-                return !error;
-            } else {
-                const { error } = await supabase
-                    .from('noticias')
-                    .insert([{
-                        categoria: noticia.categoria,
-                        titulo: noticia.titulo,
-                        contenido: noticia.contenido,
-                        foto: noticia.foto,
-                        fecha: new Date().toISOString()
-                    }]);
-                if (error) console.error('Error insert:', error);
-                return !error;
-            }
-        } else {
-            let noticias = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            if (noticia.id) {
-                const idx = noticias.findIndex(n => n.id === noticia.id);
-                if (idx !== -1) {
-                    noticias[idx].categoria = noticia.categoria;
-                    noticias[idx].titulo = noticia.titulo;
-                    noticias[idx].contenido = noticia.contenido;
-                    if (noticia.foto) noticias[idx].foto = noticia.foto;
-                    noticias[idx].fechaEdicion = new Date().toISOString();
-                }
-            } else {
-                noticia.id = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-                noticia.fecha = new Date().toISOString();
-                noticias.unshift(noticia);
-            }
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(noticias));
-            return true;
-        }
+    function guardarNoticias(noticias) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(noticias));
     }
 
-    async function eliminarNoticiaDB(id) {
-        if (supabaseConectado && supabase) {
-            const { error } = await supabase.from('noticias').delete().eq('id', id);
-            if (error) console.error('Error delete:', error);
-            return !error;
-        } else {
-            let noticias = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            noticias = noticias.filter(n => n.id !== id);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(noticias));
-            return true;
-        }
+    function generarId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
     }
 
-    /* ====== ACCIONES DE NOTICIAS ====== */
+    function formatearFecha(fechaISO) {
+        var f = new Date(fechaISO);
+        return f.toLocaleString('es-BO', {
+            day: '2-digit', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+    }
 
-    async function guardarNoticia() {
+    function guardarNoticia() {
         if (!isAdminMode()) {
-            alert('Acceso denegado. Iniciá sesión como administrador.');
+            alert('Acceso denegado. Inicia sesion como administrador.');
             return;
         }
-        const id = document.getElementById('n-id').value;
-        const categoria = document.getElementById('n-categoria').value;
-        const titulo = document.getElementById('n-titulo').value.trim();
-        const contenido = document.getElementById('n-contenido').value.trim();
-        const fotoBase64 = document.getElementById('n-foto-base64').value;
+        var id = document.getElementById('n-id').value;
+        var categoria = document.getElementById('n-categoria').value;
+        var titulo = document.getElementById('n-titulo').value.trim();
+        var contenido = document.getElementById('n-contenido').value.trim();
+        var fotoBase64 = document.getElementById('n-foto-base64').value;
 
         if (!titulo || !contenido) {
-            alert('Por favor completa el título y el contenido de la noticia.');
+            alert('Por favor completa el titulo y el contenido de la noticia.');
             return;
         }
 
-        const noticia = {
-            id: id || null,
-            categoria: categoria,
-            titulo: titulo,
-            contenido: contenido,
-            foto: fotoBase64 || ''
-        };
+        var noticias = obtenerNoticias();
 
-        const ok = await guardarNoticiaDB(noticia);
-        if (ok) {
-            cancelarEdicion();
-            await renderNoticias();
-            alert('Noticia guardada correctamente.');
+        if (id) {
+            var idx = noticias.findIndex(function(n) { return n.id === id; });
+            if (idx !== -1) {
+                noticias[idx].categoria = categoria;
+                noticias[idx].titulo = titulo;
+                noticias[idx].contenido = contenido;
+                if (fotoBase64) noticias[idx].foto = fotoBase64;
+                noticias[idx].fechaEdicion = new Date().toISOString();
+            }
         } else {
-            alert('Error al guardar la noticia. Revisá la consola.');
+            var nueva = {
+                id: generarId(),
+                categoria: categoria,
+                titulo: titulo,
+                contenido: contenido,
+                foto: fotoBase64 || '',
+                fecha: new Date().toISOString()
+            };
+            noticias.unshift(nueva);
         }
+
+        guardarNoticias(noticias);
+        cancelarEdicion();
+        renderNoticias();
+        alert('Noticia guardada correctamente.');
     }
 
-    async function editarNoticia(id) {
+    function editarNoticia(id) {
         if (!isAdminMode()) {
             alert('Acceso denegado.');
             return;
         }
-        const noticias = await obtenerNoticiasDB();
-        const noticia = noticias.find(n => n.id === id);
+        var noticias = obtenerNoticias();
+        var noticia = noticias.find(function(n) { return n.id === id; });
         if (!noticia) return;
 
         document.getElementById('n-id').value = noticia.id;
@@ -853,7 +700,7 @@
         document.getElementById('n-contenido').value = noticia.contenido;
         document.getElementById('n-foto-base64').value = noticia.foto || '';
 
-        const preview = document.getElementById('n-preview');
+        var preview = document.getElementById('n-preview');
         if (noticia.foto) {
             preview.src = noticia.foto;
             preview.style.display = 'block';
@@ -867,82 +714,58 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    async function eliminarNoticia(id) {
+    function eliminarNoticia(id) {
         if (!isAdminMode()) {
             alert('Acceso denegado.');
             return;
         }
-        if (!confirm('¿Estás seguro de que quieres eliminar esta noticia?')) return;
-        const ok = await eliminarNoticiaDB(id);
-        if (ok) {
-            await renderNoticias();
-        } else {
-            alert('Error al eliminar la noticia.');
-        }
-    }
-
-    function formatearFecha(fechaISO) {
-        const f = new Date(fechaISO);
-        return f.toLocaleString('es-BO', {
-            day: '2-digit', month: 'short', year: 'numeric',
-            hour: '2-digit', minute: '2-digit'
-        });
+        if (!confirm('Estas seguro de que quieres eliminar esta noticia?')) return;
+        var noticias = obtenerNoticias();
+        noticias = noticias.filter(function(n) { return n.id !== id; });
+        guardarNoticias(noticias);
+        renderNoticias();
     }
 
     function escapeHtml(text) {
-        const div = document.createElement('div');
+        var div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
 
-    async function renderNoticias() {
-        const noticias = await obtenerNoticiasDB();
-        const categorias = ['vallegrande', 'vallescruceños', 'pais'];
-        const admin = isAdminMode();
+    function renderNoticias() {
+        var noticias = obtenerNoticias();
+        var categorias = ['vallegrande', 'vallescruceños', 'pais'];
+        var admin = isAdminMode();
 
-        categorias.forEach(cat => {
-            const contenedor = document.getElementById('lista-' + cat);
-            const delCat = noticias.filter(n => n.categoria === cat);
+        categorias.forEach(function(cat) {
+            var contenedor = document.getElementById('lista-' + cat);
+            var delCat = noticias.filter(function(n) { return n.categoria === cat; });
 
             if (delCat.length === 0) {
-                contenedor.innerHTML = `
-                    <div class="sin-noticias">
-                        <i class="fas fa-newspaper"></i>
-                        <h3>No hay noticias aún</h3>
-                        <p>${admin ? 'Usá el botón <b>Nueva Noticia</b> para agregar la primera noticia.' : 'Próximamente noticias de ' + (cat === 'vallegrande' ? 'Vallegrande' : cat === 'vallescruceños' ? 'Valles Cruceños' : 'País') + '.'}</p>
-                    </div>
-                `;
+                var msg = admin 
+                    ? 'Usa el boton Nueva Noticia para agregar la primera noticia.'
+                    : 'Proximamente noticias de ' + (cat === 'vallegrande' ? 'Vallegrande' : cat === 'vallescruceños' ? 'Valles Cruceños' : 'Pais') + '.';
+                contenedor.innerHTML = '<div class="sin-noticias"><i class="fas fa-newspaper"></i><h3>No hay noticias aun</h3><p>' + msg + '</p></div>';
                 return;
             }
 
-            contenedor.innerHTML = delCat.map(n => {
-                const imgHtml = n.foto
-                    ? `<img src="${n.foto}" class="noticia-img" alt="${escapeHtml(n.titulo)}">`
-                    : `<div style="width:100%;height:220px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#555;border-bottom:1px solid #333;"><i class="fas fa-image" style="font-size:48px;"></i></div>`;
-                const actionsHtml = admin ? `
-                    <div class="noticia-actions">
-                        <button onclick="editarNoticia('${n.id}')"><i class="fas fa-edit"></i> Editar</button>
-                        <button class="btn-eliminar" onclick="eliminarNoticia('${n.id}')"><i class="fas fa-trash"></i> Eliminar</button>
-                    </div>
-                ` : '';
-                return `
-                    <div class="noticia-card">
-                        ${imgHtml}
-                        <div class="noticia-body">
-                            <div class="noticia-titulo">${escapeHtml(n.titulo)}</div>
-                            <div class="noticia-fecha"><i class="far fa-clock"></i> ${formatearFecha(n.fecha)} ${n.fecha_edicion || n.fechaEdicion ? '<span style="color:#666;margin-left:8px;">(editado)</span>' : ''}</div>
-                            <div class="noticia-texto">${escapeHtml(n.contenido)}</div>
-                        </div>
-                        ${actionsHtml}
-                    </div>
-                `;
-            }).join('');
+            var html = '';
+            delCat.forEach(function(n) {
+                var imgHtml = n.foto
+                    ? '<img src="' + n.foto + '" class="noticia-img" alt="' + escapeHtml(n.titulo) + '">'
+                    : '<div style="width:100%;height:220px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#555;border-bottom:1px solid #333;"><i class="fas fa-image" style="font-size:48px;"></i></div>';
+                var actionsHtml = admin 
+                    ? '<div class="noticia-actions"><button onclick="editarNoticia(\'' + n.id + '\')"><i class="fas fa-edit"></i> Editar</button><button class="btn-eliminar" onclick="eliminarNoticia(\'' + n.id + '\')"><i class="fas fa-trash"></i> Eliminar</button></div>'
+                    : '';
+                html += '<div class="noticia-card">' + imgHtml + '<div class="noticia-body"><div class="noticia-titulo">' + escapeHtml(n.titulo) + '</div><div class="noticia-fecha"><i class="far fa-clock"></i> ' + formatearFecha(n.fecha) + (n.fechaEdicion ? '<span style="color:#666;margin-left:8px;">(editado)</span>' : '') + '</div><div class="noticia-texto">' + escapeHtml(n.contenido) + '</div></div>' + actionsHtml + '</div>';
+            });
+            contenedor.innerHTML = html;
         });
     }
 
     function cambiarNoticias(tipo) {
-        document.querySelectorAll('.noticias-box').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('.noticias-sub-nav button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.noticias-box').forEach(function(v) { v.classList.remove('active'); });
+        document.querySelectorAll('.noticias-sub-nav button').forEach(function(b) { b.classList.remove('active'); });
         if(tipo === 'vallegrande') {
             document.getElementById('noticias-vallegrande').classList.add('active');
             document.getElementById('sub-btn-vallegrande').classList.add('active');
@@ -955,11 +778,10 @@
         }
     }
 
-    // Inicializar
-    document.addEventListener('DOMContentLoaded', async function() {
-        actualizarModoBanner();
+    // Inicializar al cargar
+    document.addEventListener('DOMContentLoaded', function() {
         actualizarUIAdmin();
-        await renderNoticias();
+        renderNoticias();
     });
 </script>
 </body>
