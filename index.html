@@ -43,32 +43,144 @@
         .mundial-card-header { background: var(--rojo); padding: 12px 20px; font-weight: bold; font-size: 1.1em; display: flex; align-items: center; gap: 10px; }
         .mundial-iframe { width: 100%; border: none; display: block; }
 
+        /* ====== ESTILOS NOTICIAS ====== */
         .noticias-header { text-align: center; margin-bottom: 25px; }
         .noticias-header h1 { margin-bottom: 5px; }
         .noticias-header p { color: #aaa; font-size: 0.95em; }
-        .noticias-card { background: #111; border: 1px solid #333; border-radius: 15px; overflow: hidden; margin-bottom: 20px; }
-        .noticias-card-header { background: var(--rojo); padding: 12px 20px; font-weight: bold; font-size: 1.1em; display: flex; align-items: center; gap: 10px; }
-        .noticias-iframe { width: 100%; border: none; display: block; height: 800px; }
         .noticias-sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .noticias-sub-nav button { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .noticias-sub-nav button.active { background: var(--rojo); }
         .noticias-box { display: none; width: 100%; }
         .noticias-box.active { display: block; }
-        
-        /* NUEVO: Estilos para el mensaje de error del iframe */
-        .iframe-error { 
-            padding: 40px; 
-            text-align: center; 
-            background: #1a1a1a; 
-            border-radius: 15px; 
+
+        .noticia-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .noticia-card:hover { border-color: var(--rojo); }
+        .noticia-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            border-bottom: 1px solid #333;
+        }
+        .noticia-body { padding: 20px; }
+        .noticia-titulo { font-size: 1.25em; font-weight: bold; margin-bottom: 8px; color: #fff; }
+        .noticia-fecha { color: #888; font-size: 0.85em; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+        .noticia-texto { color: #ccc; line-height: 1.6; white-space: pre-wrap; }
+        .noticia-actions {
+            display: flex;
+            gap: 10px;
+            padding: 0 20px 20px;
+        }
+        .noticia-actions button {
+            background: #222;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: 0.2s;
+        }
+        .noticia-actions button:hover { background: var(--rojo); border-color: var(--rojo); }
+        .noticia-actions .btn-eliminar:hover { background: #cc0000; border-color: #cc0000; }
+        .sin-noticias {
+            text-align: center;
+            padding: 50px 20px;
+            color: #888;
+        }
+        .sin-noticias i { font-size: 48px; color: #444; margin-bottom: 15px; display: block; }
+
+        /* ====== PANEL ADMIN ====== */
+        .admin-panel {
+            background: #111;
             border: 1px solid var(--rojo);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            display: none;
         }
-        .iframe-error a { 
-            color: var(--rojo); 
-            text-decoration: none; 
-            font-weight: bold; 
+        .admin-panel.active { display: block; }
+        .admin-panel h2 { margin-top: 0; color: var(--rojo); }
+        .admin-panel label {
+            display: block;
+            margin-bottom: 6px;
+            color: #aaa;
+            font-size: 0.9em;
         }
-        .iframe-error a:hover { text-decoration: underline; }
+        .admin-panel input,
+        .admin-panel textarea,
+        .admin-panel select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #000;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        .admin-panel textarea { resize: vertical; min-height: 120px; }
+        .admin-panel input[type="file"] { padding: 8px; }
+        .preview-img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #333;
+            display: none;
+        }
+        .btn-admin {
+            background: var(--rojo);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: 0.2s;
+        }
+        .btn-admin:hover { background: #e60000; }
+        .btn-cancelar {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .btn-toggle-admin {
+            background: transparent;
+            border: 1px solid #444;
+            color: #666;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+            transition: 0.2s;
+        }
+        .btn-toggle-admin:hover { color: var(--rojo); border-color: var(--rojo); }
+        .admin-badge {
+            display: inline-block;
+            background: var(--rojo);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
 
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -80,6 +192,10 @@
         footer { background: #000; padding: 20px; text-align: center; border-top: 2px solid var(--rojo); margin-top: 20px; font-weight: bold; }
 
         @media (max-width: 1100px) { .banner-side { display: none; } }
+        @media (max-width: 600px) {
+            .noticia-img { height: 160px; }
+            .noticia-titulo { font-size: 1.1em; }
+        }
     </style>
 </head>
 <body>
@@ -163,79 +279,70 @@
             </div>
         </div>
 
-        <!-- ====== SECCIÓN NOTICIAS CORREGIDA ====== -->
+        <!-- ====== SECCIÓN NOTICIAS PROPIA ====== -->
         <div id="noticias" class="seccion">
             <div class="noticias-header">
                 <h1><i class="fas fa-newspaper" style="color:var(--rojo)"></i> NOTICIAS</h1>
                 <p>Información actualizada desde Mundo Laboral Radio</p>
             </div>
+
+            <!-- Botón para mostrar/ocultar panel admin -->
+            <div style="text-align:center;">
+                <button class="btn-toggle-admin" onclick="toggleAdminPanel()">
+                    <i class="fas fa-cog"></i> Panel de Administración
+                </button>
+            </div>
+
+            <!-- Panel Admin: Crear/Editar Noticia -->
+            <div id="admin-panel" class="admin-panel">
+                <h2 id="admin-titulo"><i class="fas fa-plus-circle"></i> Nueva Noticia</h2>
+                <form id="form-noticia" onsubmit="return false;">
+                    <input type="hidden" id="n-id" value="">
+                    <label for="n-categoria">Categoría</label>
+                    <select id="n-categoria">
+                        <option value="vallegrande">Vallegrande</option>
+                        <option value="vallescruceños">Valles Cruceños</option>
+                        <option value="pais">País</option>
+                    </select>
+
+                    <label for="n-titulo">Título de la noticia</label>
+                    <input type="text" id="n-titulo" placeholder="Ej: Inauguración de nueva obra en Vallegrande" required>
+
+                    <label for="n-foto">Foto de portada</label>
+                    <input type="file" id="n-foto" accept="image/*" onchange="previewFoto(this)">
+                    <img id="n-preview" class="preview-img" alt="Vista previa">
+                    <input type="hidden" id="n-foto-base64" value="">
+
+                    <label for="n-contenido">Contenido / Cuerpo de la noticia</label>
+                    <textarea id="n-contenido" placeholder="Escribe aquí el contenido completo de la noticia..." required></textarea>
+
+                    <div>
+                        <button class="btn-admin" onclick="guardarNoticia()"><i class="fas fa-save"></i> Guardar Noticia</button>
+                        <button type="button" class="btn-cancelar" onclick="cancelarEdicion()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Sub-navegación de noticias -->
             <div class="noticias-sub-nav">
                 <button onclick="cambiarNoticias('vallegrande')" id="sub-btn-vallegrande" class="active"><i class="fas fa-map-marker-alt"></i> VALLEGRANDE</button>
                 <button onclick="cambiarNoticias('vallescruceños')" id="sub-btn-vallescruceños"><i class="fas fa-mountain"></i> VALLES CRUCEÑOS</button>
-                <button onclick="cambiarNoticias('bolivia')" id="sub-btn-bolivia"><i class="fas fa-globe-americas"></i> BOLIVIA</button>
+                <button onclick="cambiarNoticias('pais')" id="sub-btn-pais"><i class="fas fa-globe-americas"></i> PAÍS</button>
             </div>
 
             <!-- NOTICIAS VALLEGRANDE -->
             <div id="noticias-vallegrande" class="noticias-box active">
-                <div class="noticias-card">
-                    <div class="noticias-card-header"><i class="fas fa-map-marker-alt"></i> Noticias de Vallegrande - Mundo Laboral Radio</div>
-                    <iframe class="noticias-iframe" 
-                            src="https://mundolaboral.radio.com.bo/Vallegrande" 
-                            loading="lazy"
-                            sandbox="allow-scripts allow-same-origin allow-popups"
-                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    </iframe>
-                    <div class="iframe-error" style="display:none;">
-                        <i class="fas fa-exclamation-triangle" style="color:var(--rojo); font-size:48px; margin-bottom:15px;"></i>
-                        <h3>No se puede mostrar el contenido embebido</h3>
-                        <p>El sitio de origen no permite ser mostrado en un iframe por políticas de seguridad.</p>
-                        <p><a href="https://mundolaboral.radio.com.bo/Vallegrande" target="_blank" rel="noopener noreferrer">
-                            <i class="fas fa-external-link-alt"></i> Ver noticias de Vallegrande en una nueva pestaña
-                        </a></p>
-                    </div>
-                </div>
+                <div id="lista-vallegrande"></div>
             </div>
 
             <!-- NOTICIAS VALLES CRUCEÑOS -->
             <div id="noticias-vallescruceños" class="noticias-box">
-                <div class="noticias-card">
-                    <div class="noticias-card-header"><i class="fas fa-mountain"></i> Noticias de Valles Cruceños - Mundo Laboral Radio</div>
-                    <iframe class="noticias-iframe" 
-                            src="https://mundolaboral.radio.com.bo/Valle%20Cruce%C3%B1os" 
-                            loading="lazy"
-                            sandbox="allow-scripts allow-same-origin allow-popups"
-                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    </iframe>
-                    <div class="iframe-error" style="display:none;">
-                        <i class="fas fa-exclamation-triangle" style="color:var(--rojo); font-size:48px; margin-bottom:15px;"></i>
-                        <h3>No se puede mostrar el contenido embebido</h3>
-                        <p>El sitio de origen no permite ser mostrado en un iframe por políticas de seguridad.</p>
-                        <p><a href="https://mundolaboral.radio.com.bo/Valle%20Cruce%C3%B1os" target="_blank" rel="noopener noreferrer">
-                            <i class="fas fa-external-link-alt"></i> Ver noticias de Valles Cruceños en una nueva pestaña
-                        </a></p>
-                    </div>
-                </div>
+                <div id="lista-vallescruceños"></div>
             </div>
 
-            <!-- NOTICIAS BOLIVIA -->
-            <div id="noticias-bolivia" class="noticias-box">
-                <div class="noticias-card">
-                    <div class="noticias-card-header"><i class="fas fa-globe-americas"></i> Noticias de Bolivia - Mundo Laboral Radio</div>
-                    <iframe class="noticias-iframe" 
-                            src="https://mundolaboral.radio.com.bo/Bolivia" 
-                            loading="lazy"
-                            sandbox="allow-scripts allow-same-origin allow-popups"
-                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    </iframe>
-                    <div class="iframe-error" style="display:none;">
-                        <i class="fas fa-exclamation-triangle" style="color:var(--rojo); font-size:48px; margin-bottom:15px;"></i>
-                        <h3>No se puede mostrar el contenido embebido</h3>
-                        <p>El sitio de origen no permite ser mostrado en un iframe por políticas de seguridad.</p>
-                        <p><a href="https://mundolaboral.radio.com.bo/Bolivia" target="_blank" rel="noopener noreferrer">
-                            <i class="fas fa-external-link-alt"></i> Ver noticias de Bolivia en una nueva pestaña
-                        </a></p>
-                    </div>
-                </div>
+            <!-- NOTICIAS PAÍS -->
+            <div id="noticias-pais" class="noticias-box">
+                <div id="lista-pais"></div>
             </div>
         </div>
         <!-- ====== FIN SECCIÓN NOTICIAS ====== -->
@@ -275,6 +382,7 @@
 <footer>Mundo Laboral Radio. Vallegrande 2026</footer>
 
 <script>
+    /* ====== NAVEGACIÓN GENERAL ====== */
     function ir(id) {
         document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('#main-nav button').forEach(b => b.classList.remove('active'));
@@ -303,21 +411,6 @@
         } else {
             document.getElementById('mundial-tabla').classList.add('active');
             document.getElementById('sub-btn-tabla').classList.add('active');
-        }
-    }
-
-    function cambiarNoticias(tipo) {
-        document.querySelectorAll('.noticias-box').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('.noticias-sub-nav button').forEach(b => b.classList.remove('active'));
-        if(tipo === 'vallegrande') {
-            document.getElementById('noticias-vallegrande').classList.add('active');
-            document.getElementById('sub-btn-vallegrande').classList.add('active');
-        } else if(tipo === 'vallescruceños') {
-            document.getElementById('noticias-vallescruceños').classList.add('active');
-            document.getElementById('sub-btn-vallescruceños').classList.add('active');
-        } else {
-            document.getElementById('noticias-bolivia').classList.add('active');
-            document.getElementById('sub-btn-bolivia').classList.add('active');
         }
     }
 
@@ -355,27 +448,205 @@
         else alert("Por favor completa tu nombre y mensaje.");
     }
 
-    // NUEVO: Detectar errores de carga en iframes de noticias
-    document.querySelectorAll('.noticias-iframe').forEach(iframe => {
-        iframe.addEventListener('load', function() {
-            try {
-                // Si podemos acceder al contenido, el iframe cargó bien
-                const test = iframe.contentWindow.document;
-            } catch(e) {
-                // Error de cross-origin o X-Frame-Options
-                console.warn('El iframe no puede cargarse:', e);
-                iframe.style.display = 'none';
-                iframe.nextElementSibling.style.display = 'block';
-            }
+    /* ====== SISTEMA DE NOTICIAS ====== */
+    const STORAGE_KEY = 'mlr_noticias_v1';
+
+    function obtenerNoticias() {
+        try {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : [];
+        } catch(e) {
+            console.error('Error leyendo noticias:', e);
+            return [];
+        }
+    }
+
+    function guardarNoticias(noticias) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(noticias));
+    }
+
+    function generarId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    }
+
+    function formatearFecha(fechaISO) {
+        const f = new Date(fechaISO);
+        return f.toLocaleString('es-BO', {
+            day: '2-digit', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
         });
-        
-        // Timeout de respaldo: si después de 5 segundos no cargó, mostrar error
-        setTimeout(() => {
-            if (iframe.contentWindow && iframe.contentWindow.location.href === 'about:blank') {
-                iframe.style.display = 'none';
-                iframe.nextElementSibling.style.display = 'block';
+    }
+
+    function previewFoto(input) {
+        const preview = document.getElementById('n-preview');
+        const hidden = document.getElementById('n-foto-base64');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                hidden.value = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function toggleAdminPanel() {
+        const panel = document.getElementById('admin-panel');
+        panel.classList.toggle('active');
+    }
+
+    function cancelarEdicion() {
+        document.getElementById('form-noticia').reset();
+        document.getElementById('n-id').value = '';
+        document.getElementById('n-preview').style.display = 'none';
+        document.getElementById('n-preview').src = '';
+        document.getElementById('n-foto-base64').value = '';
+        document.getElementById('admin-titulo').innerHTML = '<i class="fas fa-plus-circle"></i> Nueva Noticia';
+        document.getElementById('admin-panel').classList.remove('active');
+    }
+
+    function guardarNoticia() {
+        const id = document.getElementById('n-id').value;
+        const categoria = document.getElementById('n-categoria').value;
+        const titulo = document.getElementById('n-titulo').value.trim();
+        const contenido = document.getElementById('n-contenido').value.trim();
+        const fotoBase64 = document.getElementById('n-foto-base64').value;
+
+        if (!titulo || !contenido) {
+            alert('Por favor completa el título y el contenido de la noticia.');
+            return;
+        }
+
+        let noticias = obtenerNoticias();
+
+        if (id) {
+            // Editar existente
+            const idx = noticias.findIndex(n => n.id === id);
+            if (idx !== -1) {
+                noticias[idx].categoria = categoria;
+                noticias[idx].titulo = titulo;
+                noticias[idx].contenido = contenido;
+                if (fotoBase64) noticias[idx].foto = fotoBase64;
+                noticias[idx].fechaEdicion = new Date().toISOString();
             }
-        }, 5000);
+        } else {
+            // Crear nueva
+            const nueva = {
+                id: generarId(),
+                categoria: categoria,
+                titulo: titulo,
+                contenido: contenido,
+                foto: fotoBase64 || '',
+                fecha: new Date().toISOString()
+            };
+            noticias.unshift(nueva);
+        }
+
+        guardarNoticias(noticias);
+        cancelarEdicion();
+        renderNoticias();
+        alert('Noticia guardada correctamente.');
+    }
+
+    function editarNoticia(id) {
+        const noticias = obtenerNoticias();
+        const noticia = noticias.find(n => n.id === id);
+        if (!noticia) return;
+
+        document.getElementById('n-id').value = noticia.id;
+        document.getElementById('n-categoria').value = noticia.categoria;
+        document.getElementById('n-titulo').value = noticia.titulo;
+        document.getElementById('n-contenido').value = noticia.contenido;
+        document.getElementById('n-foto-base64').value = noticia.foto || '';
+
+        const preview = document.getElementById('n-preview');
+        if (noticia.foto) {
+            preview.src = noticia.foto;
+            preview.style.display = 'block';
+        } else {
+            preview.style.display = 'none';
+            preview.src = '';
+        }
+
+        document.getElementById('admin-titulo').innerHTML = '<i class="fas fa-edit"></i> Editar Noticia';
+        document.getElementById('admin-panel').classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function eliminarNoticia(id) {
+        if (!confirm('¿Estás seguro de que quieres eliminar esta noticia?')) return;
+        let noticias = obtenerNoticias();
+        noticias = noticias.filter(n => n.id !== id);
+        guardarNoticias(noticias);
+        renderNoticias();
+    }
+
+    function renderNoticias() {
+        const noticias = obtenerNoticias();
+        const categorias = ['vallegrande', 'vallescruceños', 'pais'];
+
+        categorias.forEach(cat => {
+            const contenedor = document.getElementById('lista-' + cat);
+            const delCat = noticias.filter(n => n.categoria === cat);
+
+            if (delCat.length === 0) {
+                contenedor.innerHTML = `
+                    <div class="sin-noticias">
+                        <i class="fas fa-newspaper"></i>
+                        <h3>No hay noticias aún</h3>
+                        <p>Usa el Panel de Administración para agregar la primera noticia de ${cat === 'vallegrande' ? 'Vallegrande' : cat === 'vallescruceños' ? 'Valles Cruceños' : 'País'}.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            contenedor.innerHTML = delCat.map(n => {
+                const imgHtml = n.foto
+                    ? `<img src="${n.foto}" class="noticia-img" alt="${n.titulo}">`
+                    : `<div style="width:100%;height:220px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#555;border-bottom:1px solid #333;"><i class="fas fa-image" style="font-size:48px;"></i></div>`;
+                return `
+                    <div class="noticia-card">
+                        ${imgHtml}
+                        <div class="noticia-body">
+                            <div class="noticia-titulo">${escapeHtml(n.titulo)}</div>
+                            <div class="noticia-fecha"><i class="far fa-clock"></i> ${formatearFecha(n.fecha)} ${n.fechaEdicion ? '<span style="color:#666;margin-left:8px;">(editado)</span>' : ''}</div>
+                            <div class="noticia-texto">${escapeHtml(n.contenido)}</div>
+                        </div>
+                        <div class="noticia-actions">
+                            <button onclick="editarNoticia('${n.id}')"><i class="fas fa-edit"></i> Editar</button>
+                            <button class="btn-eliminar" onclick="eliminarNoticia('${n.id}')"><i class="fas fa-trash"></i> Eliminar</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        });
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function cambiarNoticias(tipo) {
+        document.querySelectorAll('.noticias-box').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.noticias-sub-nav button').forEach(b => b.classList.remove('active'));
+        if(tipo === 'vallegrande') {
+            document.getElementById('noticias-vallegrande').classList.add('active');
+            document.getElementById('sub-btn-vallegrande').classList.add('active');
+        } else if(tipo === 'vallescruceños') {
+            document.getElementById('noticias-vallescruceños').classList.add('active');
+            document.getElementById('sub-btn-vallescruceños').classList.add('active');
+        } else {
+            document.getElementById('noticias-pais').classList.add('active');
+            document.getElementById('sub-btn-pais').classList.add('active');
+        }
+    }
+
+    // Inicializar noticias al cargar
+    document.addEventListener('DOMContentLoaded', function() {
+        renderNoticias();
     });
 </script>
 </body>
