@@ -481,51 +481,67 @@
 
 <footer>Mundo Laboral Radio. Vallegrande 2026</footer>
 
-<!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
 <script>
     // ====== CONFIGURACION SUPABASE ======
     var SUPABASE_URL = 'https://dwchiapkvpzodiymlyew.supabase.co';
     var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3Y2hpYXBrdnB6b2RpeW1seWV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NjM4MzcsImV4cCI6MjA5NjUzOTgzN30.r5MSdkAyg-x19Xw4Gjgi5URCqGC8xpuBD8RAAop0Kgk';
 
-    var supabase = null;
     var dbOnline = false;
+    var dbErrorMsg = '';
 
-    function initSupabase() {
-        try {
-            if (window.supabase && window.supabase.createClient) {
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                return true;
-            }
-        } catch(e) {
-            console.error('Error init Supabase:', e);
+    function supabaseFetch(method, path, body, callback) {
+        var url = SUPABASE_URL + '/rest/v1' + path;
+        var headers = {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': method === 'POST' ? 'return=representation' : 'return=representation'
+        };
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        for (var key in headers) {
+            xhr.setRequestHeader(key, headers[key]);
         }
-        return false;
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    var data = xhr.responseText ? JSON.parse(xhr.responseText) : [];
+                    callback(null, data);
+                } else {
+                    var err = xhr.responseText || 'HTTP ' + xhr.status;
+                    try {
+                        var parsed = JSON.parse(xhr.responseText);
+                        if (parsed.message) err = parsed.message;
+                    } catch(e) {}
+                    callback(err, null);
+                }
+            }
+        };
+        xhr.onerror = function() {
+            callback('Error de red (sin conexion a internet o CORS bloqueado)', null);
+        };
+        xhr.send(body ? JSON.stringify(body) : null);
     }
 
     function testSupabaseConnection(callback) {
-        if (!supabase) {
-            callback(false, 'Supabase no inicializado');
-            return;
-        }
-        supabase.from('noticias').select('id', { count: 'exact', head: true }).then(function(result) {
-            if (result.error) {
-                callback(false, result.error.message || 'Error de conexion');
+        supabaseFetch('GET', '/noticias?select=id&limit=1', null, function(err, data) {
+            if (err) {
+                console.error('Error Supabase test:', err);
+                callback(false, err);
             } else {
                 callback(true, 'Conectado');
             }
-        }).catch(function(err) {
-            callback(false, err.message || 'Error de red');
         });
     }
 
     function mostrarEstadoDB() {
         var div = document.getElementById('estado-db');
         if (dbOnline) {
-            div.innerHTML = '<div class="estado-db online"><i class="fas fa-cloud"></i> MODO ONLINE - Las noticias se sincronizan con la nube y se ven en todos los dispositivos</div>';
+            div.innerHTML = '<div class="estado-db online"><i class="fas fa-cloud"></i> MODO ONLINE - Conectado a Supabase. Las noticias se sincronizan en todos los dispositivos.</div>';
         } else {
-            div.innerHTML = '<div class="estado-db offline"><i class="fas fa-exclamation-triangle"></i> MODO LOCAL - Sin conexion a la base de datos. Las noticias solo se guardan en este dispositivo.</div>';
+            var msg = dbErrorMsg || 'Sin conexion a la base de datos';
+            div.innerHTML = '<div class="estado-db offline"><i class="fas fa-exclamation-triangle"></i> MODO LOCAL - ' + msg + '<br><small>Las noticias solo se guardan en este dispositivo.</small></div>';
         }
     }
 
@@ -698,17 +714,14 @@
     }
 
     function obtenerNoticias(callback) {
-        if (dbOnline && supabase) {
-            supabase.from('noticias').select('*').order('fecha', { ascending: false }).then(function(result) {
-                if (result.error) {
-                    console.error('Error Supabase select:', result.error);
+        if (dbOnline) {
+            supabaseFetch('GET', '/noticias?select=*&order=fecha.desc', null, function(err, data) {
+                if (err) {
+                    console.error('Error Supabase select:', err);
                     callback(obtenerNoticiasLocal());
                 } else {
-                    callback(result.data || []);
+                    callback(data || []);
                 }
-            }).catch(function(err) {
-                console.error('Catch Supabase select:', err);
-                callback(obtenerNoticiasLocal());
             });
         } else {
             callback(obtenerNoticiasLocal());
@@ -716,42 +729,36 @@
     }
 
     function guardarNoticiaDB(noticia, callback) {
-        if (dbOnline && supabase) {
+        if (dbOnline) {
             if (noticia.id) {
-                supabase.from('noticias').update({
+                supabaseFetch('PATCH', '/noticias?id=eq.' + noticia.id, {
                     categoria: noticia.categoria,
                     titulo: noticia.titulo,
                     contenido: noticia.contenido,
                     foto: noticia.foto,
                     fecha_edicion: new Date().toISOString()
-                }).eq('id', noticia.id).then(function(result) {
-                    if (result.error) {
-                        console.error('Error Supabase update:', result.error);
+                }, function(err, data) {
+                    if (err) {
+                        console.error('Error Supabase update:', err);
                         callback(false);
                     } else {
                         callback(true);
                     }
-                }).catch(function(err) {
-                    console.error('Catch Supabase update:', err);
-                    callback(false);
                 });
             } else {
-                supabase.from('noticias').insert([{
+                supabaseFetch('POST', '/noticias', {
                     categoria: noticia.categoria,
                     titulo: noticia.titulo,
                     contenido: noticia.contenido,
                     foto: noticia.foto,
                     fecha: new Date().toISOString()
-                }]).then(function(result) {
-                    if (result.error) {
-                        console.error('Error Supabase insert:', result.error);
+                }, function(err, data) {
+                    if (err) {
+                        console.error('Error Supabase insert:', err);
                         callback(false);
                     } else {
                         callback(true);
                     }
-                }).catch(function(err) {
-                    console.error('Catch Supabase insert:', err);
-                    callback(false);
                 });
             }
         } else {
@@ -776,17 +783,14 @@
     }
 
     function eliminarNoticiaDB(id, callback) {
-        if (dbOnline && supabase) {
-            supabase.from('noticias').delete().eq('id', id).then(function(result) {
-                if (result.error) {
-                    console.error('Error Supabase delete:', result.error);
+        if (dbOnline) {
+            supabaseFetch('DELETE', '/noticias?id=eq.' + id, null, function(err, data) {
+                if (err) {
+                    console.error('Error Supabase delete:', err);
                     callback(false);
                 } else {
                     callback(true);
                 }
-            }).catch(function(err) {
-                console.error('Catch Supabase delete:', err);
-                callback(false);
             });
         } else {
             var noticias = obtenerNoticiasLocal();
@@ -950,19 +954,15 @@
 
         // Intentar conectar Supabase despues de que todo este listo
         setTimeout(function() {
-            if (initSupabase()) {
-                testSupabaseConnection(function(ok, msg) {
-                    dbOnline = ok;
-                    mostrarEstadoDB();
-                    if (ok) {
-                        renderNoticias(); // Recargar desde la nube
-                    }
-                    console.log('Supabase:', msg);
-                });
-            } else {
+            testSupabaseConnection(function(ok, msg) {
+                dbOnline = ok;
+                dbErrorMsg = msg;
                 mostrarEstadoDB();
-                console.log('Supabase no disponible');
-            }
+                if (ok) {
+                    renderNoticias(); // Recargar desde la nube
+                }
+                console.log('Supabase:', msg);
+            });
         }, 500);
     });
 </script>
