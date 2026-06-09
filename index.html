@@ -182,6 +182,93 @@
             vertical-align: middle;
         }
 
+        /* ====== MODAL LOGIN ADMIN ====== */
+        .login-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        .login-overlay.active { display: flex; }
+        .login-box {
+            background: #111;
+            border: 1px solid var(--rojo);
+            border-radius: 15px;
+            padding: 35px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+        }
+        .login-box h3 { margin-top: 0; color: var(--rojo); font-size: 1.3em; }
+        .login-box input {
+            width: 100%;
+            padding: 14px;
+            margin: 15px 0;
+            background: #000;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1em;
+            text-align: center;
+        }
+        .login-box .login-error {
+            color: var(--rojo);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            display: none;
+        }
+        .login-box .login-error.active { display: block; }
+        .btn-login {
+            background: var(--rojo);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .btn-login:hover { background: #e60000; }
+        .btn-login-cancel {
+            background: transparent;
+            color: #888;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .btn-login-cancel:hover { color: #fff; }
+        .admin-bar {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .admin-bar.active { display: flex; }
+        .admin-bar span {
+            color: var(--rojo);
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .btn-logout {
+            background: #222;
+            border: 1px solid #444;
+            color: #888;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        .btn-logout:hover { color: var(--rojo); border-color: var(--rojo); }
+
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
@@ -286,10 +373,21 @@
                 <p>Información actualizada desde Mundo Laboral Radio</p>
             </div>
 
-            <!-- Botón para mostrar/ocultar panel admin -->
-            <div style="text-align:center;">
+            <!-- Barra de admin (solo visible cuando está logueado) -->
+            <div id="admin-bar" class="admin-bar">
+                <span><i class="fas fa-shield-alt"></i> MODO ADMINISTRADOR</span>
                 <button class="btn-toggle-admin" onclick="toggleAdminPanel()">
-                    <i class="fas fa-cog"></i> Panel de Administración
+                    <i class="fas fa-plus-circle"></i> Nueva Noticia
+                </button>
+                <button class="btn-logout" onclick="logoutAdmin()">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </button>
+            </div>
+
+            <!-- Botón de acceso admin (solo visible cuando NO está logueado) -->
+            <div id="admin-login-btn" style="text-align:center;">
+                <button class="btn-toggle-admin" onclick="mostrarLoginModal()">
+                    <i class="fas fa-lock"></i> Acceso Administrador
                 </button>
             </div>
 
@@ -379,6 +477,18 @@
 
 <a href="https://wa.me/59168785216" target="_blank" rel="noopener noreferrer" class="float-wa"><i class="fab fa-whatsapp"></i></a>
 
+<!-- ====== MODAL LOGIN ADMINISTRADOR ====== -->
+<div id="login-modal" class="login-overlay">
+    <div class="login-box">
+        <h3><i class="fas fa-lock" style="color:var(--rojo)"></i> Acceso Restringido</h3>
+        <p style="color:#888; font-size:0.9em; margin-bottom:15px;">Ingresá la contraseña para administrar noticias</p>
+        <div id="login-error" class="login-error">Contraseña incorrecta</div>
+        <input type="password" id="login-pass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')verificarPassword()">
+        <button class="btn-login" onclick="verificarPassword()">INGRESAR</button>
+        <button class="btn-login-cancel" onclick="cerrarLoginModal()">Cancelar</button>
+    </div>
+</div>
+
 <footer>Mundo Laboral Radio. Vallegrande 2026</footer>
 
 <script>
@@ -450,6 +560,8 @@
 
     /* ====== SISTEMA DE NOTICIAS ====== */
     const STORAGE_KEY = 'mlr_noticias_v1';
+    const ADMIN_PASS = 'mlr2026';          // <-- CAMBIÁ ESTA CONTRASEÑA SI QUERÉS
+    const ADMIN_SESSION_KEY = 'mlr_admin_session';
 
     function obtenerNoticias() {
         try {
@@ -477,6 +589,58 @@
         });
     }
 
+    function isAdminMode() {
+        return sessionStorage.getItem(ADMIN_SESSION_KEY) === '1';
+    }
+
+    function actualizarUIAdmin() {
+        const admin = isAdminMode();
+        const bar = document.getElementById('admin-bar');
+        const loginBtn = document.getElementById('admin-login-btn');
+        const panel = document.getElementById('admin-panel');
+
+        if (admin) {
+            bar.classList.add('active');
+            loginBtn.style.display = 'none';
+        } else {
+            bar.classList.remove('active');
+            loginBtn.style.display = 'block';
+            panel.classList.remove('active');
+        }
+        renderNoticias();
+    }
+
+    function mostrarLoginModal() {
+        document.getElementById('login-modal').classList.add('active');
+        document.getElementById('login-pass').value = '';
+        document.getElementById('login-error').classList.remove('active');
+        setTimeout(() => document.getElementById('login-pass').focus(), 100);
+    }
+
+    function cerrarLoginModal() {
+        document.getElementById('login-modal').classList.remove('active');
+    }
+
+    function verificarPassword() {
+        const input = document.getElementById('login-pass').value.trim();
+        if (input === ADMIN_PASS) {
+            sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
+            cerrarLoginModal();
+            actualizarUIAdmin();
+            toggleAdminPanel(); // abre el panel directo
+        } else {
+            document.getElementById('login-error').classList.add('active');
+            document.getElementById('login-pass').value = '';
+            document.getElementById('login-pass').focus();
+        }
+    }
+
+    function logoutAdmin() {
+        sessionStorage.removeItem(ADMIN_SESSION_KEY);
+        cancelarEdicion();
+        actualizarUIAdmin();
+    }
+
     function previewFoto(input) {
         const preview = document.getElementById('n-preview');
         const hidden = document.getElementById('n-foto-base64');
@@ -492,6 +656,10 @@
     }
 
     function toggleAdminPanel() {
+        if (!isAdminMode()) {
+            mostrarLoginModal();
+            return;
+        }
         const panel = document.getElementById('admin-panel');
         panel.classList.toggle('active');
     }
@@ -507,6 +675,10 @@
     }
 
     function guardarNoticia() {
+        if (!isAdminMode()) {
+            alert('Acceso denegado. Iniciá sesión como administrador.');
+            return;
+        }
         const id = document.getElementById('n-id').value;
         const categoria = document.getElementById('n-categoria').value;
         const titulo = document.getElementById('n-titulo').value.trim();
@@ -521,7 +693,6 @@
         let noticias = obtenerNoticias();
 
         if (id) {
-            // Editar existente
             const idx = noticias.findIndex(n => n.id === id);
             if (idx !== -1) {
                 noticias[idx].categoria = categoria;
@@ -531,7 +702,6 @@
                 noticias[idx].fechaEdicion = new Date().toISOString();
             }
         } else {
-            // Crear nueva
             const nueva = {
                 id: generarId(),
                 categoria: categoria,
@@ -550,6 +720,10 @@
     }
 
     function editarNoticia(id) {
+        if (!isAdminMode()) {
+            alert('Acceso denegado.');
+            return;
+        }
         const noticias = obtenerNoticias();
         const noticia = noticias.find(n => n.id === id);
         if (!noticia) return;
@@ -575,6 +749,10 @@
     }
 
     function eliminarNoticia(id) {
+        if (!isAdminMode()) {
+            alert('Acceso denegado.');
+            return;
+        }
         if (!confirm('¿Estás seguro de que quieres eliminar esta noticia?')) return;
         let noticias = obtenerNoticias();
         noticias = noticias.filter(n => n.id !== id);
@@ -585,6 +763,7 @@
     function renderNoticias() {
         const noticias = obtenerNoticias();
         const categorias = ['vallegrande', 'vallescruceños', 'pais'];
+        const admin = isAdminMode();
 
         categorias.forEach(cat => {
             const contenedor = document.getElementById('lista-' + cat);
@@ -595,7 +774,7 @@
                     <div class="sin-noticias">
                         <i class="fas fa-newspaper"></i>
                         <h3>No hay noticias aún</h3>
-                        <p>Usa el Panel de Administración para agregar la primera noticia de ${cat === 'vallegrande' ? 'Vallegrande' : cat === 'vallescruceños' ? 'Valles Cruceños' : 'País'}.</p>
+                        <p>${admin ? 'Usá el botón <b>Nueva Noticia</b> para agregar la primera noticia.' : 'Próximamente noticias de ' + (cat === 'vallegrande' ? 'Vallegrande' : cat === 'vallescruceños' ? 'Valles Cruceños' : 'País') + '.'}</p>
                     </div>
                 `;
                 return;
@@ -603,8 +782,14 @@
 
             contenedor.innerHTML = delCat.map(n => {
                 const imgHtml = n.foto
-                    ? `<img src="${n.foto}" class="noticia-img" alt="${n.titulo}">`
+                    ? `<img src="${n.foto}" class="noticia-img" alt="${escapeHtml(n.titulo)}">`
                     : `<div style="width:100%;height:220px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#555;border-bottom:1px solid #333;"><i class="fas fa-image" style="font-size:48px;"></i></div>`;
+                const actionsHtml = admin ? `
+                    <div class="noticia-actions">
+                        <button onclick="editarNoticia('${n.id}')"><i class="fas fa-edit"></i> Editar</button>
+                        <button class="btn-eliminar" onclick="eliminarNoticia('${n.id}')"><i class="fas fa-trash"></i> Eliminar</button>
+                    </div>
+                ` : '';
                 return `
                     <div class="noticia-card">
                         ${imgHtml}
@@ -613,10 +798,7 @@
                             <div class="noticia-fecha"><i class="far fa-clock"></i> ${formatearFecha(n.fecha)} ${n.fechaEdicion ? '<span style="color:#666;margin-left:8px;">(editado)</span>' : ''}</div>
                             <div class="noticia-texto">${escapeHtml(n.contenido)}</div>
                         </div>
-                        <div class="noticia-actions">
-                            <button onclick="editarNoticia('${n.id}')"><i class="fas fa-edit"></i> Editar</button>
-                            <button class="btn-eliminar" onclick="eliminarNoticia('${n.id}')"><i class="fas fa-trash"></i> Eliminar</button>
-                        </div>
+                        ${actionsHtml}
                     </div>
                 `;
             }).join('');
@@ -646,7 +828,7 @@
 
     // Inicializar noticias al cargar
     document.addEventListener('DOMContentLoaded', function() {
-        renderNoticias();
+        actualizarUIAdmin();
     });
 </script>
 </body>
