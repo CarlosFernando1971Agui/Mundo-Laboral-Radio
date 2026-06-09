@@ -527,12 +527,17 @@
        5. Pegalos acá abajo reemplazando los valores de ejemplo:
     ============================================================ */
     const SUPABASE_URL = 'https://dwchiapkvpzodiymlyew.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_r-R45DcqMobJ3IiuKkD3AQ_uGbMlCXu';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3Y2hpYXBrdnB6b2RpeW1seWV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NjM4MzcsImV4cCI6MjA5NjUzOTgzN30.r5MSdkAyg-x19Xw4Gjgi5URCqGC8xpuBD8RAAop0Kgk';
 
     const USE_SUPABASE = SUPABASE_URL && !SUPABASE_URL.includes('TU-PROYECTO') && SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.includes('TU-ANON');
     let supabase = null;
+    let supabaseConectado = false;
     if (USE_SUPABASE && window.supabase) {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        try {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } catch(e) {
+            console.error('Error creando cliente Supabase:', e);
+        }
     }
 
     /* ====== NAVEGACIÓN GENERAL ====== */
@@ -610,12 +615,25 @@
         return sessionStorage.getItem(ADMIN_SESSION_KEY) === '1';
     }
 
-    function actualizarModoBanner() {
+    async function actualizarModoBanner() {
         const banner = document.getElementById('modo-banner');
-        if (USE_SUPABASE) {
-            banner.innerHTML = '<div class="modo-banner modo-online"><i class="fas fa-cloud"></i> MODO ONLINE — Las noticias se ven en todos los dispositivos</div>';
-        } else {
-            banner.innerHTML = '<div class="modo-banner modo-offline"><i class="fas fa-exclamation-triangle"></i> MODO LOCAL — Solo se ven en este dispositivo. Configurá Supabase para compartir.</div>';
+        if (!USE_SUPABASE || !supabase) {
+            banner.innerHTML = '<div class="modo-banner modo-offline"><i class="fas fa-exclamation-triangle"></i> MODO LOCAL — Supabase no configurado. Las noticias solo se ven en este dispositivo.</div>';
+            return;
+        }
+        // Test de conexión real
+        try {
+            const { data, error } = await supabase.from('noticias').select('id', { count: 'exact', head: true });
+            if (error) throw error;
+            supabaseConectado = true;
+            banner.innerHTML = '<div class="modo-banner modo-online"><i class="fas fa-cloud"></i> MODO ONLINE — Conectado a Supabase. Las noticias se ven en todos los dispositivos.</div>';
+        } catch(e) {
+            supabaseConectado = false;
+            console.error('Error conectando a Supabase:', e);
+            let msg = e.message || 'Error desconocido';
+            if (msg.includes('Invalid API key')) msg = 'Clave API inválida. Revisá la clave "anon public" en Project Settings → API.';
+            if (msg.includes('does not exist')) msg = 'La tabla "noticias" no existe. Creala en Table Editor.';
+            banner.innerHTML = '<div class="modo-banner modo-offline"><i class="fas fa-times-circle"></i> ERROR SUPABASE: ' + msg + '<br><small>Modo local activado temporalmente.</small></div>';
         }
     }
 
@@ -702,7 +720,7 @@
     /* ====== BASE DE DATOS: SUPABASE O LOCALSTORAGE ====== */
 
     async function obtenerNoticiasDB() {
-        if (USE_SUPABASE && supabase) {
+        if (supabaseConectado && supabase) {
             const { data, error } = await supabase
                 .from('noticias')
                 .select('*')
@@ -723,7 +741,7 @@
     }
 
     async function guardarNoticiaDB(noticia) {
-        if (USE_SUPABASE && supabase) {
+        if (supabaseConectado && supabase) {
             if (noticia.id) {
                 const { error } = await supabase
                     .from('noticias')
@@ -772,7 +790,7 @@
     }
 
     async function eliminarNoticiaDB(id) {
-        if (USE_SUPABASE && supabase) {
+        if (supabaseConectado && supabase) {
             const { error } = await supabase.from('noticias').delete().eq('id', id);
             if (error) console.error('Error delete:', error);
             return !error;
