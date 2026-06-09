@@ -256,6 +256,25 @@
         }
         .btn-login-cancel:hover { color: #fff; }
 
+        .estado-db {
+            text-align: center;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        .estado-db.online {
+            background: rgba(0, 200, 0, 0.15);
+            color: #4caf50;
+            border: 1px solid rgba(0, 200, 0, 0.3);
+        }
+        .estado-db.offline {
+            background: rgba(255, 77, 77, 0.1);
+            color: #ff8a8a;
+            border: 1px solid rgba(255, 77, 77, 0.2);
+        }
+
         .grid-redes { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
         .card-red { padding: 20px; border-radius: 10px; color: white; text-decoration: none; text-align: center; font-weight: bold; border: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
@@ -356,6 +375,8 @@
                 <h1><i class="fas fa-newspaper" style="color:var(--rojo)"></i> NOTICIAS</h1>
                 <p>Informacion actualizada desde Mundo Laboral Radio</p>
             </div>
+
+            <div id="estado-db"></div>
 
             <div id="admin-bar" class="admin-bar">
                 <span><i class="fas fa-shield-alt"></i> MODO ADMINISTRADOR</span>
@@ -460,7 +481,54 @@
 
 <footer>Mundo Laboral Radio. Vallegrande 2026</footer>
 
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
 <script>
+    // ====== CONFIGURACION SUPABASE ======
+    var SUPABASE_URL = 'https://dwchiapkvpzodiymlyew.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3Y2hpYXBrdnB6b2RpeW1seWV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NjM4MzcsImV4cCI6MjA5NjUzOTgzN30.r5MSdkAyg-x19Xw4Gjgi5URCqGC8xpuBD8RAAop0Kgk';
+
+    var supabase = null;
+    var dbOnline = false;
+
+    function initSupabase() {
+        try {
+            if (window.supabase && window.supabase.createClient) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                return true;
+            }
+        } catch(e) {
+            console.error('Error init Supabase:', e);
+        }
+        return false;
+    }
+
+    function testSupabaseConnection(callback) {
+        if (!supabase) {
+            callback(false, 'Supabase no inicializado');
+            return;
+        }
+        supabase.from('noticias').select('id', { count: 'exact', head: true }).then(function(result) {
+            if (result.error) {
+                callback(false, result.error.message || 'Error de conexion');
+            } else {
+                callback(true, 'Conectado');
+            }
+        }).catch(function(err) {
+            callback(false, err.message || 'Error de red');
+        });
+    }
+
+    function mostrarEstadoDB() {
+        var div = document.getElementById('estado-db');
+        if (dbOnline) {
+            div.innerHTML = '<div class="estado-db online"><i class="fas fa-cloud"></i> MODO ONLINE - Las noticias se sincronizan con la nube y se ven en todos los dispositivos</div>';
+        } else {
+            div.innerHTML = '<div class="estado-db offline"><i class="fas fa-exclamation-triangle"></i> MODO LOCAL - Sin conexion a la base de datos. Las noticias solo se guardan en este dispositivo.</div>';
+        }
+    }
+
     // ====== NAVEGACION GENERAL ======
     function ir(id) {
         document.querySelectorAll('.seccion').forEach(function(s) { s.classList.remove('active'); });
@@ -615,7 +683,8 @@
         document.getElementById('admin-panel').classList.remove('active');
     }
 
-    function obtenerNoticias() {
+    // ====== BASE DE DATOS ======
+    function obtenerNoticiasLocal() {
         try {
             var data = localStorage.getItem(STORAGE_KEY);
             return data ? JSON.parse(data) : [];
@@ -624,10 +693,110 @@
         }
     }
 
-    function guardarNoticias(noticias) {
+    function guardarNoticiasLocal(noticias) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(noticias));
     }
 
+    function obtenerNoticias(callback) {
+        if (dbOnline && supabase) {
+            supabase.from('noticias').select('*').order('fecha', { ascending: false }).then(function(result) {
+                if (result.error) {
+                    console.error('Error Supabase select:', result.error);
+                    callback(obtenerNoticiasLocal());
+                } else {
+                    callback(result.data || []);
+                }
+            }).catch(function(err) {
+                console.error('Catch Supabase select:', err);
+                callback(obtenerNoticiasLocal());
+            });
+        } else {
+            callback(obtenerNoticiasLocal());
+        }
+    }
+
+    function guardarNoticiaDB(noticia, callback) {
+        if (dbOnline && supabase) {
+            if (noticia.id) {
+                supabase.from('noticias').update({
+                    categoria: noticia.categoria,
+                    titulo: noticia.titulo,
+                    contenido: noticia.contenido,
+                    foto: noticia.foto,
+                    fecha_edicion: new Date().toISOString()
+                }).eq('id', noticia.id).then(function(result) {
+                    if (result.error) {
+                        console.error('Error Supabase update:', result.error);
+                        callback(false);
+                    } else {
+                        callback(true);
+                    }
+                }).catch(function(err) {
+                    console.error('Catch Supabase update:', err);
+                    callback(false);
+                });
+            } else {
+                supabase.from('noticias').insert([{
+                    categoria: noticia.categoria,
+                    titulo: noticia.titulo,
+                    contenido: noticia.contenido,
+                    foto: noticia.foto,
+                    fecha: new Date().toISOString()
+                }]).then(function(result) {
+                    if (result.error) {
+                        console.error('Error Supabase insert:', result.error);
+                        callback(false);
+                    } else {
+                        callback(true);
+                    }
+                }).catch(function(err) {
+                    console.error('Catch Supabase insert:', err);
+                    callback(false);
+                });
+            }
+        } else {
+            var noticias = obtenerNoticiasLocal();
+            if (noticia.id) {
+                var idx = noticias.findIndex(function(n) { return n.id === noticia.id; });
+                if (idx !== -1) {
+                    noticias[idx].categoria = noticia.categoria;
+                    noticias[idx].titulo = noticia.titulo;
+                    noticias[idx].contenido = noticia.contenido;
+                    if (noticia.foto) noticias[idx].foto = noticia.foto;
+                    noticias[idx].fechaEdicion = new Date().toISOString();
+                }
+            } else {
+                noticia.id = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+                noticia.fecha = new Date().toISOString();
+                noticias.unshift(noticia);
+            }
+            guardarNoticiasLocal(noticias);
+            callback(true);
+        }
+    }
+
+    function eliminarNoticiaDB(id, callback) {
+        if (dbOnline && supabase) {
+            supabase.from('noticias').delete().eq('id', id).then(function(result) {
+                if (result.error) {
+                    console.error('Error Supabase delete:', result.error);
+                    callback(false);
+                } else {
+                    callback(true);
+                }
+            }).catch(function(err) {
+                console.error('Catch Supabase delete:', err);
+                callback(false);
+            });
+        } else {
+            var noticias = obtenerNoticiasLocal();
+            noticias = noticias.filter(function(n) { return n.id !== id; });
+            guardarNoticiasLocal(noticias);
+            callback(true);
+        }
+    }
+
+    // ====== ACCIONES DE NOTICIAS ======
     function generarId() {
         return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
     }
@@ -638,6 +807,12 @@
             day: '2-digit', month: 'short', year: 'numeric',
             hour: '2-digit', minute: '2-digit'
         });
+    }
+
+    function escapeHtml(text) {
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     function guardarNoticia() {
@@ -656,33 +831,23 @@
             return;
         }
 
-        var noticias = obtenerNoticias();
+        var noticia = {
+            id: id || null,
+            categoria: categoria,
+            titulo: titulo,
+            contenido: contenido,
+            foto: fotoBase64 || ''
+        };
 
-        if (id) {
-            var idx = noticias.findIndex(function(n) { return n.id === id; });
-            if (idx !== -1) {
-                noticias[idx].categoria = categoria;
-                noticias[idx].titulo = titulo;
-                noticias[idx].contenido = contenido;
-                if (fotoBase64) noticias[idx].foto = fotoBase64;
-                noticias[idx].fechaEdicion = new Date().toISOString();
+        guardarNoticiaDB(noticia, function(ok) {
+            if (ok) {
+                cancelarEdicion();
+                renderNoticias();
+                alert('Noticia guardada correctamente.');
+            } else {
+                alert('Error al guardar la noticia.');
             }
-        } else {
-            var nueva = {
-                id: generarId(),
-                categoria: categoria,
-                titulo: titulo,
-                contenido: contenido,
-                foto: fotoBase64 || '',
-                fecha: new Date().toISOString()
-            };
-            noticias.unshift(nueva);
-        }
-
-        guardarNoticias(noticias);
-        cancelarEdicion();
-        renderNoticias();
-        alert('Noticia guardada correctamente.');
+        });
     }
 
     function editarNoticia(id) {
@@ -690,28 +855,29 @@
             alert('Acceso denegado.');
             return;
         }
-        var noticias = obtenerNoticias();
-        var noticia = noticias.find(function(n) { return n.id === id; });
-        if (!noticia) return;
+        obtenerNoticias(function(noticias) {
+            var noticia = noticias.find(function(n) { return n.id === id; });
+            if (!noticia) return;
 
-        document.getElementById('n-id').value = noticia.id;
-        document.getElementById('n-categoria').value = noticia.categoria;
-        document.getElementById('n-titulo').value = noticia.titulo;
-        document.getElementById('n-contenido').value = noticia.contenido;
-        document.getElementById('n-foto-base64').value = noticia.foto || '';
+            document.getElementById('n-id').value = noticia.id;
+            document.getElementById('n-categoria').value = noticia.categoria;
+            document.getElementById('n-titulo').value = noticia.titulo;
+            document.getElementById('n-contenido').value = noticia.contenido;
+            document.getElementById('n-foto-base64').value = noticia.foto || '';
 
-        var preview = document.getElementById('n-preview');
-        if (noticia.foto) {
-            preview.src = noticia.foto;
-            preview.style.display = 'block';
-        } else {
-            preview.style.display = 'none';
-            preview.src = '';
-        }
+            var preview = document.getElementById('n-preview');
+            if (noticia.foto) {
+                preview.src = noticia.foto;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+                preview.src = '';
+            }
 
-        document.getElementById('admin-titulo').innerHTML = '<i class="fas fa-edit"></i> Editar Noticia';
-        document.getElementById('admin-panel').classList.add('active');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('admin-titulo').innerHTML = '<i class="fas fa-edit"></i> Editar Noticia';
+            document.getElementById('admin-panel').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     }
 
     function eliminarNoticia(id) {
@@ -720,46 +886,45 @@
             return;
         }
         if (!confirm('Estas seguro de que quieres eliminar esta noticia?')) return;
-        var noticias = obtenerNoticias();
-        noticias = noticias.filter(function(n) { return n.id !== id; });
-        guardarNoticias(noticias);
-        renderNoticias();
-    }
-
-    function escapeHtml(text) {
-        var div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+        eliminarNoticiaDB(id, function(ok) {
+            if (ok) {
+                renderNoticias();
+            } else {
+                alert('Error al eliminar la noticia.');
+            }
+        });
     }
 
     function renderNoticias() {
-        var noticias = obtenerNoticias();
-        var categorias = ['vallegrande', 'vallescruceños', 'pais'];
-        var admin = isAdminMode();
+        obtenerNoticias(function(noticias) {
+            var categorias = ['vallegrande', 'vallescruceños', 'pais'];
+            var admin = isAdminMode();
 
-        categorias.forEach(function(cat) {
-            var contenedor = document.getElementById('lista-' + cat);
-            var delCat = noticias.filter(function(n) { return n.categoria === cat; });
+            categorias.forEach(function(cat) {
+                var contenedor = document.getElementById('lista-' + cat);
+                var delCat = noticias.filter(function(n) { return n.categoria === cat; });
 
-            if (delCat.length === 0) {
-                var msg = admin 
-                    ? 'Usa el boton Nueva Noticia para agregar la primera noticia.'
-                    : 'Proximamente noticias de ' + (cat === 'vallegrande' ? 'Vallegrande' : cat === 'vallescruceños' ? 'Valles Cruceños' : 'Pais') + '.';
-                contenedor.innerHTML = '<div class="sin-noticias"><i class="fas fa-newspaper"></i><h3>No hay noticias aun</h3><p>' + msg + '</p></div>';
-                return;
-            }
+                if (delCat.length === 0) {
+                    var msg = admin 
+                        ? 'Usa el boton Nueva Noticia para agregar la primera noticia.'
+                        : 'Proximamente noticias de ' + (cat === 'vallegrande' ? 'Vallegrande' : cat === 'vallescruceños' ? 'Valles Cruceños' : 'Pais') + '.';
+                    contenedor.innerHTML = '<div class="sin-noticias"><i class="fas fa-newspaper"></i><h3>No hay noticias aun</h3><p>' + msg + '</p></div>';
+                    return;
+                }
 
-            var html = '';
-            delCat.forEach(function(n) {
-                var imgHtml = n.foto
-                    ? '<img src="' + n.foto + '" class="noticia-img" alt="' + escapeHtml(n.titulo) + '">'
-                    : '<div style="width:100%;height:220px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#555;border-bottom:1px solid #333;"><i class="fas fa-image" style="font-size:48px;"></i></div>';
-                var actionsHtml = admin 
-                    ? '<div class="noticia-actions"><button onclick="editarNoticia(\'' + n.id + '\')"><i class="fas fa-edit"></i> Editar</button><button class="btn-eliminar" onclick="eliminarNoticia(\'' + n.id + '\')"><i class="fas fa-trash"></i> Eliminar</button></div>'
-                    : '';
-                html += '<div class="noticia-card">' + imgHtml + '<div class="noticia-body"><div class="noticia-titulo">' + escapeHtml(n.titulo) + '</div><div class="noticia-fecha"><i class="far fa-clock"></i> ' + formatearFecha(n.fecha) + (n.fechaEdicion ? '<span style="color:#666;margin-left:8px;">(editado)</span>' : '') + '</div><div class="noticia-texto">' + escapeHtml(n.contenido) + '</div></div>' + actionsHtml + '</div>';
+                var html = '';
+                delCat.forEach(function(n) {
+                    var imgHtml = n.foto
+                        ? '<img src="' + n.foto + '" class="noticia-img" alt="' + escapeHtml(n.titulo) + '">'
+                        : '<div style="width:100%;height:220px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#555;border-bottom:1px solid #333;"><i class="fas fa-image" style="font-size:48px;"></i></div>';
+                    var actionsHtml = admin 
+                        ? '<div class="noticia-actions"><button onclick="editarNoticia(\'' + n.id + '\')"><i class="fas fa-edit"></i> Editar</button><button class="btn-eliminar" onclick="eliminarNoticia(\'' + n.id + '\')"><i class="fas fa-trash"></i> Eliminar</button></div>'
+                        : '';
+                    var editado = (n.fecha_edicion || n.fechaEdicion) ? '<span style="color:#666;margin-left:8px;">(editado)</span>' : '';
+                    html += '<div class="noticia-card">' + imgHtml + '<div class="noticia-body"><div class="noticia-titulo">' + escapeHtml(n.titulo) + '</div><div class="noticia-fecha"><i class="far fa-clock"></i> ' + formatearFecha(n.fecha) + editado + '</div><div class="noticia-texto">' + escapeHtml(n.contenido) + '</div></div>' + actionsHtml + '</div>';
+                });
+                contenedor.innerHTML = html;
             });
-            contenedor.innerHTML = html;
         });
     }
 
@@ -778,10 +943,27 @@
         }
     }
 
-    // Inicializar al cargar
+    // ====== INICIALIZACION ======
     document.addEventListener('DOMContentLoaded', function() {
         actualizarUIAdmin();
         renderNoticias();
+
+        // Intentar conectar Supabase despues de que todo este listo
+        setTimeout(function() {
+            if (initSupabase()) {
+                testSupabaseConnection(function(ok, msg) {
+                    dbOnline = ok;
+                    mostrarEstadoDB();
+                    if (ok) {
+                        renderNoticias(); // Recargar desde la nube
+                    }
+                    console.log('Supabase:', msg);
+                });
+            } else {
+                mostrarEstadoDB();
+                console.log('Supabase no disponible');
+            }
+        }, 500);
     });
 </script>
 </body>
