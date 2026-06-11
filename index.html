@@ -829,8 +829,9 @@
     }
 
     // ====== ACCIONES DE NOTICIAS ======
-    function compartirNoticia(red, titulo, id) {
-        var url = window.location.href.split('#')[0] + '#noticias';
+    function compartirNoticia(red, titulo, id, categoria) {
+        var cat = categoria || 'vallegrande';
+        var url = window.location.href.split('#')[0] + '#noticias-' + cat;
         var texto = encodeURIComponent(titulo + ' - Mundo Laboral Radio');
         var link;
         if (red === 'wa') {
@@ -970,7 +971,7 @@
                         ? '<div class="noticia-actions"><button onclick="editarNoticia(\'' + n.id + '\')"><i class="fas fa-edit"></i> Editar</button><button class="btn-eliminar" onclick="eliminarNoticia(\'' + n.id + '\')"><i class="fas fa-trash"></i> Eliminar</button></div>'
                         : '';
                     var editado = (n.fecha_edicion || n.fechaEdicion) ? '<span style="color:#666;margin-left:8px;">(editado)</span>' : '';
-                    var shareHtml = '<div class="noticia-share"><span>Compartir:</span><a href="#" class="share-wa" onclick="compartirNoticia(\'wa\',\'' + escapeHtml(n.titulo) + '\',\'' + n.id + '\');return false;" title="WhatsApp"><i class="fab fa-whatsapp"></i></a><a href="#" class="share-tg" onclick="compartirNoticia(\'tg\',\'' + escapeHtml(n.titulo) + '\',\'' + n.id + '\');return false;" title="Telegram"><i class="fab fa-telegram-plane"></i></a><a href="#" class="share-fb" onclick="compartirNoticia(\'fb\',\'' + escapeHtml(n.titulo) + '\',\'' + n.id + '\');return false;" title="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" class="share-ig" onclick="compartirNoticia(\'ig\',\'' + escapeHtml(n.titulo) + '\',\'' + n.id + '\');return false;" title="Instagram"><i class="fab fa-instagram"></i></a></div>';
+                    var shareHtml = '<div class="noticia-share"><span>Compartir:</span><a href="#" class="share-wa" onclick="compartirNoticia(\'wa\',\'' + escapeHtml(n.titulo) + '\',\'' + n.id + '\',\'' + n.categoria + '\');return false;" title="WhatsApp"><i class="fab fa-whatsapp"></i></a><a href="#" class="share-tg" onclick="compartirNoticia(\'tg\',\'' + escapeHtml(n.titulo) + '\',\'' + n.id + '\',\'' + n.categoria + '\');return false;" title="Telegram"><i class="fab fa-telegram-plane"></i></a><a href="#" class="share-fb" onclick="compartirNoticia(\'fb\',\'' + escapeHtml(n.titulo) + '\',\'' + n.id + '\',\'' + n.categoria + '\');return false;" title="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" class="share-ig" onclick="compartirNoticia(\'ig\',\'' + escapeHtml(n.titulo) + '\',\'' + n.id + '\',\'' + n.categoria + '\');return false;" title="Instagram"><i class="fab fa-instagram"></i></a></div>';
                     html += '<div class="noticia-card">' + imgHtml + '<div class="noticia-body"><div class="noticia-titulo">' + escapeHtml(n.titulo) + '</div><div class="noticia-fecha"><i class="far fa-clock"></i> ' + formatearFecha(n.fecha) + editado + '</div><div class="noticia-texto">' + escapeHtml(n.contenido) + '</div></div>' + shareHtml + actionsHtml + '</div>';
                 });
                 contenedor.innerHTML = html;
@@ -996,7 +997,11 @@
     // ====== INICIALIZACION ======
     document.addEventListener('DOMContentLoaded', function() {
         var hash = window.location.hash.replace('#', '');
-        if (hash && document.getElementById(hash)) {
+        if (hash.indexOf('noticias-') === 0) {
+            var cat = hash.replace('noticias-', '');
+            ir('noticias');
+            cambiarNoticias(cat);
+        } else if (hash && document.getElementById(hash)) {
             ir(hash);
         }
 
