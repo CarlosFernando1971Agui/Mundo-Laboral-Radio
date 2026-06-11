@@ -996,11 +996,11 @@
 
     // ====== INICIALIZACION ======
     document.addEventListener('DOMContentLoaded', function() {
-        var hash = window.location.hash.replace('#', '');
+        var hash = decodeURIComponent(window.location.hash.replace('#', ''));
         if (hash.indexOf('noticias-') === 0) {
             var cat = hash.replace('noticias-', '');
             ir('noticias');
-            cambiarNoticias(cat);
+            setTimeout(function() { cambiarNoticias(cat); }, 100);
         } else if (hash && document.getElementById(hash)) {
             ir(hash);
         }
