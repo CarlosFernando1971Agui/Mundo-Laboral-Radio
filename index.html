@@ -9,7 +9,19 @@
     <style>
         :root { --rojo: #ff4d4d; --negro: #0d0d11; --gris: #16161d; --texto: #ffffff; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--negro); color: var(--texto); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: #000; padding: 25px 0; border-bottom: 2px solid var(--rojo); text-align: center; }
+        header { background: #000; padding: 20px 25px; border-bottom: 2px solid var(--rojo); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+        .header-left, .header-right { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 0.9em; color: #ccc; min-width: 120px; }
+        .header-left i, .header-right i { color: var(--rojo); font-size: 1.1em; }
+        .header-center { flex: 1; text-align: center; }
+        .header-label { font-size: 0.7em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .header-clima { display: flex; align-items: center; gap: 6px; background: #111; padding: 6px 12px; border-radius: 8px; border: 1px solid #333; }
+        .header-clima img { width: 28px; height: 28px; }
+        .header-reloj { background: #111; padding: 6px 12px; border-radius: 8px; border: 1px solid #333; font-family: 'Courier New', monospace; font-size: 1.05em; color: #fff; letter-spacing: 1px; }
+        .header-reloj span { color: var(--rojo); }
+        @media (max-width: 700px) {
+            .header-left, .header-right { display: none; }
+            header { justify-content: center; padding: 15px; }
+        }
         .brand-name { font-size: 30px; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 12px; }
         .brand-logo { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--rojo); }
 
@@ -319,14 +331,26 @@
 <body>
 
 <header>
-    <div class="brand-name"><img src="logo.jpg" class="brand-logo" alt="Logo"> MUNDO <span style="color:var(--rojo)">LABORAL</span> RADIO <img src="logo.jpg" class="brand-logo" alt="Logo"></div>
-    <nav id="main-nav">
-        <button onclick="ir('inicio')" id="btn-inicio" class="active">RADIO</button>
-        <button onclick="ir('videos')" id="btn-videos">VIDEOS</button>
-        <button onclick="ir('noticias')" id="btn-noticias">NOTICIAS</button>
-        <button onclick="ir('redes')" id="btn-redes">REDES</button>
-        <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
-    </nav>
+    <div class="header-left">
+        <div class="header-label">Clima Vallegrande</div>
+        <div class="header-clima" id="header-clima">
+            <i class="fas fa-cloud-sun"></i> <span id="clima-temp">--</span>°C
+        </div>
+    </div>
+    <div class="header-center">
+        <div class="brand-name"><img src="logo.jpg" class="brand-logo" alt="Logo"> MUNDO <span style="color:var(--rojo)">LABORAL</span> RADIO <img src="logo.jpg" class="brand-logo" alt="Logo"></div>
+        <nav id="main-nav">
+            <button onclick="ir('inicio')" id="btn-inicio" class="active">RADIO</button>
+            <button onclick="ir('videos')" id="btn-videos">VIDEOS</button>
+            <button onclick="ir('noticias')" id="btn-noticias">NOTICIAS</button>
+            <button onclick="ir('redes')" id="btn-redes">REDES</button>
+            <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
+        </nav>
+    </div>
+    <div class="header-right">
+        <div class="header-label">Hora Bolivia</div>
+        <div class="header-reloj" id="header-reloj">--:--:--</div>
+    </div>
 </header>
 
 <div class="wrapper">
@@ -593,6 +617,50 @@
         var nombre = document.getElementById('c-nombre').value;
         if(nombre && msg) window.open('https://wa.me/59168785216?text=Hola soy ' + nombre + ', ' + encodeURIComponent(msg), '_blank');
         else alert("Por favor completa tu nombre y mensaje.");
+    }
+
+    // ====== CLIMA Y RELOJ ======
+    function iconoClima(code) {
+        var map = {
+            0: 'fa-sun', 1: 'fa-cloud-sun', 2: 'fa-cloud-sun', 3: 'fa-cloud',
+            45: 'fa-smog', 48: 'fa-smog',
+            51: 'fa-cloud-rain', 53: 'fa-cloud-rain', 55: 'fa-cloud-rain',
+            61: 'fa-cloud-showers-heavy', 63: 'fa-cloud-showers-heavy', 65: 'fa-cloud-showers-heavy',
+            71: 'fa-snowflake', 73: 'fa-snowflake', 75: 'fa-snowflake',
+            80: 'fa-cloud-rain', 81: 'fa-cloud-rain', 82: 'fa-cloud-rain',
+            95: 'fa-bolt', 96: 'fa-bolt', 99: 'fa-bolt'
+        };
+        return map[code] || 'fa-cloud';
+    }
+
+    function cargarClima() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=-18.4833&longitude=-64.1&current_weather=true', true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                try {
+                    var data = JSON.parse(xhr.responseText);
+                    var temp = Math.round(data.current_weather.temperature);
+                    var code = data.current_weather.weathercode;
+                    var iconClass = iconoClima(code);
+                    document.getElementById('header-clima').innerHTML = '<i class="fas ' + iconClass + '"></i> <span id="clima-temp">' + temp + '</span>°C';
+                } catch(e) {
+                    document.getElementById('header-clima').innerHTML = '<i class="fas fa-cloud"></i> <span id="clima-temp">--</span>°C';
+                }
+            }
+        };
+        xhr.onerror = function() {
+            document.getElementById('header-clima').innerHTML = '<i class="fas fa-cloud"></i> <span id="clima-temp">--</span>°C';
+        };
+        xhr.send();
+    }
+
+    function actualizarReloj() {
+        var ahora = new Date();
+        var h = String(ahora.getHours()).padStart(2, '0');
+        var m = String(ahora.getMinutes()).padStart(2, '0');
+        var s = String(ahora.getSeconds()).padStart(2, '0');
+        document.getElementById('header-reloj').innerHTML = h + '<span>:</span>' + m + '<span>:</span>' + s;
     }
 
     // ====== SISTEMA DE NOTICIAS ======
@@ -963,6 +1031,9 @@
 
         actualizarUIAdmin();
         renderNoticias();
+        cargarClima();
+        actualizarReloj();
+        setInterval(actualizarReloj, 1000);
 
         // Intentar conectar Supabase despues de que todo este listo
         setTimeout(function() {
