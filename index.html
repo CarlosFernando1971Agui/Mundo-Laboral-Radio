@@ -40,10 +40,6 @@
         .iframe-container { aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
         iframe { width: 100%; height: 100%; border: none; }
 
-        .mundial-header { text-align: center; margin-bottom: 25px; }
-        .mundial-card { background: #111; border: 1px solid #333; border-radius: 15px; overflow: hidden; margin-bottom: 20px; }
-        .mundial-card-header { background: var(--rojo); padding: 12px 20px; font-weight: bold; font-size: 1.1em; display: flex; align-items: center; gap: 10px; }
-        .mundial-iframe { width: 100%; border: none; display: block; }
 
         .noticias-header { text-align: center; margin-bottom: 25px; }
         .noticias-header h1 { margin-bottom: 5px; }
@@ -327,7 +323,6 @@
     <nav id="main-nav">
         <button onclick="ir('inicio')" id="btn-inicio" class="active">RADIO</button>
         <button onclick="ir('videos')" id="btn-videos">VIDEOS</button>
-        <button onclick="ir('mundial')" id="btn-mundial">MUNDIAL 2026</button>
         <button onclick="ir('noticias')" id="btn-noticias">NOTICIAS</button>
         <button onclick="ir('redes')" id="btn-redes">REDES</button>
         <button onclick="ir('contacto')" id="btn-contacto">CONTACTO</button>
@@ -372,29 +367,6 @@
                 </div>
                 <div class="iframe-container">
                     <iframe id="frame-live" src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A" allowfullscreen></iframe>
-                </div>
-            </div>
-        </div>
-
-        <div id="mundial" class="seccion">
-            <div class="mundial-header">
-                <h1><i class="fas fa-futbol" style="color:var(--rojo)"></i> MUNDIAL 2026</h1>
-                <p>Estados Unidos - Mexico - Canada | 11 junio - 19 julio</p>
-            </div>
-            <div class="sub-nav">
-                <button onclick="cambiarMundial('partidos')" id="sub-btn-partidos" class="active">PARTIDOS</button>
-                <button onclick="cambiarMundial('tabla')" id="sub-btn-tabla">TABLA DE POSICIONES</button>
-            </div>
-            <div id="mundial-partidos" class="video-box active">
-                <div class="mundial-card">
-                    <div class="mundial-card-header"><i class="fas fa-calendar-alt"></i> Calendario de Partidos - Mundial 2026</div>
-                    <iframe class="mundial-iframe" src="https://www.sportbusy.com/embed/world-cup" height="600" loading="lazy"></iframe>
-                </div>
-            </div>
-            <div id="mundial-tabla" class="video-box">
-                <div class="mundial-card">
-                    <div class="mundial-card-header"><i class="fas fa-table"></i> Tabla de Posiciones - Mundial 2026</div>
-                    <iframe class="mundial-iframe" src="https://www.sportbusy.com/widget/standings/?league=world-cup" height="600" loading="lazy"></iframe>
                 </div>
             </div>
         </div>
@@ -591,22 +563,6 @@
             document.getElementById('live-box').classList.add('active');
             document.getElementById('sub-btn-live').classList.add('active');
         }
-    }
-
-    function cambiarMundial(tipo) {
-        document.querySelectorAll('#mundial .video-box').forEach(function(v) { v.classList.remove('active'); });
-        document.querySelectorAll('#mundial .sub-nav button').forEach(function(b) { b.classList.remove('active'); });
-        if(tipo === 'partidos') {
-            document.getElementById('mundial-partidos').classList.add('active');
-            document.getElementById('sub-btn-partidos').classList.add('active');
-        } else {
-            document.getElementById('mundial-tabla').classList.add('active');
-            document.getElementById('sub-btn-tabla').classList.add('active');
-        }
-    }
-
-    function cargarLive(url) {
-        document.getElementById('frame-live').src = url;
     }
 
     var radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
