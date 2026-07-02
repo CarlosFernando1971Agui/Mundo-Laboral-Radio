@@ -30,8 +30,29 @@
         nav button.active { background: var(--rojo); border-color: var(--rojo); }
 
         .wrapper { display: flex; justify-content: center; gap: 20px; padding: 20px; flex: 1; width: 100%; box-sizing: border-box; }
-        .banner-side { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; }
-        .banner-img { width: 100%; border-radius: 10px; border: 1px solid var(--rojo); display: block; }
+        .banner-side { 
+            width: 220px; 
+            flex-shrink: 0; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            overflow: visible;
+            padding: 10px 0;
+        }
+        .banner-img { 
+            width: 100%; 
+            border-radius: 10px; 
+            border: 1px solid var(--rojo); 
+            display: block; 
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            cursor: pointer;
+        }
+        .banner-img:hover {
+            transform: scale(1.18);
+            box-shadow: 0 10px 30px rgba(255, 77, 77, 0.5);
+            z-index: 100;
+            position: relative;
+        }
 
         .container { flex: 1; max-width: 950px; }
         .seccion { display: none; width: 100%; }
