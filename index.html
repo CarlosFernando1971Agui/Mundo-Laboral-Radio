@@ -347,6 +347,21 @@
             .noticia-img { max-height: 160px; }
             .noticia-titulo { font-size: 1.1em; }
         }
+    
+        .live-btn {
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        .live-btn.active {
+            background: var(--rojo);
+        }
+
     </style>
 </head>
 <body>
@@ -408,8 +423,8 @@
             </div>
             <div id="live-box" class="video-box">
                 <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                    <button onclick="cargarLive('https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A')" style="background:var(--rojo); color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">VER EN VIVO</button>
-                    <button onclick="cargarLive('https://www.youtube.com/embed/videoseries?list=UUUJY-xgeGJokDh-5Ho_Wb9A')" style="background:#333; color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">VER LISTA DE VIDEOS</button>
+                    <button id="btn-ver-vivo" class="live-btn active" onclick="cargarLive('https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A', 'btn-ver-vivo')">VER EN VIVO</button>
+                    <button id="btn-ver-lista" class="live-btn" onclick="cargarLive('https://www.youtube.com/embed/videoseries?list=UUUJY-xgeGJokDh-5Ho_Wb9A', 'btn-ver-lista')">VER LISTA DE VIDEOS</button>
                 </div>
                 <div class="iframe-container">
                     <iframe id="frame-live" src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A" allowfullscreen></iframe>
@@ -642,8 +657,20 @@
         else alert("Por favor completa tu nombre y mensaje.");
     }
 
-    function cargarLive(url) {
+    function cargarLive(url, btnId) {
         document.getElementById('frame-live').src = url;
+        // Update active button styling
+        document.querySelectorAll('.live-btn').forEach(function(btn) {
+            btn.classList.remove('active');
+            btn.style.background = '#333';
+        });
+        if (btnId) {
+            var activeBtn = document.getElementById(btnId);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+                activeBtn.style.background = 'var(--rojo)';
+            }
+        }
     }
 
     // ====== CLIMA Y RELOJ ======
