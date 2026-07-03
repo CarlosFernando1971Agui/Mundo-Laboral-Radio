@@ -362,6 +362,100 @@
             background: var(--rojo);
         }
 
+    
+        /* Live video layout with playlist */
+        .live-layout {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+        .live-player-area {
+            flex: 1;
+            min-width: 0;
+        }
+        .live-playlist {
+            width: 280px;
+            flex-shrink: 0;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            max-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+        .playlist-header {
+            background: var(--rojo);
+            color: white;
+            padding: 12px 15px;
+            font-weight: bold;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .playlist-items {
+            overflow-y: auto;
+            max-height: 460px;
+            padding: 8px;
+        }
+        .playlist-item {
+            display: flex;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+        .playlist-item:hover {
+            background: #222;
+        }
+        .playlist-item.active {
+            background: rgba(255, 77, 77, 0.15);
+            border: 1px solid var(--rojo);
+        }
+        .playlist-thumb {
+            width: 100px;
+            height: 56px;
+            border-radius: 6px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: #222;
+        }
+        .playlist-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .playlist-title {
+            color: #fff;
+            font-size: 0.8em;
+            font-weight: 600;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .playlist-duration {
+            color: #888;
+            font-size: 0.7em;
+            margin-top: 3px;
+        }
+        @media (max-width: 900px) {
+            .live-layout {
+                flex-direction: column;
+            }
+            .live-playlist {
+                width: 100%;
+                max-height: 300px;
+            }
+            .playlist-items {
+                max-height: 260px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -423,11 +517,21 @@
             </div>
             <div id="live-box" class="video-box">
                 <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                    <button id="btn-ver-vivo" class="live-btn active" onclick="cargarLive('https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A', 'btn-ver-vivo')">VER EN VIVO</button>
-                    <button id="btn-ver-lista" class="live-btn" onclick="cargarLive('https://www.youtube.com/embed/videoseries?list=UUUJY-xgeGJokDh-5Ho_Wb9A', 'btn-ver-lista')">VER LISTA DE VIDEOS</button>
+                    <button id="btn-ver-vivo" class="live-btn active" onclick="cargarLive('live', 'btn-ver-vivo')">VER EN VIVO</button>
+                    <button id="btn-ver-lista" class="live-btn" onclick="cargarLive('playlist', 'btn-ver-lista')">VER LISTA DE VIDEOS</button>
                 </div>
-                <div class="iframe-container">
-                    <iframe id="frame-live" src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A" allowfullscreen></iframe>
+                <div class="live-layout" id="live-layout">
+                    <div class="live-player-area">
+                        <div class="iframe-container" id="player-container">
+                            <iframe id="frame-live" src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="live-playlist" id="playlist-sidebar" style="display:none;">
+                        <div class="playlist-header"><i class="fas fa-list"></i> Videos del Canal</div>
+                        <div class="playlist-items" id="playlist-items">
+                            <!-- Videos will be loaded here -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -657,8 +761,11 @@
         else alert("Por favor completa tu nombre y mensaje.");
     }
 
-    function cargarLive(url, btnId) {
-        document.getElementById('frame-live').src = url;
+    function cargarLive(mode, btnId) {
+        var iframe = document.getElementById('frame-live');
+        var sidebar = document.getElementById('playlist-sidebar');
+        var container = document.getElementById('player-container');
+
         // Update active button styling
         document.querySelectorAll('.live-btn').forEach(function(btn) {
             btn.classList.remove('active');
@@ -671,6 +778,53 @@
                 activeBtn.style.background = 'var(--rojo)';
             }
         }
+
+        if (mode === 'live') {
+            iframe.src = 'https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A';
+            sidebar.style.display = 'none';
+            container.style.width = '100%';
+        } else if (mode === 'playlist') {
+            // Load first video of playlist and show sidebar
+            cargarVideoPlaylist('UUUJY-xgeGJokDh-5Ho_Wb9A', 0);
+            sidebar.style.display = 'flex';
+        }
+    }
+
+    // Playlist video data - these are videos from the Mundo Laboral Radio channel
+    // The user can update this list with actual video IDs and titles
+    var playlistVideos = [
+        { id: 'dQw4w9WgXcQ', title: 'Video de ejemplo 1', duration: '10:30' },
+        { id: 'dQw4w9WgXcQ', title: 'Video de ejemplo 2', duration: '15:45' },
+        { id: 'dQw4w9WgXcQ', title: 'Video de ejemplo 3', duration: '8:20' },
+        { id: 'dQw4w9WgXcQ', title: 'Video de ejemplo 4', duration: '22:10' },
+        { id: 'dQw4w9WgXcQ', title: 'Video de ejemplo 5', duration: '5:55' }
+    ];
+    var currentPlaylistIndex = 0;
+
+    function cargarVideoPlaylist(playlistId, index) {
+        currentPlaylistIndex = index;
+        var iframe = document.getElementById('frame-live');
+        var video = playlistVideos[index];
+        if (video) {
+            iframe.src = 'https://www.youtube.com/embed/' + video.id + '?list=' + playlistId + '&index=' + (index + 1);
+        }
+        renderPlaylistSidebar();
+    }
+
+    function renderPlaylistSidebar() {
+        var container = document.getElementById('playlist-items');
+        var html = '';
+        playlistVideos.forEach(function(video, idx) {
+            var activeClass = idx === currentPlaylistIndex ? 'active' : '';
+            var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
+            html += '<div class="playlist-item ' + activeClass + '" onclick="cargarVideoPlaylist('UUUJY-xgeGJokDh-5Ho_Wb9A', ' + idx + ')">' +
+                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="' + video.title + '" onerror="this.src='https://via.placeholder.com/100x56/222/444?text=Video'">' +
+                '<div class="playlist-info">' +
+                '<div class="playlist-title">' + video.title + '</div>' +
+                '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
+                '</div></div>';
+        });
+        container.innerHTML = html;
     }
 
     // ====== CLIMA Y RELOJ ======
