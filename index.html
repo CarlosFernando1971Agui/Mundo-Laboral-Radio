@@ -347,6 +347,113 @@
             .noticia-img { max-height: 160px; }
             .noticia-titulo { font-size: 1.1em; }
         }
+    
+        .live-btn {
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        .live-btn.active {
+            background: var(--rojo);
+        }
+        /* Live video layout with playlist */
+        .live-layout {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+        .live-player-area {
+            flex: 1;
+            min-width: 0;
+        }
+        .live-playlist {
+            width: 280px;
+            flex-shrink: 0;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            max-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+        .playlist-header {
+            background: var(--rojo);
+            color: white;
+            padding: 12px 15px;
+            font-weight: bold;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .playlist-items {
+            overflow-y: auto;
+            max-height: 460px;
+            padding: 8px;
+        }
+        .playlist-item {
+            display: flex;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+        .playlist-item:hover {
+            background: #222;
+        }
+        .playlist-item.active {
+            background: rgba(255, 77, 77, 0.15);
+            border: 1px solid var(--rojo);
+        }
+        .playlist-thumb {
+            width: 100px;
+            height: 56px;
+            border-radius: 6px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: #222;
+        }
+        .playlist-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .playlist-title {
+            color: #fff;
+            font-size: 0.8em;
+            font-weight: 600;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .playlist-duration {
+            color: #888;
+            font-size: 0.7em;
+            margin-top: 3px;
+        }
+        @media (max-width: 900px) {
+            .live-layout {
+                flex-direction: column;
+            }
+            .live-playlist {
+                width: 100%;
+                max-height: 300px;
+            }
+            .playlist-items {
+                max-height: 260px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -408,11 +515,19 @@
             </div>
             <div id="live-box" class="video-box">
                 <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                    <button onclick="cargarLive('https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A')" style="background:var(--rojo); color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">VER EN VIVO</button>
-                    <button onclick="cargarLive('https://www.youtube.com/embed/videoseries?list=UUUJY-xgeGJokDh-5Ho_Wb9A')" style="background:#333; color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">VER LISTA DE VIDEOS</button>
+                    <button id="btn-ver-vivo" class="live-btn active" onclick="mostrarLive()">VER EN VIVO</button>
+                    <button id="btn-ver-lista" class="live-btn" onclick="mostrarPlaylist()">VER LISTA DE VIDEOS</button>
                 </div>
-                <div class="iframe-container">
-                    <iframe id="frame-live" src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A" allowfullscreen></iframe>
+                <div class="live-layout" id="live-layout">
+                    <div class="live-player-area" id="live-player-area">
+                        <div class="iframe-container">
+                            <iframe id="frame-live" src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="live-playlist" id="playlist-sidebar" style="display:none;">
+                        <div class="playlist-header"><i class="fas fa-list"></i> Videos del Canal</div>
+                        <div class="playlist-items" id="playlist-items"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -642,8 +757,59 @@
         else alert("Por favor completa tu nombre y mensaje.");
     }
 
-    function cargarLive(url) {
-        document.getElementById('frame-live').src = url;
+    function mostrarLive() {
+        // Update buttons
+        document.getElementById('btn-ver-vivo').classList.add('active');
+        document.getElementById('btn-ver-lista').classList.remove('active');
+        // Show live stream, hide playlist
+        document.getElementById('frame-live').src = 'https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A';
+        document.getElementById('playlist-sidebar').style.display = 'none';
+    }
+
+    function mostrarPlaylist() {
+        // Update buttons
+        document.getElementById('btn-ver-vivo').classList.remove('active');
+        document.getElementById('btn-ver-lista').classList.add('active');
+        // Show playlist sidebar
+        document.getElementById('playlist-sidebar').style.display = 'flex';
+        // Load first video
+        cargarVideoPlaylist(0);
+    }
+
+    // Playlist video data - UPDATE THESE with your real video IDs from YouTube
+    // To get a video ID: it's the 11-character string after "v=" in a YouTube URL
+    // Example: https://www.youtube.com/watch?v=ABC123DEF45 -> ID is ABC123DEF45
+    var playlistVideos = [
+        { id: 'ABC123DEF45', title: 'Video ejemplo 1 - Actualiza este ID', duration: '10:30' },
+        { id: 'XYZ789GHI12', title: 'Video ejemplo 2 - Actualiza este ID', duration: '15:45' },
+        { id: 'MNO345PQR67', title: 'Video ejemplo 3 - Actualiza este ID', duration: '8:20' }
+    ];
+    var currentPlaylistIndex = 0;
+
+    function cargarVideoPlaylist(index) {
+        currentPlaylistIndex = index;
+        var iframe = document.getElementById('frame-live');
+        var video = playlistVideos[index];
+        if (video) {
+            iframe.src = 'https://www.youtube.com/embed/' + video.id;
+        }
+        renderPlaylistSidebar();
+    }
+
+    function renderPlaylistSidebar() {
+        var container = document.getElementById('playlist-items');
+        var html = '';
+        playlistVideos.forEach(function(video, idx) {
+            var activeClass = idx === currentPlaylistIndex ? 'active' : '';
+            var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
+            html += '<div class="playlist-item ' + activeClass + '" onclick="cargarVideoPlaylist(' + idx + ')">' +
+                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="' + video.title.replace(/'/g, "&#39;") + '" onerror="this.style.display=\'none\'">' +
+                '<div class="playlist-info">' +
+                '<div class="playlist-title">' + video.title + '</div>' +
+                '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
+                '</div></div>';
+        });
+        container.innerHTML = html;
     }
 
     // ====== CLIMA Y RELOJ ======
