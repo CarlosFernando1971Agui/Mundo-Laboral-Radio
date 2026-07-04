@@ -478,6 +478,76 @@
             }
         }
 
+    
+        .playlist-api-setup {
+            padding: 15px;
+        }
+        .api-setup-box {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .api-setup-box i {
+            font-size: 2em;
+            color: var(--rojo);
+            margin-bottom: 10px;
+        }
+        .api-setup-box p {
+            color: #ccc;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .api-instructions {
+            text-align: left;
+            color: #aaa;
+            font-size: 0.8em;
+            line-height: 1.8;
+            background: #111;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .api-instructions a {
+            color: var(--rojo);
+            text-decoration: none;
+        }
+        .api-instructions a:hover {
+            text-decoration: underline;
+        }
+        .api-setup-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #000;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 0.85em;
+        }
+        .api-save-btn {
+            background: var(--rojo);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 5px;
+            transition: background 0.2s;
+        }
+        .api-save-btn:hover {
+            background: #e60000;
+        }
+        .api-note {
+            color: #666;
+            font-size: 0.75em;
+            margin-top: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -552,9 +622,16 @@
                         <div class="playlist-header"><i class="fas fa-list"></i> Videos del Canal</div>
                         <div class="playlist-loading" id="playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
                         <div class="playlist-items" id="playlist-items"></div>
+                        <div class="playlist-api-setup" id="playlist-api-setup" style="display:none;">
+                            <div class="api-setup-box">
+                                <i class="fas fa-key"></i>
+                                <p>API Key configurada. Haz clic para cargar los videos del canal.</p>
+                                <button onclick="guardarApiKey()" class="api-save-btn"><i class="fas fa-play"></i> Cargar Videos del Canal</button>
+                            </div>
+                        </div>
                         <div class="playlist-error" id="playlist-error" style="display:none;">
-                            <i class="fas fa-exclamation-circle"></i> No se pudieron cargar los videos.<br>
-                            <small>Usando lista manual. Actualiza los IDs en el codigo.</small>
+                            <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
+                            <small id="playlist-error-msg">Verifica tu conexion o API Key.</small>
                         </div>
                     </div>
                 </div>
@@ -797,101 +874,121 @@
         document.getElementById('btn-ver-vivo').classList.remove('active');
         document.getElementById('btn-ver-lista').classList.add('active');
         document.getElementById('playlist-sidebar').style.display = 'flex';
+        document.getElementById('playlist-api-setup').style.display = 'none';
+
         if (!playlistVideos || playlistVideos.length === 0) {
-            fetchChannelVideos();
+            fetchVideosWithAPI(API_KEY);
         } else {
             cargarVideoPlaylist(0);
         }
+    }
+
+    function guardarApiKey() {
+        document.getElementById('playlist-api-setup').style.display = 'none';
+        fetchVideosWithAPI(API_KEY);
     }
 
     var CHANNEL_ID = 'UCUJY-xgeGJokDh-5Ho_Wb9A';
+    var API_KEY = 'AIzaSyD93mpAa7LzQRNUEaW9fuYy6sLnuwl6LJY';
+    var UPLOADS_PLAYLIST_ID = 'UUUJY-xgeGJokDh-5Ho_Wb9A';
     var playlistVideos = [];
     var currentPlaylistIndex = 0;
-    var videosLoaded = false;
 
-    var fallbackVideos = [
-        { id: 'dQw4w9WgXcQ', title: 'Actualiza con IDs reales del canal (@mundolaboralradio)', duration: '--:--' }
-    ];
+    function fetchVideosWithAPI(apiKey) {
+        document.getElementById('playlist-loading').style.display = 'block';
+        document.getElementById('playlist-api-setup').style.display = 'none';
+        document.getElementById('playlist-error').style.display = 'none';
 
-    function fetchChannelVideos() {
-        var loading = document.getElementById('playlist-loading');
-        var errorDiv = document.getElementById('playlist-error');
-        if (loading) loading.style.display = 'block';
-        if (errorDiv) errorDiv.style.display = 'none';
+        // First, get the uploads playlist ID from the channel
+        var channelUrl = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' + CHANNEL_ID + '&key=' + apiKey;
 
-        var rssUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + CHANNEL_ID;
-        var corsProxies = [
-            'https://api.allorigins.win/raw?url=' + encodeURIComponent(rssUrl),
-            'https://corsproxy.io/?' + encodeURIComponent(rssUrl)
-        ];
-
-        function tryProxy(proxyIndex) {
-            if (proxyIndex >= corsProxies.length) {
-                useFallbackVideos();
-                return;
-            }
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', corsProxies[proxyIndex], true);
-            xhr.timeout = 8000;
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        parseRSS(xhr.responseText);
-                    } else {
-                        tryProxy(proxyIndex + 1);
+        var xhr1 = new XMLHttpRequest();
+        xhr1.open('GET', channelUrl, true);
+        xhr1.timeout = 10000;
+        xhr1.onreadystatechange = function() {
+            if (xhr1.readyState === 4) {
+                if (xhr1.status === 200) {
+                    try {
+                        var data = JSON.parse(xhr1.responseText);
+                        if (data.items && data.items[0] && data.items[0].contentDetails) {
+                            var uploadsId = data.items[0].contentDetails.relatedPlaylists.uploads;
+                            fetchPlaylistItems(apiKey, uploadsId);
+                        } else {
+                            showPlaylistError('No se encontro la lista de uploads del canal.');
+                        }
+                    } catch(e) {
+                        showPlaylistError('Error al parsear respuesta del canal.');
                     }
-                }
-            };
-            xhr.onerror = function() { tryProxy(proxyIndex + 1); };
-            xhr.ontimeout = function() { tryProxy(proxyIndex + 1); };
-            xhr.send();
-        }
-        tryProxy(0);
-    }
-
-    function parseRSS(xmlText) {
-        var parser = new DOMParser();
-        var xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-        var entries = xmlDoc.querySelectorAll('entry');
-        playlistVideos = [];
-        entries.forEach(function(entry) {
-            var videoId = '';
-            var ytId = entry.querySelector('yt\:videoId, videoId');
-            if (ytId) videoId = ytId.textContent;
-            var title = '';
-            var titleEl = entry.querySelector('title');
-            if (titleEl) title = titleEl.textContent;
-            var duration = '--:--';
-            var mediaGroup = entry.querySelector('media\:group, mediaGroup');
-            if (mediaGroup) {
-                var dur = mediaGroup.querySelector('yt\:duration, duration');
-                if (dur) {
-                    var sec = parseInt(dur.getAttribute('seconds') || '0');
-                    var m = Math.floor(sec / 60);
-                    var s = sec % 60;
-                    duration = m + ':' + String(s).padStart(2, '0');
+                } else if (xhr1.status === 403) {
+                    showPlaylistError('API Key invalida o sin cuota. Verifica tu clave en Google Cloud Console.');
+                } else {
+                    showPlaylistError('Error ' + xhr1.status + ' al conectar con YouTube API.');
                 }
             }
-            if (videoId && title) {
-                playlistVideos.push({ id: videoId, title: title, duration: duration });
-            }
-        });
-        if (playlistVideos.length > 0) {
-            videosLoaded = true;
-            document.getElementById('playlist-loading').style.display = 'none';
-            document.getElementById('playlist-error').style.display = 'none';
-            cargarVideoPlaylist(0);
-        } else {
-            useFallbackVideos();
-        }
+        };
+        xhr1.onerror = function() {
+            showPlaylistError('Error de red. Verifica tu conexion a internet.');
+        };
+        xhr1.ontimeout = function() {
+            showPlaylistError('Tiempo de espera agotado. Intenta de nuevo.');
+        };
+        xhr1.send();
     }
 
-    function useFallbackVideos() {
-        playlistVideos = fallbackVideos.slice();
-        videosLoaded = true;
+    function fetchPlaylistItems(apiKey, playlistId) {
+        var playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + playlistId + '&key=' + apiKey;
+
+        var xhr2 = new XMLHttpRequest();
+        xhr2.open('GET', playlistUrl, true);
+        xhr2.timeout = 10000;
+        xhr2.onreadystatechange = function() {
+            if (xhr2.readyState === 4) {
+                if (xhr2.status === 200) {
+                    try {
+                        var data = JSON.parse(xhr2.responseText);
+                        if (data.items && data.items.length > 0) {
+                            playlistVideos = [];
+                            data.items.forEach(function(item) {
+                                var snippet = item.snippet;
+                                if (snippet && snippet.resourceId && snippet.resourceId.videoId) {
+                                    playlistVideos.push({
+                                        id: snippet.resourceId.videoId,
+                                        title: snippet.title || 'Sin titulo',
+                                        duration: '--:--'
+                                    });
+                                }
+                            });
+                            if (playlistVideos.length > 0) {
+                                document.getElementById('playlist-loading').style.display = 'none';
+                                document.getElementById('playlist-error').style.display = 'none';
+                                cargarVideoPlaylist(0);
+                            } else {
+                                showPlaylistError('El canal no tiene videos publicos.');
+                            }
+                        } else {
+                            showPlaylistError('No se encontraron videos en el canal.');
+                        }
+                    } catch(e) {
+                        showPlaylistError('Error al procesar la lista de videos.');
+                    }
+                } else {
+                    showPlaylistError('Error ' + xhr2.status + ' al cargar la lista de videos.');
+                }
+            }
+        };
+        xhr2.onerror = function() {
+            showPlaylistError('Error de red al cargar videos.');
+        };
+        xhr2.ontimeout = function() {
+            showPlaylistError('Tiempo de espera agotado.');
+        };
+        xhr2.send();
+    }
+
+    function showPlaylistError(msg) {
         document.getElementById('playlist-loading').style.display = 'none';
         document.getElementById('playlist-error').style.display = 'block';
-        cargarVideoPlaylist(0);
+        document.getElementById('playlist-error-msg').textContent = msg;
     }
 
     function cargarVideoPlaylist(index) {
