@@ -394,8 +394,32 @@
         }
         .playlist-items {
             overflow-y: auto;
-            max-height: 460px;
+            max-height: 420px;
             padding: 8px;
+        }
+        .playlist-loading {
+            text-align: center;
+            padding: 30px 15px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        .playlist-loading i {
+            margin-right: 8px;
+            color: var(--rojo);
+        }
+        .playlist-error {
+            text-align: center;
+            padding: 20px 15px;
+            color: #ff8a8a;
+            font-size: 0.85em;
+            background: rgba(255, 77, 77, 0.05);
+            border-radius: 8px;
+            margin: 8px;
+        }
+        .playlist-error i {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+            display: block;
         }
         .playlist-item {
             display: flex;
@@ -526,7 +550,12 @@
                     </div>
                     <div class="live-playlist" id="playlist-sidebar" style="display:none;">
                         <div class="playlist-header"><i class="fas fa-list"></i> Videos del Canal</div>
+                        <div class="playlist-loading" id="playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
                         <div class="playlist-items" id="playlist-items"></div>
+                        <div class="playlist-error" id="playlist-error" style="display:none;">
+                            <i class="fas fa-exclamation-circle"></i> No se pudieron cargar los videos.<br>
+                            <small>Usando lista manual. Actualiza los IDs en el codigo.</small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -758,40 +787,119 @@
     }
 
     function mostrarLive() {
-        // Update buttons
         document.getElementById('btn-ver-vivo').classList.add('active');
         document.getElementById('btn-ver-lista').classList.remove('active');
-        // Show live stream, hide playlist
         document.getElementById('frame-live').src = 'https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A';
         document.getElementById('playlist-sidebar').style.display = 'none';
     }
 
     function mostrarPlaylist() {
-        // Update buttons
         document.getElementById('btn-ver-vivo').classList.remove('active');
         document.getElementById('btn-ver-lista').classList.add('active');
-        // Show playlist sidebar
         document.getElementById('playlist-sidebar').style.display = 'flex';
-        // Load first video
-        cargarVideoPlaylist(0);
+        if (!playlistVideos || playlistVideos.length === 0) {
+            fetchChannelVideos();
+        } else {
+            cargarVideoPlaylist(0);
+        }
     }
 
-    // Playlist video data - UPDATE THESE with your real video IDs from YouTube
-    // To get a video ID: it's the 11-character string after "v=" in a YouTube URL
-    // Example: https://www.youtube.com/watch?v=ABC123DEF45 -> ID is ABC123DEF45
-    var playlistVideos = [
-        { id: 'ABC123DEF45', title: 'Video ejemplo 1 - Actualiza este ID', duration: '10:30' },
-        { id: 'XYZ789GHI12', title: 'Video ejemplo 2 - Actualiza este ID', duration: '15:45' },
-        { id: 'MNO345PQR67', title: 'Video ejemplo 3 - Actualiza este ID', duration: '8:20' }
-    ];
+    var CHANNEL_ID = 'UCUJY-xgeGJokDh-5Ho_Wb9A';
+    var playlistVideos = [];
     var currentPlaylistIndex = 0;
+    var videosLoaded = false;
+
+    var fallbackVideos = [
+        { id: 'dQw4w9WgXcQ', title: 'Actualiza con IDs reales del canal (@mundolaboralradio)', duration: '--:--' }
+    ];
+
+    function fetchChannelVideos() {
+        var loading = document.getElementById('playlist-loading');
+        var errorDiv = document.getElementById('playlist-error');
+        if (loading) loading.style.display = 'block';
+        if (errorDiv) errorDiv.style.display = 'none';
+
+        var rssUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + CHANNEL_ID;
+        var corsProxies = [
+            'https://api.allorigins.win/raw?url=' + encodeURIComponent(rssUrl),
+            'https://corsproxy.io/?' + encodeURIComponent(rssUrl)
+        ];
+
+        function tryProxy(proxyIndex) {
+            if (proxyIndex >= corsProxies.length) {
+                useFallbackVideos();
+                return;
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', corsProxies[proxyIndex], true);
+            xhr.timeout = 8000;
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        parseRSS(xhr.responseText);
+                    } else {
+                        tryProxy(proxyIndex + 1);
+                    }
+                }
+            };
+            xhr.onerror = function() { tryProxy(proxyIndex + 1); };
+            xhr.ontimeout = function() { tryProxy(proxyIndex + 1); };
+            xhr.send();
+        }
+        tryProxy(0);
+    }
+
+    function parseRSS(xmlText) {
+        var parser = new DOMParser();
+        var xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+        var entries = xmlDoc.querySelectorAll('entry');
+        playlistVideos = [];
+        entries.forEach(function(entry) {
+            var videoId = '';
+            var ytId = entry.querySelector('yt\:videoId, videoId');
+            if (ytId) videoId = ytId.textContent;
+            var title = '';
+            var titleEl = entry.querySelector('title');
+            if (titleEl) title = titleEl.textContent;
+            var duration = '--:--';
+            var mediaGroup = entry.querySelector('media\:group, mediaGroup');
+            if (mediaGroup) {
+                var dur = mediaGroup.querySelector('yt\:duration, duration');
+                if (dur) {
+                    var sec = parseInt(dur.getAttribute('seconds') || '0');
+                    var m = Math.floor(sec / 60);
+                    var s = sec % 60;
+                    duration = m + ':' + String(s).padStart(2, '0');
+                }
+            }
+            if (videoId && title) {
+                playlistVideos.push({ id: videoId, title: title, duration: duration });
+            }
+        });
+        if (playlistVideos.length > 0) {
+            videosLoaded = true;
+            document.getElementById('playlist-loading').style.display = 'none';
+            document.getElementById('playlist-error').style.display = 'none';
+            cargarVideoPlaylist(0);
+        } else {
+            useFallbackVideos();
+        }
+    }
+
+    function useFallbackVideos() {
+        playlistVideos = fallbackVideos.slice();
+        videosLoaded = true;
+        document.getElementById('playlist-loading').style.display = 'none';
+        document.getElementById('playlist-error').style.display = 'block';
+        cargarVideoPlaylist(0);
+    }
 
     function cargarVideoPlaylist(index) {
         currentPlaylistIndex = index;
         var iframe = document.getElementById('frame-live');
         var video = playlistVideos[index];
         if (video) {
-            iframe.src = 'https://www.youtube.com/embed/' + video.id;
+            iframe.src = 'https://www.youtube.com/embed/' + video.id + '?rel=0';
         }
         renderPlaylistSidebar();
     }
@@ -803,9 +911,9 @@
             var activeClass = idx === currentPlaylistIndex ? 'active' : '';
             var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
             html += '<div class="playlist-item ' + activeClass + '" onclick="cargarVideoPlaylist(' + idx + ')">' +
-                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="' + video.title.replace(/'/g, "&#39;") + '" onerror="this.style.display=\'none\'">' +
+                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" onerror="this.style.display=\'none\'">' +
                 '<div class="playlist-info">' +
-                '<div class="playlist-title">' + video.title + '</div>' +
+                '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
                 '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
                 '</div></div>';
         });
