@@ -30,42 +30,11 @@
         nav button.active { background: var(--rojo); border-color: var(--rojo); }
 
         .wrapper { display: flex; justify-content: center; gap: 20px; padding: 20px; flex: 1; width: 100%; box-sizing: border-box; }
-        .banner-side { 
-            width: 220px; 
-            flex-shrink: 0; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px; 
-            transition: opacity 0.3s ease, transform 0.3s ease, width 0.3s ease;
-        }
-        .banner-side.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: scaleX(0);
-            width: 0;
-            overflow: hidden;
-        }
-        .banner-img { 
-            width: 100%; 
-            border-radius: 10px; 
-            border: 1px solid var(--rojo); 
-            display: block; 
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-        .banner-img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
-        }
+        .banner-side { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; }
+        .banner-img { width: 100%; border-radius: 10px; border: 1px solid var(--rojo); display: block; }
 
-        .container { 
-            flex: 1; 
-            max-width: 950px; 
-            transition: max-width 0.3s ease;
-        }
-        .container.expanded {
-            max-width: 1400px;
-        }
+        .container { flex: 1; max-width: 950px; }
+        
         .seccion { display: none; width: 100%; }
         .seccion.active { display: block; }
 
@@ -587,7 +556,7 @@
 </header>
 
 <div class="wrapper">
-    <aside class="banner-side left" id="banner-left">
+    <aside class="banner-side">
         <img src="https://i.postimg.cc/wTLNj1B9/ags.jpg" class="banner-img" alt="Ad">
         <img src="https://i.postimg.cc/J4ZXzshz/publi-fija-junio.jpg" class="banner-img" alt="Ad">
         <img src="https://i.postimg.cc/TYgb3KPX/232310560-401062984939201-7897983293061993896-n.png" class="banner-img" alt="Ad">
@@ -616,8 +585,7 @@
             
             <div id="clasico-box" class="video-box active">
                 <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                    <button id="btn-clasico-player" class="live-btn active" onclick="mostrarClasicoPlayer()">REPRODUCTOR</button>
-                    <button id="btn-clasico-lista" class="live-btn" onclick="mostrarClasicoLista()">VER LISTA DE VIDEOS</button>
+                    <button id="btn-clasico-lista" class="live-btn active" onclick="mostrarClasicoLista()">VER LISTA DE VIDEOS</button>
                 </div>
                 <div class="live-layout" id="clasico-layout">
                     <div class="live-player-area" id="clasico-player-area">
@@ -625,7 +593,7 @@
                             <iframe id="frame-clasico" src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
                         </div>
                     </div>
-                    <div class="live-playlist" id="clasico-sidebar" style="display:none;">
+                    <div class="live-playlist" id="clasico-sidebar" style="display:flex;">
                         <div class="playlist-header"><i class="fas fa-list"></i> Clasicos del Canal</div>
                         <div class="playlist-loading" id="clasico-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
                         <div class="playlist-items" id="clasico-items"></div>
@@ -757,7 +725,7 @@
         </div>
     </div>
 
-    <aside class="banner-side right" id="banner-right">
+    <aside class="banner-side">
         <img src="https://i.postimg.cc/fTmdRVbN/Imagen-de-Whats-App-2024-02-18-a-las-13-11-48-5cb62194.jpg" class="banner-img" alt="Ad">
         <img src="https://i.postimg.cc/TYgb3KPR/Logotipo-2020-CST.jpg" class="banner-img" alt="Ad">
         <img src="https://i.postimg.cc/NfmXjK00/Sin-titulo.jpg" class="banner-img" alt="Ad">
@@ -850,18 +818,6 @@
         document.querySelectorAll('#main-nav button').forEach(function(b) { b.classList.remove('active'); });
         document.getElementById(id).classList.add('active');
         document.getElementById('btn-' + id).classList.add('active');
-        var leftBanner = document.getElementById('banner-left');
-        var rightBanner = document.getElementById('banner-right');
-        var container = document.querySelector('.container');
-        if (id === 'videos') {
-            if (leftBanner) leftBanner.classList.add('hidden');
-            if (rightBanner) rightBanner.classList.add('hidden');
-            if (container) container.classList.add('expanded');
-        } else {
-            if (leftBanner) leftBanner.classList.remove('hidden');
-            if (rightBanner) rightBanner.classList.remove('hidden');
-            if (container) container.classList.remove('expanded');
-        }
     }
 
     function cambiarVideo(tipo) {
@@ -870,11 +826,11 @@
         if(tipo === 'clasico') {
             document.getElementById('clasico-box').classList.add('active');
             document.getElementById('sub-btn-clasico').classList.add('active');
+            mostrarClasicoLista();
         } else {
             document.getElementById('live-box').classList.add('active');
             document.getElementById('sub-btn-live').classList.add('active');
         }
-        // Banners remain hidden in all video sub-sections
     }
 
     var radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
@@ -1066,16 +1022,7 @@
     var clasicoVideos = [];
     var currentClasicoIndex = 0;
 
-    function mostrarClasicoPlayer() {
-        document.getElementById('btn-clasico-player').classList.add('active');
-        document.getElementById('btn-clasico-lista').classList.remove('active');
-        document.getElementById('clasico-sidebar').style.display = 'none';
-        document.getElementById('frame-clasico').src = 'https://www.youtube.com/embed/videoseries?list=' + CLASICOS_PLAYLIST_ID;
-    }
-
-    function mostrarClasicoLista() {
-        document.getElementById('btn-clasico-player').classList.remove('active');
-        document.getElementById('btn-clasico-lista').classList.add('active');
+function mostrarClasicoLista() {
         document.getElementById('clasico-sidebar').style.display = 'flex';
         if (!clasicoVideos || clasicoVideos.length === 0) {
             fetchClasicoVideos();
