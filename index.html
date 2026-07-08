@@ -602,26 +602,9 @@
                 <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLASICOS</button>
                 <button onclick="cambiarVideo('live')" id="sub-btn-live">TRANSMISION EN VIVO</button>
             </div>
-            <div id="clasico-controls" style="display:none; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                <button id="btn-clasico-player" class="live-btn active" onclick="mostrarClasicoPlayer()">REPRODUCTOR</button>
-                <button id="btn-clasico-lista" class="live-btn" onclick="mostrarClasicoLista()">VER LISTA DE VIDEOS</button>
-            </div>
             <div id="clasico-box" class="video-box active">
-                <div class="live-layout" id="clasico-layout">
-                    <div class="live-player-area" id="clasico-player-area">
-                        <div class="iframe-container">
-                            <iframe id="frame-clasico" src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
-                        </div>
-                    </div>
-                    <div class="live-playlist" id="clasico-sidebar" style="display:none;">
-                        <div class="playlist-header"><i class="fas fa-list"></i> Clasicos del Canal</div>
-                        <div class="playlist-loading" id="clasico-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
-                        <div class="playlist-items" id="clasico-items"></div>
-                        <div class="playlist-error" id="clasico-error" style="display:none;">
-                            <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
-                            <small id="clasico-error-msg">Verifica tu conexion.</small>
-                        </div>
-                    </div>
+                <div class="iframe-container">
+                    <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
                 </div>
             </div>
             <div id="live-box" class="video-box">
@@ -841,15 +824,12 @@
     function cambiarVideo(tipo) {
         document.querySelectorAll('.video-box').forEach(function(v) { v.classList.remove('active'); });
         document.querySelectorAll('.sub-nav button').forEach(function(b) { b.classList.remove('active'); });
-        var clasicoControls = document.getElementById('clasico-controls');
         if(tipo === 'clasico') {
             document.getElementById('clasico-box').classList.add('active');
             document.getElementById('sub-btn-clasico').classList.add('active');
-            if (clasicoControls) clasicoControls.style.display = 'flex';
         } else {
             document.getElementById('live-box').classList.add('active');
             document.getElementById('sub-btn-live').classList.add('active');
-            if (clasicoControls) clasicoControls.style.display = 'none';
         }
     }
 
@@ -1028,116 +1008,6 @@
             var activeClass = idx === currentPlaylistIndex ? 'active' : '';
             var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
             html += '<div class="playlist-item ' + activeClass + '" onclick="cargarVideoPlaylist(' + idx + ')">' +
-                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" onerror="this.style.display=\'none\'">' +
-                '<div class="playlist-info">' +
-                '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
-                '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
-                '</div></div>';
-        });
-        container.innerHTML = html;
-    }
-
-    // ====== CLASICOS PLAYLIST ======
-    var CLASICOS_PLAYLIST_ID = 'PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC';
-    var clasicoVideos = [];
-    var currentClasicoIndex = 0;
-
-    function mostrarClasicoPlayer() {
-        document.getElementById('btn-clasico-player').classList.add('active');
-        document.getElementById('btn-clasico-lista').classList.remove('active');
-        document.getElementById('clasico-sidebar').style.display = 'none';
-        document.getElementById('frame-clasico').src = 'https://www.youtube.com/embed/videoseries?list=' + CLASICOS_PLAYLIST_ID;
-    }
-
-    function mostrarClasicoLista() {
-        document.getElementById('btn-clasico-player').classList.remove('active');
-        document.getElementById('btn-clasico-lista').classList.add('active');
-        document.getElementById('clasico-sidebar').style.display = 'flex';
-        if (!clasicoVideos || clasicoVideos.length === 0) {
-            fetchClasicoVideos();
-        } else {
-            cargarVideoClasico(0);
-        }
-    }
-
-    function fetchClasicoVideos() {
-        document.getElementById('clasico-loading').style.display = 'block';
-        document.getElementById('clasico-error').style.display = 'none';
-
-        var playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + CLASICOS_PLAYLIST_ID + '&key=' + API_KEY;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', playlistUrl, true);
-        xhr.timeout = 10000;
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr.responseText);
-                        if (data.items && data.items.length > 0) {
-                            clasicoVideos = [];
-                            data.items.forEach(function(item) {
-                                var snippet = item.snippet;
-                                if (snippet && snippet.resourceId && snippet.resourceId.videoId) {
-                                    clasicoVideos.push({
-                                        id: snippet.resourceId.videoId,
-                                        title: snippet.title || 'Sin titulo',
-                                        duration: '--:--'
-                                    });
-                                }
-                            });
-                            if (clasicoVideos.length > 0) {
-                                document.getElementById('clasico-loading').style.display = 'none';
-                                document.getElementById('clasico-error').style.display = 'none';
-                                cargarVideoClasico(0);
-                            } else {
-                                showClasicoError('La playlist no tiene videos publicos.');
-                            }
-                        } else {
-                            showClasicoError('No se encontraron videos en la playlist.');
-                        }
-                    } catch(e) {
-                        showClasicoError('Error al procesar la lista de videos.');
-                    }
-                } else if (xhr.status === 403) {
-                    showClasicoError('API Key invalida o sin cuota disponible.');
-                } else {
-                    showClasicoError('Error ' + xhr.status + ' al cargar la playlist.');
-                }
-            }
-        };
-        xhr.onerror = function() {
-            showClasicoError('Error de red al cargar videos.');
-        };
-        xhr.ontimeout = function() {
-            showClasicoError('Tiempo de espera agotado.');
-        };
-        xhr.send();
-    }
-
-    function showClasicoError(msg) {
-        document.getElementById('clasico-loading').style.display = 'none';
-        document.getElementById('clasico-error').style.display = 'block';
-        document.getElementById('clasico-error-msg').textContent = msg;
-    }
-
-    function cargarVideoClasico(index) {
-        currentClasicoIndex = index;
-        var iframe = document.getElementById('frame-clasico');
-        var video = clasicoVideos[index];
-        if (video) {
-            iframe.src = 'https://www.youtube.com/embed/' + video.id + '?rel=0';
-        }
-        renderClasicoSidebar();
-    }
-
-    function renderClasicoSidebar() {
-        var container = document.getElementById('clasico-items');
-        var html = '';
-        clasicoVideos.forEach(function(video, idx) {
-            var activeClass = idx === currentClasicoIndex ? 'active' : '';
-            var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
-            html += '<div class="playlist-item ' + activeClass + '" onclick="cargarVideoClasico(' + idx + ')">' +
                 '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" onerror="this.style.display=\'none\'">' +
                 '<div class="playlist-info">' +
                 '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
