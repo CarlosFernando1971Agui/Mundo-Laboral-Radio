@@ -549,6 +549,7 @@
         }
 
     </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -600,8 +601,10 @@
         <div id="videos" class="seccion">
             <div class="sub-nav">
                 <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLASICOS</button>
+                <button onclick="cambiarVideo('playlist')" id="sub-btn-playlist">PLAYLIST</button>
                 <button onclick="cambiarVideo('live')" id="sub-btn-live">TRANSMISION EN VIVO</button>
             </div>
+            
             <div id="clasico-box" class="video-box active">
                 <div class="iframe-container">
                     <iframe src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
@@ -635,6 +638,28 @@
                         </div>
                     </div>
                 </div>
+            <div id="playlist-box" class="video-box">
+                <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
+                    <button id="btn-playlist-player" class="live-btn active" onclick="mostrarPlaylistPlayer()">REPRODUCTOR</button>
+                    <button id="btn-playlist-lista" class="live-btn" onclick="mostrarPlaylistLista()">VER LISTA DE VIDEOS</button>
+                </div>
+                <div class="live-layout" id="playlist-layout">
+                    <div class="live-player-area" id="playlist-player-area">
+                        <div class="iframe-container">
+                            <iframe id="frame-playlist" src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="live-playlist" id="playlist-sidebar2" style="display:none;">
+                        <div class="playlist-header"><i class="fas fa-list"></i> Playlist Seleccionada</div>
+                        <div class="playlist-loading" id="playlist2-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
+                        <div class="playlist-items" id="playlist2-items"></div>
+                        <div class="playlist-error" id="playlist2-error" style="display:none;">
+                            <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
+                            <small id="playlist2-error-msg">Verifica tu conexion.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
 
@@ -827,6 +852,9 @@
         if(tipo === 'clasico') {
             document.getElementById('clasico-box').classList.add('active');
             document.getElementById('sub-btn-clasico').classList.add('active');
+        } else if(tipo === 'playlist') {
+            document.getElementById('playlist-box').classList.add('active');
+            document.getElementById('sub-btn-playlist').classList.add('active');
         } else {
             document.getElementById('live-box').classList.add('active');
             document.getElementById('sub-btn-live').classList.add('active');
@@ -1008,6 +1036,116 @@
             var activeClass = idx === currentPlaylistIndex ? 'active' : '';
             var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
             html += '<div class="playlist-item ' + activeClass + '" onclick="cargarVideoPlaylist(' + idx + ')">' +
+                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" onerror="this.style.display=\'none\'">' +
+                '<div class="playlist-info">' +
+                '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
+                '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
+                '</div></div>';
+        });
+        container.innerHTML = html;
+    }
+
+    // ====== PLAYLIST BOX (PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC) ======
+    var PLAYLIST_ID = 'PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC';
+    var playlistBoxVideos = [];
+    var currentPlaylistBoxIndex = 0;
+
+    function mostrarPlaylistPlayer() {
+        document.getElementById('btn-playlist-player').classList.add('active');
+        document.getElementById('btn-playlist-lista').classList.remove('active');
+        document.getElementById('playlist-sidebar2').style.display = 'none';
+        document.getElementById('frame-playlist').src = 'https://www.youtube.com/embed/videoseries?list=' + PLAYLIST_ID;
+    }
+
+    function mostrarPlaylistLista() {
+        document.getElementById('btn-playlist-player').classList.remove('active');
+        document.getElementById('btn-playlist-lista').classList.add('active');
+        document.getElementById('playlist-sidebar2').style.display = 'flex';
+        if (!playlistBoxVideos || playlistBoxVideos.length === 0) {
+            fetchPlaylistBoxVideos();
+        } else {
+            cargarVideoPlaylistBox(0);
+        }
+    }
+
+    function fetchPlaylistBoxVideos() {
+        document.getElementById('playlist2-loading').style.display = 'block';
+        document.getElementById('playlist2-error').style.display = 'none';
+
+        var playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + PLAYLIST_ID + '&key=' + API_KEY;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', playlistUrl, true);
+        xhr.timeout = 10000;
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        if (data.items && data.items.length > 0) {
+                            playlistBoxVideos = [];
+                            data.items.forEach(function(item) {
+                                var snippet = item.snippet;
+                                if (snippet && snippet.resourceId && snippet.resourceId.videoId) {
+                                    playlistBoxVideos.push({
+                                        id: snippet.resourceId.videoId,
+                                        title: snippet.title || 'Sin titulo',
+                                        duration: '--:--'
+                                    });
+                                }
+                            });
+                            if (playlistBoxVideos.length > 0) {
+                                document.getElementById('playlist2-loading').style.display = 'none';
+                                document.getElementById('playlist2-error').style.display = 'none';
+                                cargarVideoPlaylistBox(0);
+                            } else {
+                                showPlaylistBoxError('La playlist no tiene videos publicos.');
+                            }
+                        } else {
+                            showPlaylistBoxError('No se encontraron videos en la playlist.');
+                        }
+                    } catch(e) {
+                        showPlaylistBoxError('Error al procesar la lista de videos.');
+                    }
+                } else if (xhr.status === 403) {
+                    showPlaylistBoxError('API Key invalida o sin cuota disponible.');
+                } else {
+                    showPlaylistBoxError('Error ' + xhr.status + ' al cargar la playlist.');
+                }
+            }
+        };
+        xhr.onerror = function() {
+            showPlaylistBoxError('Error de red al cargar videos.');
+        };
+        xhr.ontimeout = function() {
+            showPlaylistBoxError('Tiempo de espera agotado.');
+        };
+        xhr.send();
+    }
+
+    function showPlaylistBoxError(msg) {
+        document.getElementById('playlist2-loading').style.display = 'none';
+        document.getElementById('playlist2-error').style.display = 'block';
+        document.getElementById('playlist2-error-msg').textContent = msg;
+    }
+
+    function cargarVideoPlaylistBox(index) {
+        currentPlaylistBoxIndex = index;
+        var iframe = document.getElementById('frame-playlist');
+        var video = playlistBoxVideos[index];
+        if (video) {
+            iframe.src = 'https://www.youtube.com/embed/' + video.id + '?rel=0';
+        }
+        renderPlaylistBoxSidebar();
+    }
+
+    function renderPlaylistBoxSidebar() {
+        var container = document.getElementById('playlist2-items');
+        var html = '';
+        playlistBoxVideos.forEach(function(video, idx) {
+            var activeClass = idx === currentPlaylistBoxIndex ? 'active' : '';
+            var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
+            html += '<div class="playlist-item ' + activeClass + '" onclick="cargarVideoPlaylistBox(' + idx + ')">' +
                 '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" onerror="this.style.display=\'none\'">' +
                 '<div class="playlist-info">' +
                 '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
