@@ -828,6 +828,18 @@
         document.querySelectorAll('#main-nav button').forEach(function(b) { b.classList.remove('active'); });
         document.getElementById(id).classList.add('active');
         document.getElementById('btn-' + id).classList.add('active');
+
+        // Limpiar intervals al salir de la sección de videos
+        if (id !== 'videos') {
+            if (clasicosInterval) {
+                clearInterval(clasicosInterval);
+                clasicosInterval = null;
+            }
+            if (livePlaylistInterval) {
+                clearInterval(livePlaylistInterval);
+                livePlaylistInterval = null;
+            }
+        }
     }
 
     function cambiarVideo(tipo) {
@@ -887,10 +899,19 @@
     var clasicosVideos = [];
     var currentClasicoIndex = 0;
     var clasicosLoaded = false;
+    var clasicosInterval = null;
+    var livePlaylistInterval = null;
+    var AUTO_REFRESH_MINUTES = 15;
 
     function fetchClasicosPlaylist(apiKey) {
         document.getElementById('clasico-playlist-loading').style.display = 'block';
         document.getElementById('clasico-playlist-error').style.display = 'none';
+
+        // Limpiar interval anterior si existe
+        if (clasicosInterval) {
+            clearInterval(clasicosInterval);
+            clasicosInterval = null;
+        }
 
         var playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + CLASICOS_PLAYLIST_ID + '&key=' + apiKey;
 
@@ -919,6 +940,11 @@
                                 document.getElementById('clasico-playlist-error').style.display = 'none';
                                 clasicosLoaded = true;
                                 cargarVideoClasico(0);
+
+                                // Auto-refresh cada 5 minutos
+                                clasicosInterval = setInterval(function() {
+                                    fetchClasicosPlaylist(apiKey);
+                                }, AUTO_REFRESH_MINUTES * 60 * 1000);
                             } else {
                                 showClasicosError('La playlist no tiene videos.');
                             }
@@ -1016,6 +1042,12 @@
         document.getElementById('playlist-api-setup').style.display = 'none';
         document.getElementById('playlist-error').style.display = 'none';
 
+        // Limpiar interval anterior si existe
+        if (livePlaylistInterval) {
+            clearInterval(livePlaylistInterval);
+            livePlaylistInterval = null;
+        }
+
         var channelUrl = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' + CHANNEL_ID + '&key=' + apiKey;
 
         var xhr1 = new XMLHttpRequest();
@@ -1078,6 +1110,11 @@
                                 document.getElementById('playlist-loading').style.display = 'none';
                                 document.getElementById('playlist-error').style.display = 'none';
                                 cargarVideoPlaylist(0);
+
+                                // Auto-refresh cada 5 minutos
+                                livePlaylistInterval = setInterval(function() {
+                                    fetchVideosWithAPI(apiKey);
+                                }, AUTO_REFRESH_MINUTES * 60 * 1000);
                             } else {
                                 showPlaylistError('El canal no tiene videos publicos.');
                             }
