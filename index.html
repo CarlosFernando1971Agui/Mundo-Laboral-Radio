@@ -962,18 +962,21 @@
 
     function renderClasicosSidebar() {
         var container = document.getElementById('clasico-playlist-items');
-        var html = '';
+        container.innerHTML = '';
         clasicosVideos.forEach(function(video, idx) {
             var activeClass = idx === currentClasicoIndex ? 'active' : '';
             var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
-            html += '<div class="playlist-item ' + activeClass + '" onclick="cargarVideoClasico(' + idx + ')">' +
-                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" >' +
+            var item = document.createElement('div');
+            item.className = 'playlist-item ' + activeClass;
+            item.setAttribute('data-idx', idx);
+            item.onclick = function() { cargarVideoClasico(parseInt(this.getAttribute('data-idx'))); };
+            item.innerHTML = '<img src="' + thumbUrl + '" class="playlist-thumb" alt="">' +
                 '<div class="playlist-info">' +
                 '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
                 '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
-                '</div></div>';
+                '</div>';
+            container.appendChild(item);
         });
-        container.innerHTML = html;
     }
 
     // ====== LIVE / TRANSMISION ======
@@ -1116,18 +1119,21 @@
 
     function renderPlaylistSidebar() {
         var container = document.getElementById('playlist-items');
-        var html = '';
+        container.innerHTML = '';
         playlistVideos.forEach(function(video, idx) {
             var activeClass = idx === currentPlaylistIndex ? 'active' : '';
             var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
-            html += '<div class="playlist-item ' + activeClass + '" onclick="cargarVideoPlaylist(' + idx + ')">' +
-                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" >' +
+            var item = document.createElement('div');
+            item.className = 'playlist-item ' + activeClass;
+            item.setAttribute('data-idx', idx);
+            item.onclick = function() { cargarVideoPlaylist(parseInt(this.getAttribute('data-idx'))); };
+            item.innerHTML = '<img src="' + thumbUrl + '" class="playlist-thumb" alt="">' +
                 '<div class="playlist-info">' +
                 '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
                 '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
-                '</div></div>';
+                '</div>';
+            container.appendChild(item);
         });
-        container.innerHTML = html;
     }
 
     // ====== CLIMA Y RELOJ ======
@@ -1491,19 +1497,95 @@
                     return;
                 }
 
-                var html = '';
+                contenedor.innerHTML = '';
                 delCat.forEach(function(n) {
-                    var imgHtml = n.foto
-                        ? '<img src="' + n.foto + '" class="noticia-img" alt="' + escapeHtml(n.titulo) + '">'
-                        : '<div style="width:100%;height:160px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#555;border-bottom:1px solid #333;"><i class="fas fa-image" style="font-size:48px;"></i></div>';
-                    var actionsHtml = admin 
-                        ? '<div class="noticia-actions"><button onclick="editarNoticia(\' + n.id + \')"><i class="fas fa-edit"></i> Editar</button><button class="btn-eliminar" onclick="eliminarNoticia(\' + n.id + \')"><i class="fas fa-trash"></i> Eliminar</button></div>'
-                        : '';
+                    var card = document.createElement('div');
+                    card.className = 'noticia-card';
+
+                    // Imagen
+                    if (n.foto) {
+                        var img = document.createElement('img');
+                        img.src = n.foto;
+                        img.className = 'noticia-img';
+                        img.alt = n.titulo;
+                        card.appendChild(img);
+                    } else {
+                        var imgDiv = document.createElement('div');
+                        imgDiv.style.cssText = 'width:100%;height:160px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#555;border-bottom:1px solid #333;';
+                        imgDiv.innerHTML = '<i class="fas fa-image" style="font-size:48px;"></i>';
+                        card.appendChild(imgDiv);
+                    }
+
+                    // Body
+                    var body = document.createElement('div');
+                    body.className = 'noticia-body';
+
+                    var titulo = document.createElement('div');
+                    titulo.className = 'noticia-titulo';
+                    titulo.textContent = n.titulo;
+                    body.appendChild(titulo);
+
+                    var fecha = document.createElement('div');
+                    fecha.className = 'noticia-fecha';
                     var editado = (n.fecha_edicion || n.fechaEdicion) ? '<span style="color:#666;margin-left:8px;">(editado)</span>' : '';
-                    var shareHtml = '<div class="noticia-share"><span>Compartir:</span><a href="#" class="share-wa" onclick="compartirNoticia('wa',\'' + escapeHtml(n.titulo) + \','' + n.id + '','' + cat + '');return false;" title="WhatsApp"><i class="fab fa-whatsapp"></i></a><a href="#" class="share-tg" onclick="compartirNoticia('tg',\'' + escapeHtml(n.titulo) + \','' + n.id + '','' + cat + '');return false;" title="Telegram"><i class="fab fa-telegram-plane"></i></a><a href="#" class="share-fb" onclick="compartirNoticia('fb',\'' + escapeHtml(n.titulo) + \','' + n.id + '','' + cat + '');return false;" title="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" class="share-ig" onclick="compartirNoticia('ig',\'' + escapeHtml(n.titulo) + \','' + n.id + '','' + cat + '');return false;" title="Instagram"><i class="fab fa-instagram"></i></a></div>';
-                    html += '<div class="noticia-card">' + imgHtml + '<div class="noticia-body"><div class="noticia-titulo">' + escapeHtml(n.titulo) + '</div><div class="noticia-fecha"><i class="far fa-clock"></i> ' + formatearFecha(n.fecha) + editado + '</div><div class="noticia-texto">' + escapeHtml(n.contenido) + '</div></div>' + shareHtml + actionsHtml + '</div>';
+                    fecha.innerHTML = '<i class="far fa-clock"></i> ' + formatearFecha(n.fecha) + editado;
+                    body.appendChild(fecha);
+
+                    var texto = document.createElement('div');
+                    texto.className = 'noticia-texto';
+                    texto.textContent = n.contenido;
+                    body.appendChild(texto);
+
+                    card.appendChild(body);
+
+                    // Compartir
+                    var shareDiv = document.createElement('div');
+                    shareDiv.className = 'noticia-share';
+                    shareDiv.innerHTML = '<span>Compartir:</span>';
+
+                    var redes = [
+                        {cls: 'share-wa', icon: 'fab fa-whatsapp', title: 'WhatsApp', red: 'wa'},
+                        {cls: 'share-tg', icon: 'fab fa-telegram-plane', title: 'Telegram', red: 'tg'},
+                        {cls: 'share-fb', icon: 'fab fa-facebook-f', title: 'Facebook', red: 'fb'},
+                        {cls: 'share-ig', icon: 'fab fa-instagram', title: 'Instagram', red: 'ig'}
+                    ];
+
+                    redes.forEach(function(r) {
+                        var a = document.createElement('a');
+                        a.href = '#';
+                        a.className = r.cls;
+                        a.title = r.title;
+                        a.innerHTML = '<i class="' + r.icon + '"></i>';
+                        a.onclick = function() {
+                            compartirNoticia(r.red, n.titulo, n.id, cat);
+                            return false;
+                        };
+                        shareDiv.appendChild(a);
+                    });
+
+                    card.appendChild(shareDiv);
+
+                    // Admin actions
+                    if (admin) {
+                        var actionsDiv = document.createElement('div');
+                        actionsDiv.className = 'noticia-actions';
+
+                        var btnEdit = document.createElement('button');
+                        btnEdit.innerHTML = '<i class="fas fa-edit"></i> Editar';
+                        btnEdit.onclick = function() { editarNoticia(n.id); };
+                        actionsDiv.appendChild(btnEdit);
+
+                        var btnDel = document.createElement('button');
+                        btnDel.className = 'btn-eliminar';
+                        btnDel.innerHTML = '<i class="fas fa-trash"></i> Eliminar';
+                        btnDel.onclick = function() { eliminarNoticia(n.id); };
+                        actionsDiv.appendChild(btnDel);
+
+                        card.appendChild(actionsDiv);
+                    }
+
+                    contenedor.appendChild(card);
                 });
-                contenedor.innerHTML = html;
             });
         });
     }
