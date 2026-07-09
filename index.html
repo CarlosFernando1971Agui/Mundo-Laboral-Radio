@@ -603,16 +603,14 @@
                 <button onclick="cambiarVideo('live')" id="sub-btn-live">TRANSMISION EN VIVO</button>
             </div>
             <div id="clasico-box" class="video-box active">
-                <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                    <button id="btn-ver-lista-clasico" class="live-btn" onclick="toggleListaClasico()">VER LISTA DE VIDEOS</button>
-                </div>
+                <!-- Sidebar visible by default for clasicos -->
                 <div class="live-layout" id="clasico-layout">
                     <div class="live-player-area" id="clasico-player-area">
                         <div class="iframe-container">
                             <iframe id="frame-clasico" src="https://www.youtube.com/embed/videoseries?list=PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC" allowfullscreen></iframe>
                         </div>
                     </div>
-                    <div class="live-playlist" id="clasico-playlist-sidebar" style="display:none;">
+                    <div class="live-playlist" id="clasico-playlist-sidebar" style="display:flex;">
                         <div class="playlist-header"><i class="fas fa-list"></i> Clásicos del Canal <button onclick="recargarClasicos()" style="margin-left:auto;background:#fff;color:#ff4d4d;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.8em;font-weight:bold;"><i class="fas fa-sync-alt"></i> Actualizar</button></div>
                         <div class="playlist-loading" id="clasico-playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
                         <div class="playlist-items" id="clasico-playlist-items"></div>
@@ -843,8 +841,10 @@
         if(tipo === 'clasico') {
             document.getElementById('clasico-box').classList.add('active');
             document.getElementById('sub-btn-clasico').classList.add('active');
-            // Reset sidebar state when switching to clasicos
-            mostrarClasicoPlayer();
+            // Auto-load clasicos sidebar when switching to clasicos
+            if (!clasicosLoaded) {
+                fetchClasicosPlaylist(API_KEY);
+            }
         } else {
             document.getElementById('live-box').classList.add('active');
             document.getElementById('sub-btn-live').classList.add('active');
@@ -891,37 +891,6 @@
     var clasicosVideos = [];
     var currentClasicoIndex = 0;
     var clasicosLoaded = false;
-    var clasicoSidebarVisible = false;
-
-    function toggleListaClasico() {
-        var btn = document.getElementById('btn-ver-lista-clasico');
-        var sidebar = document.getElementById('clasico-playlist-sidebar');
-
-        if (clasicoSidebarVisible) {
-            // Hide sidebar, show player
-            btn.classList.remove('active');
-            btn.innerHTML = 'VER LISTA DE VIDEOS';
-            sidebar.style.display = 'none';
-            clasicoSidebarVisible = false;
-        } else {
-            // Show sidebar
-            btn.classList.add('active');
-            btn.innerHTML = 'OCULTAR LISTA';
-            sidebar.style.display = 'flex';
-            clasicoSidebarVisible = true;
-
-            if (!clasicosLoaded) {
-                fetchClasicosPlaylist(API_KEY);
-            }
-        }
-    }
-
-    function mostrarClasicoPlayer() {
-        document.getElementById('btn-ver-lista-clasico').classList.remove('active');
-        document.getElementById('btn-ver-lista-clasico').innerHTML = 'VER LISTA DE VIDEOS';
-        document.getElementById('clasico-playlist-sidebar').style.display = 'none';
-        clasicoSidebarVisible = false;
-    }
 
     function recargarClasicos() {
         clasicosVideos = [];
@@ -1002,8 +971,6 @@
             iframe.src = 'https://www.youtube.com/embed/' + video.id + '?rel=0';
         }
         renderClasicosSidebar();
-        // Auto-hide sidebar and show player when a video is selected
-        mostrarClasicoPlayer();
     }
 
     function renderClasicosSidebar() {
