@@ -967,7 +967,7 @@
             var activeClass = idx === currentClasicoIndex ? 'active' : '';
             var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
             html += '<div class="playlist-item ' + activeClass + '" onclick="cargarVideoClasico(' + idx + ')">' +
-                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" onerror="this.style.display='none'">' +
+                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" >' +
                 '<div class="playlist-info">' +
                 '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
                 '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
@@ -1121,7 +1121,7 @@
             var activeClass = idx === currentPlaylistIndex ? 'active' : '';
             var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
             html += '<div class="playlist-item ' + activeClass + '" onclick="cargarVideoPlaylist(' + idx + ')">' +
-                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" onerror="this.style.display='none'">' +
+                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" >' +
                 '<div class="playlist-info">' +
                 '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
                 '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
@@ -1497,10 +1497,10 @@
                         ? '<img src="' + n.foto + '" class="noticia-img" alt="' + escapeHtml(n.titulo) + '">'
                         : '<div style="width:100%;height:160px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#555;border-bottom:1px solid #333;"><i class="fas fa-image" style="font-size:48px;"></i></div>';
                     var actionsHtml = admin 
-                        ? '<div class="noticia-actions"><button onclick="editarNoticia('' + n.id + '')"><i class="fas fa-edit"></i> Editar</button><button class="btn-eliminar" onclick="eliminarNoticia('' + n.id + '')"><i class="fas fa-trash"></i> Eliminar</button></div>'
+                        ? '<div class="noticia-actions"><button onclick="editarNoticia(\' + n.id + \')"><i class="fas fa-edit"></i> Editar</button><button class="btn-eliminar" onclick="eliminarNoticia(\' + n.id + \')"><i class="fas fa-trash"></i> Eliminar</button></div>'
                         : '';
                     var editado = (n.fecha_edicion || n.fechaEdicion) ? '<span style="color:#666;margin-left:8px;">(editado)</span>' : '';
-                    var shareHtml = '<div class="noticia-share"><span>Compartir:</span><a href="#" class="share-wa" onclick="compartirNoticia('wa','' + escapeHtml(n.titulo) + '','' + n.id + '','' + cat + '');return false;" title="WhatsApp"><i class="fab fa-whatsapp"></i></a><a href="#" class="share-tg" onclick="compartirNoticia('tg','' + escapeHtml(n.titulo) + '','' + n.id + '','' + cat + '');return false;" title="Telegram"><i class="fab fa-telegram-plane"></i></a><a href="#" class="share-fb" onclick="compartirNoticia('fb','' + escapeHtml(n.titulo) + '','' + n.id + '','' + cat + '');return false;" title="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" class="share-ig" onclick="compartirNoticia('ig','' + escapeHtml(n.titulo) + '','' + n.id + '','' + cat + '');return false;" title="Instagram"><i class="fab fa-instagram"></i></a></div>';
+                    var shareHtml = '<div class="noticia-share"><span>Compartir:</span><a href="#" class="share-wa" onclick="compartirNoticia('wa',\'' + escapeHtml(n.titulo) + \','' + n.id + '','' + cat + '');return false;" title="WhatsApp"><i class="fab fa-whatsapp"></i></a><a href="#" class="share-tg" onclick="compartirNoticia('tg',\'' + escapeHtml(n.titulo) + \','' + n.id + '','' + cat + '');return false;" title="Telegram"><i class="fab fa-telegram-plane"></i></a><a href="#" class="share-fb" onclick="compartirNoticia('fb',\'' + escapeHtml(n.titulo) + \','' + n.id + '','' + cat + '');return false;" title="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" class="share-ig" onclick="compartirNoticia('ig',\'' + escapeHtml(n.titulo) + \','' + n.id + '','' + cat + '');return false;" title="Instagram"><i class="fab fa-instagram"></i></a></div>';
                     html += '<div class="noticia-card">' + imgHtml + '<div class="noticia-body"><div class="noticia-titulo">' + escapeHtml(n.titulo) + '</div><div class="noticia-fecha"><i class="far fa-clock"></i> ' + formatearFecha(n.fecha) + editado + '</div><div class="noticia-texto">' + escapeHtml(n.contenido) + '</div></div>' + shareHtml + actionsHtml + '</div>';
                 });
                 contenedor.innerHTML = html;
