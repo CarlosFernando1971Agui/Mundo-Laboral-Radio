@@ -862,8 +862,11 @@
     function enviarWA() {
         var msg = document.getElementById('c-mensaje').value;
         var nombre = document.getElementById('c-nombre').value;
-        if(nombre && msg) window.open('https://wa.me/59168785216?text=Hola soy ' + nombre + ', ' + encodeURIComponent(msg), '_blank');
-        else alert("Por favor completa tu nombre y mensaje.");
+        if(nombre && msg) {
+            window.open('https://wa.me/59168785216?text=Hola soy ' + nombre + ', ' + encodeURIComponent(msg), '_blank');
+        } else {
+            alert("Por favor completa tu nombre y mensaje.");
+        }
     }
 
     function mostrarLive() {
@@ -1104,10 +1107,6 @@
                 '</div>';
             container.appendChild(item);
         });
-    }
- else {
-            cargarVideoPlaylist(0);
-        }
     }
 
     function guardarApiKey() {
@@ -1662,12 +1661,7 @@
         setInterval(actualizarReloj, 1000);
 
         // Cargar playlist de clasicos al iniciar
-        if (API_KEY) {
-            fetchClasicosPlaylist(API_KEY);
-        }
-
-        // Cargar playlist de clasicos al iniciar (si hay API Key configurada)
-        if (API_KEY !== 'AIzaSyDRy7iepCJA8jZ9nAQnaGW1MbVboax54Dc') {
+        if (API_KEY && API_KEY !== 'TU_API_KEY_AQUI') {
             fetchClasicosPlaylist(API_KEY);
         }
 
