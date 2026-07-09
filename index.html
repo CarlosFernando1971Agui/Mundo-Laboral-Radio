@@ -765,7 +765,7 @@
             'Content-Type': 'application/json',
             'Prefer': method === 'POST' ? 'return=representation' : 'return=representation'
         };
-        
+
         var xhr = new XMLHttpRequest();
         xhr.open(method, url, true);
         for (var key in headers) {
@@ -827,15 +827,13 @@
         if(tipo === 'clasico') {
             document.getElementById('clasico-box').classList.add('active');
             document.getElementById('sub-btn-clasico').classList.add('active');
-            if (!clasicosLoaded && API_KEY) {
-                fetchClasicosPlaylist(API_KEY);
-            }
         } else {
             document.getElementById('live-box').classList.add('active');
             document.getElementById('sub-btn-live').classList.add('active');
         }
     }
 
+    // ====== RADIO ======
     var radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
     var sonando = false;
     function toggleAudio() {
@@ -859,6 +857,7 @@
 
     document.getElementById('vol-slider').oninput = function() { radio.volume = this.value; };
 
+    // ====== CONTACTO ======
     function enviarWA() {
         var msg = document.getElementById('c-mensaje').value;
         var nombre = document.getElementById('c-nombre').value;
@@ -868,6 +867,12 @@
             alert("Por favor completa tu nombre y mensaje.");
         }
     }
+
+    // ====== YOUTUBE LIVE ======
+    var CHANNEL_ID = 'UCUJY-xgeGJokDh-5Ho_Wb9A';
+    var API_KEY = 'AIzaSyD93mpAa7LzQRNUEaW9fuYy6sLnuwl6LJY';
+    var playlistVideos = [];
+    var currentPlaylistIndex = 0;
 
     function mostrarLive() {
         document.getElementById('btn-ver-vivo').classList.add('active');
@@ -884,104 +889,21 @@
 
         if (!playlistVideos || playlistVideos.length === 0) {
             fetchVideosWithAPI(API_KEY);
+        } else {
+            renderPlaylistSidebar();
         }
-    // ====== FUNCIONES API YOUTUBE ======
-    function fetchClasicosPlaylist(apiKey) {
-        document.getElementById('clasico-playlist-loading').style.display = 'block';
-        document.getElementById('clasico-playlist-error').style.display = 'none';
-
-        clasicosVideos = [];
-        var playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + CLASICOS_PLAYLIST_ID + '&key=' + apiKey;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', playlistUrl, true);
-        xhr.timeout = 15000;
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr.responseText);
-                        if (data.items && data.items.length > 0) {
-                            data.items.forEach(function(item) {
-                                var snippet = item.snippet;
-                                if (snippet && snippet.resourceId && snippet.resourceId.videoId) {
-                                    clasicosVideos.push({
-                                        id: snippet.resourceId.videoId,
-                                        title: snippet.title || 'Sin titulo',
-                                        duration: '--:--'
-                                    });
-                                }
-                            });
-                            document.getElementById('clasico-playlist-loading').style.display = 'none';
-                            document.getElementById('clasico-playlist-error').style.display = 'none';
-                            clasicosLoaded = true;
-                            if (clasicosVideos.length > 0) {
-                                cargarVideoClasico(0);
-                            } else {
-                                showClasicosError('La playlist no tiene videos.');
-                            }
-                        } else {
-                            showClasicosError('No se encontraron videos en la playlist.');
-                        }
-                    } catch(e) {
-                        showClasicosError('Error al procesar la lista de videos.');
-                    }
-                } else if (xhr.status === 403) {
-                    showClasicosError('API Key inválida o sin cuota. Crea una nueva en Google Cloud Console.');
-                } else if (xhr.status === 0) {
-                    showClasicosError('Error de conexión. Verifica tu internet.');
-                } else {
-                    showClasicosError('Error ' + xhr.status + ' al cargar la playlist.');
-                }
-            }
-        };
-        xhr.onerror = function() {
-            showClasicosError('Error de red. Verifica tu conexión a internet.');
-        };
-        xhr.ontimeout = function() {
-            showClasicosError('Tiempo de espera agotado. Intenta de nuevo.');
-        };
-        xhr.send();
     }
 
-    function showClasicosError(msg) {
-        document.getElementById('clasico-playlist-loading').style.display = 'none';
-        document.getElementById('clasico-playlist-error').style.display = 'block';
-        document.getElementById('clasico-playlist-error-msg').textContent = msg;
-    }
-
-    function cargarVideoClasico(index) {
-        currentClasicoIndex = index;
-        var iframe = document.getElementById('frame-clasico');
-        var video = clasicosVideos[index];
-        if (video) {
-            iframe.src = 'https://www.youtube.com/embed/' + video.id + '?rel=0';
-        }
-        renderClasicosSidebar();
-    }
-
-    function renderClasicosSidebar() {
-        var container = document.getElementById('clasico-playlist-items');
-        container.innerHTML = '';
-        clasicosVideos.forEach(function(video, idx) {
-            var activeClass = idx === currentClasicoIndex ? 'active' : '';
-            var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
-            var item = document.createElement('div');
-            item.className = 'playlist-item ' + activeClass;
-            item.setAttribute('data-idx', idx);
-            item.onclick = function() { cargarVideoClasico(parseInt(this.getAttribute('data-idx'))); };
-            item.innerHTML = '<img src="' + thumbUrl + '" class="playlist-thumb" alt="">' +
-                '<div class="playlist-info">' +
-                '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
-                '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
-                '</div>';
-            container.appendChild(item);
-        });
+    function recargarPlaylist() {
+        playlistVideos = [];
+        fetchVideosWithAPI(API_KEY);
     }
 
     function fetchVideosWithAPI(apiKey) {
         document.getElementById('playlist-loading').style.display = 'block';
+        document.getElementById('playlist-api-setup').style.display = 'none';
         document.getElementById('playlist-error').style.display = 'none';
+        document.getElementById('playlist-items').innerHTML = '';
 
         var channelUrl = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' + CHANNEL_ID + '&key=' + apiKey;
 
@@ -997,22 +919,22 @@
                             var uploadsId = data.items[0].contentDetails.relatedPlaylists.uploads;
                             fetchPlaylistItems(apiKey, uploadsId);
                         } else {
-                            showPlaylistError('No se encontró la lista de uploads del canal.');
+                            showPlaylistError('No se encontro la lista de uploads del canal.');
                         }
                     } catch(e) {
                         showPlaylistError('Error al parsear respuesta del canal.');
                     }
                 } else if (xhr1.status === 403) {
-                    showPlaylistError('API Key inválida o sin cuota. Crea una nueva en Google Cloud Console.');
+                    showPlaylistError('API Key invalida o sin cuota. Verifica tu clave en Google Cloud Console.');
                 } else if (xhr1.status === 0) {
-                    showPlaylistError('Error de conexión. Verifica tu internet.');
+                    showPlaylistError('Error de conexion. Verifica tu internet.');
                 } else {
                     showPlaylistError('Error ' + xhr1.status + ' al conectar con YouTube API.');
                 }
             }
         };
         xhr1.onerror = function() {
-            showPlaylistError('Error de red. Verifica tu conexión a internet.');
+            showPlaylistError('Error de red. Verifica tu conexion a internet.');
         };
         xhr1.ontimeout = function() {
             showPlaylistError('Tiempo de espera agotado. Intenta de nuevo.');
@@ -1043,148 +965,6 @@
                                     });
                                 }
                             });
-                            document.getElementById('playlist-loading').style.display = 'none';
-                            document.getElementById('playlist-error').style.display = 'none';
-                            if (playlistVideos.length > 0) {
-                                cargarVideoPlaylist(0);
-                            } else {
-                                showPlaylistError('El canal no tiene videos públicos.');
-                            }
-                        } else {
-                            showPlaylistError('No se encontraron videos en el canal.');
-                        }
-                    } catch(e) {
-                        showPlaylistError('Error al procesar la lista de videos.');
-                    }
-                } else if (xhr2.status === 403) {
-                    showPlaylistError('API Key inválida o sin cuota.');
-                } else if (xhr2.status === 0) {
-                    showPlaylistError('Error de conexión. Verifica tu internet.');
-                } else {
-                    showPlaylistError('Error ' + xhr2.status + ' al cargar videos.');
-                }
-            }
-        };
-        xhr2.onerror = function() {
-            showPlaylistError('Error de red al cargar videos.');
-        };
-        xhr2.ontimeout = function() {
-            showPlaylistError('Tiempo de espera agotado. Intenta de nuevo.');
-        };
-        xhr2.send();
-    }
-
-    function showPlaylistError(msg) {
-        document.getElementById('playlist-loading').style.display = 'none';
-        document.getElementById('playlist-error').style.display = 'block';
-        document.getElementById('playlist-error-msg').textContent = msg;
-    }
-
-    function cargarVideoPlaylist(index) {
-        currentPlaylistIndex = index;
-        var iframe = document.getElementById('frame-live');
-        var video = playlistVideos[index];
-        if (video) {
-            iframe.src = 'https://www.youtube.com/embed/' + video.id + '?rel=0';
-        }
-        renderPlaylistSidebar();
-    }
-
-    function renderPlaylistSidebar() {
-        var container = document.getElementById('playlist-items');
-        container.innerHTML = '';
-        playlistVideos.forEach(function(video, idx) {
-            var activeClass = idx === currentPlaylistIndex ? 'active' : '';
-            var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
-            var item = document.createElement('div');
-            item.className = 'playlist-item ' + activeClass;
-            item.setAttribute('data-idx', idx);
-            item.onclick = function() { cargarVideoPlaylist(parseInt(this.getAttribute('data-idx'))); };
-            item.innerHTML = '<img src="' + thumbUrl + '" class="playlist-thumb" alt="">' +
-                '<div class="playlist-info">' +
-                '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
-                '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
-                '</div>';
-            container.appendChild(item);
-        });
-    }
-
-    function guardarApiKey() {
-        document.getElementById('playlist-api-setup').style.display = 'none';
-        fetchVideosWithAPI(API_KEY);
-    }
-
-    var CHANNEL_ID = 'UCUJY-xgeGJokDh-5Ho_Wb9A';
-    var API_KEY = 'AIzaSyD93mpAa7LzQRNUEaW9fuYy6sLnuwl6LJY';
-    var UPLOADS_PLAYLIST_ID = 'UUUJY-xgeGJokDh-5Ho_Wb9A';
-    var playlistVideos = [];
-    var currentPlaylistIndex = 0;
-
-    function fetchVideosWithAPI(apiKey) {
-        document.getElementById('playlist-loading').style.display = 'block';
-        document.getElementById('playlist-api-setup').style.display = 'none';
-        document.getElementById('playlist-error').style.display = 'none';
-
-        // First, get the uploads playlist ID from the channel
-        var channelUrl = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' + CHANNEL_ID + '&key=' + apiKey;
-
-        var xhr1 = new XMLHttpRequest();
-        xhr1.open('GET', channelUrl, true);
-        xhr1.timeout = 10000;
-        xhr1.onreadystatechange = function() {
-            if (xhr1.readyState === 4) {
-                if (xhr1.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr1.responseText);
-                        if (data.items && data.items[0] && data.items[0].contentDetails) {
-                            var uploadsId = data.items[0].contentDetails.relatedPlaylists.uploads;
-                            fetchPlaylistItems(apiKey, uploadsId);
-                        } else {
-                            showPlaylistError('No se encontro la lista de uploads del canal.');
-                        }
-                    } catch(e) {
-                        showPlaylistError('Error al parsear respuesta del canal.');
-                    }
-                } else if (xhr1.status === 403) {
-                    showPlaylistError('API Key invalida o sin cuota. Verifica tu clave en Google Cloud Console.');
-                } else {
-                    showPlaylistError('Error ' + xhr1.status + ' al conectar con YouTube API.');
-                }
-            }
-        };
-        xhr1.onerror = function() {
-            showPlaylistError('Error de red. Verifica tu conexion a internet.');
-        };
-        xhr1.ontimeout = function() {
-            showPlaylistError('Tiempo de espera agotado. Intenta de nuevo.');
-        };
-        xhr1.send();
-    }
-
-    function fetchPlaylistItems(apiKey, playlistId) {
-        playlistVideos = [];
-        var playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + playlistId + '&key=' + apiKey;
-
-        var xhr2 = new XMLHttpRequest();
-        xhr2.open('GET', playlistUrl, true);
-        xhr2.timeout = 10000;
-        xhr2.onreadystatechange = function() {
-            if (xhr2.readyState === 4) {
-                if (xhr2.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr2.responseText);
-                        if (data.items && data.items.length > 0) {
-                            playlistVideos = [];
-                            data.items.forEach(function(item) {
-                                var snippet = item.snippet;
-                                if (snippet && snippet.resourceId && snippet.resourceId.videoId) {
-                                    playlistVideos.push({
-                                        id: snippet.resourceId.videoId,
-                                        title: snippet.title || 'Sin titulo',
-                                        duration: '--:--'
-                                    });
-                                }
-                            });
                             if (playlistVideos.length > 0) {
                                 document.getElementById('playlist-loading').style.display = 'none';
                                 document.getElementById('playlist-error').style.display = 'none';
@@ -1198,8 +978,12 @@
                     } catch(e) {
                         showPlaylistError('Error al procesar la lista de videos.');
                     }
+                } else if (xhr2.status === 403) {
+                    showPlaylistError('API Key invalida o sin cuota.');
+                } else if (xhr2.status === 0) {
+                    showPlaylistError('Error de conexion. Verifica tu internet.');
                 } else {
-                    showPlaylistError('Error ' + xhr2.status + ' al cargar la lista de videos.');
+                    showPlaylistError('Error ' + xhr2.status + ' al cargar videos.');
                 }
             }
         };
@@ -1242,6 +1026,11 @@
                 '</div></div>';
         });
         container.innerHTML = html;
+    }
+
+    function guardarApiKey() {
+        document.getElementById('playlist-api-setup').style.display = 'none';
+        fetchVideosWithAPI(API_KEY);
     }
 
     // ====== CLIMA Y RELOJ ======
@@ -1491,7 +1280,7 @@
             link = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
         } else if (red === 'ig') {
             navigator.clipboard.writeText(url).then(function() {
-                alert('Link copiado al portapapeles. Abre Instagram y pégalo en tu historia o chat.');
+                alert('Link copiado al portapapeles. Abre Instagram y pegalo en tu historia o chat.');
             }).catch(function() {
                 alert('No se pudo copiar el link. URL: ' + url);
             });
@@ -1660,11 +1449,6 @@
         actualizarReloj();
         setInterval(actualizarReloj, 1000);
 
-        // Cargar playlist de clasicos al iniciar
-        if (API_KEY && API_KEY !== 'TU_API_KEY_AQUI') {
-            fetchClasicosPlaylist(API_KEY);
-        }
-
         // Intentar conectar Supabase despues de que todo este listo
         setTimeout(function() {
             testSupabaseConnection(function(ok, msg) {
@@ -1672,7 +1456,7 @@
                 dbErrorMsg = msg;
                 mostrarEstadoDB();
                 if (ok) {
-                    renderNoticias(); // Recargar desde la nube
+                    renderNoticias();
                 }
                 console.log('Supabase:', msg);
             });
