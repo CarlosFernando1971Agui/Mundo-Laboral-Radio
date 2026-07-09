@@ -604,8 +604,7 @@
             </div>
             <div id="clasico-box" class="video-box active">
                 <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                    <button id="btn-ver-clasico" class="live-btn active" onclick="mostrarClasico()">VER PLAYLIST</button>
-                    <button id="btn-ver-lista-clasico" class="live-btn" onclick="mostrarListaClasico()">VER LISTA DE VIDEOS</button>
+                    <button id="btn-ver-lista-clasico" class="live-btn" onclick="toggleListaClasico()">VER LISTA DE VIDEOS</button>
                 </div>
                 <div class="live-layout" id="clasico-layout">
                     <div class="live-player-area" id="clasico-player-area">
@@ -844,9 +843,8 @@
         if(tipo === 'clasico') {
             document.getElementById('clasico-box').classList.add('active');
             document.getElementById('sub-btn-clasico').classList.add('active');
-            if (!clasicosLoaded && API_KEY && API_KEY !== 'TU_API_KEY_AQUI') {
-                fetchClasicosPlaylist(API_KEY);
-            }
+            // Reset sidebar state when switching to clasicos
+            mostrarClasicoPlayer();
         } else {
             document.getElementById('live-box').classList.add('active');
             document.getElementById('sub-btn-live').classList.add('active');
@@ -893,22 +891,36 @@
     var clasicosVideos = [];
     var currentClasicoIndex = 0;
     var clasicosLoaded = false;
+    var clasicoSidebarVisible = false;
 
-    function mostrarClasico() {
-        document.getElementById('btn-ver-clasico').classList.add('active');
-        document.getElementById('btn-ver-lista-clasico').classList.remove('active');
-        document.getElementById('frame-clasico').src = 'https://www.youtube.com/embed/videoseries?list=' + CLASICOS_PLAYLIST_ID;
-        document.getElementById('clasico-playlist-sidebar').style.display = 'none';
+    function toggleListaClasico() {
+        var btn = document.getElementById('btn-ver-lista-clasico');
+        var sidebar = document.getElementById('clasico-playlist-sidebar');
+
+        if (clasicoSidebarVisible) {
+            // Hide sidebar, show player
+            btn.classList.remove('active');
+            btn.innerHTML = 'VER LISTA DE VIDEOS';
+            sidebar.style.display = 'none';
+            clasicoSidebarVisible = false;
+        } else {
+            // Show sidebar
+            btn.classList.add('active');
+            btn.innerHTML = 'OCULTAR LISTA';
+            sidebar.style.display = 'flex';
+            clasicoSidebarVisible = true;
+
+            if (!clasicosLoaded) {
+                fetchClasicosPlaylist(API_KEY);
+            }
+        }
     }
 
-    function mostrarListaClasico() {
-        document.getElementById('btn-ver-clasico').classList.remove('active');
-        document.getElementById('btn-ver-lista-clasico').classList.add('active');
-        document.getElementById('clasico-playlist-sidebar').style.display = 'flex';
-
-        if (!clasicosLoaded) {
-            fetchClasicosPlaylist(API_KEY);
-        }
+    function mostrarClasicoPlayer() {
+        document.getElementById('btn-ver-lista-clasico').classList.remove('active');
+        document.getElementById('btn-ver-lista-clasico').innerHTML = 'VER LISTA DE VIDEOS';
+        document.getElementById('clasico-playlist-sidebar').style.display = 'none';
+        clasicoSidebarVisible = false;
     }
 
     function recargarClasicos() {
@@ -990,6 +1002,8 @@
             iframe.src = 'https://www.youtube.com/embed/' + video.id + '?rel=0';
         }
         renderClasicosSidebar();
+        // Auto-hide sidebar and show player when a video is selected
+        mostrarClasicoPlayer();
     }
 
     function renderClasicosSidebar() {
