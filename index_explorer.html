@@ -779,9 +779,12 @@ function initMap() {
 }
 
 function drawProvinceBoundaries() {
-  provincePolygons.vallegrande = L.polygon([[-18.29, -64.30], [-18.29, -63.53], [-19.18, -63.53], [-19.18, -64.30]], { color: "#e94560", weight: 2, fillColor: "#e94560", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map).bindPopup("Provincia Vallegrande");
-  provincePolygons.florida = L.polygon([[-17.60, -64.30], [-17.60, -63.50], [-18.65, -63.50], [-18.65, -64.30]], { color: "#4ecdc4", weight: 2, fillColor: "#4ecdc4", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map).bindPopup("Provincia Florida");
-  provincePolygons.caballero = L.polygon([[-17.43, -64.50], [-17.43, -64.07], [-18.15, -64.07], [-18.15, -64.50]], { color: "#f7b731", weight: 2, fillColor: "#f7b731", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map).bindPopup("Provincia Caballero");
+  // Vallegrande: provincia sur, limita con Florida al norte en lat ~-18.32
+  provincePolygons.vallegrande = L.polygon([[-18.32, -64.35], [-18.32, -63.50], [-19.18, -63.50], [-19.18, -64.35]], { color: "#e94560", weight: 2, fillColor: "#e94560", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map).bindPopup("Provincia Vallegrande");
+  // Florida: provincia norte de Vallegrande, limita al sur en lat ~-18.32
+  provincePolygons.florida = L.polygon([[-17.60, -64.35], [-17.60, -63.50], [-18.32, -63.50], [-18.32, -64.35]], { color: "#4ecdc4", weight: 2, fillColor: "#4ecdc4", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map).bindPopup("Provincia Florida");
+  // Caballero: provincia al oeste, ajustada para reducir solapamiento con Florida
+  provincePolygons.caballero = L.polygon([[-17.43, -64.55], [-17.43, -64.15], [-18.15, -64.15], [-18.15, -64.55]], { color: "#f7b731", weight: 2, fillColor: "#f7b731", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map).bindPopup("Provincia Caballero");
 }
 
 function setProvince(prov) {
