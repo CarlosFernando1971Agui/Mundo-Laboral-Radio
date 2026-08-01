@@ -779,12 +779,46 @@ function initMap() {
 }
 
 function drawProvinceBoundaries() {
-  // Vallegrande: provincia sur, limita con Florida al norte en lat ~-18.32
-  provincePolygons.vallegrande = L.polygon([[-18.32, -64.35], [-18.32, -63.50], [-19.18, -63.50], [-19.18, -64.35]], { color: "#e94560", weight: 2, fillColor: "#e94560", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map).bindPopup("Provincia Vallegrande");
-  // Florida: provincia norte de Vallegrande, limita al sur en lat ~-18.32
-  provincePolygons.florida = L.polygon([[-17.60, -64.35], [-17.60, -63.50], [-18.32, -63.50], [-18.32, -64.35]], { color: "#4ecdc4", weight: 2, fillColor: "#4ecdc4", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map).bindPopup("Provincia Florida");
-  // Caballero: provincia al oeste, ajustada para reducir solapamiento con Florida
-  provincePolygons.caballero = L.polygon([[-17.43, -64.55], [-17.43, -64.15], [-18.15, -64.15], [-18.15, -64.55]], { color: "#f7b731", weight: 2, fillColor: "#f7b731", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map).bindPopup("Provincia Caballero");
+  // Polígonos aproximados basados en la geografía real de las provincias de Santa Cruz, Bolivia.
+  // Se usan múltiples vértices para evitar solapamientos entre provincias.
+
+  // VALLEGRANDE — sur de Florida, limita al norte de forma irregular
+  provincePolygons.vallegrande = L.polygon([
+    [-18.05, -64.30],  // NW: límite con Caballero (zona Moro Moro)
+    [-18.10, -64.10],  // N:  límite con Florida/Caballero
+    [-18.35, -63.80],  // NE: límite con Florida
+    [-18.70, -63.58],  // E:  límite con Cordillera
+    [-19.10, -63.55],  // SE
+    [-19.18, -63.65],  // S
+    [-19.18, -64.30],  // SW: límite con Chuquisaca
+    [-18.80, -64.38],  // W
+    [-18.05, -64.30]   // cerrar
+  ], { color: "#e94560", weight: 2.5, fillColor: "#e94560", fillOpacity: 0.04, dashArray: "8, 8" }).addTo(map);
+
+  // FLORIDA — norte de Vallegrande, forma irregular
+  provincePolygons.florida = L.polygon([
+    [-17.60, -64.05],  // NW
+    [-17.60, -63.50],  // N
+    [-18.00, -63.50],  // NE
+    [-18.25, -63.55],  // E
+    [-18.35, -63.70],  // SE: límite con Vallegrande
+    [-18.20, -63.90],  // S:  límite con Vallegrande
+    [-18.10, -64.10],  // SW: límite con Vallegrande/Caballero
+    [-17.85, -64.20],  // W:  límite con Caballero
+    [-17.60, -64.05]   // cerrar
+  ], { color: "#4ecdc4", weight: 2.5, fillColor: "#4ecdc4", fillOpacity: 0.04, dashArray: "8, 8" }).addTo(map);
+
+  // CABALLERO — oeste de Florida y Vallegrande
+  provincePolygons.caballero = L.polygon([
+    [-17.43, -64.50],  // NW
+    [-17.43, -64.10],  // N
+    [-17.70, -64.05],  // NE
+    [-17.90, -64.10],  // E
+    [-18.10, -64.15],  // SE: límite con Vallegrande
+    [-18.15, -64.30],  // S
+    [-17.90, -64.50],  // SW
+    [-17.43, -64.50]   // cerrar
+  ], { color: "#f7b731", weight: 2.5, fillColor: "#f7b731", fillOpacity: 0.04, dashArray: "8, 8" }).addTo(map);
 }
 
 function setProvince(prov) {
