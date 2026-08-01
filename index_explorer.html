@@ -352,7 +352,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 <span style="font-size:20px;opacity:0.6">🗺️</span>
 </button>
 </div>
-<button type="button" class="btn-primary" style="width:100%;margin-top:10px" onclick="openRouteModal(currentDetailId)"><span>🗺️</span> Cómo llegar aquí</button>
+<button type="button" class="btn-primary" style="width:100%;margin-top:10px" onclick="openRouteModal(window.currentDetailId)"><span>🗺️</span> Cómo llegar aquí</button>
 </div>
 </div>
 </div>
@@ -1261,9 +1261,9 @@ async function handleSubmit(event) {
   }
 }
 
-var currentDetailId = null;
+window.currentDetailId = null;
 function showDetail(id) {
-  currentDetailId = id;
+  window.currentDetailId = id;
   // Cerrar cualquier popup de Leaflet abierto
   if (map) map.closePopup();
   const place = places.find(p => p.id === id);
@@ -1697,7 +1697,7 @@ let routeEndMarker = null;
 // currentDetailId ya está declarada en showDetail() del código original
 
 function openRouteModal(placeId) {
-  currentDetailId = placeId;
+  window.currentDetailId = placeId;
   const place = places.find(p => p.id === placeId);
   if (!place) return;
   document.getElementById("route-destination").value = place.name;
