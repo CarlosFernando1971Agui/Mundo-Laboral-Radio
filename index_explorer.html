@@ -207,6 +207,93 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 .route-actions .btn-primary { flex: 1; }
 .route-actions .btn-secondary { flex: 1; background: #333; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem; font-family: inherit; transition: 0.2s; }
 .route-actions .btn-secondary:hover { background: #444; }
+
+/* ===== PANEL DE RUTA EN EL MAPA ===== */
+.route-info-panel {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 14px 18px;
+  z-index: 1000;
+  min-width: 220px;
+  display: none;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+.route-info-panel.active {
+  display: block;
+  animation: routePanelIn 0.3s ease;
+}
+@keyframes routePanelIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.route-info-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.route-info-header-icon {
+  font-size: 1.2rem;
+}
+.route-info-header-title {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 700;
+}
+.route-info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.route-info-row:last-child {
+  margin-bottom: 0;
+}
+.route-info-icon {
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+}
+.route-info-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.route-info-value {
+  font-size: 0.9rem;
+  color: #fff;
+  font-weight: 600;
+  margin-left: auto;
+}
+.route-info-clear {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.route-info-clear:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
 </style>
 </head>
 <body>
@@ -257,6 +344,23 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 
 <main class="map-wrapper">
 <div id="map"></div>
+<div class="route-info-panel" id="route-info-panel">
+<div class="route-info-header">
+<span class="route-info-header-icon">🛣️</span>
+<h4 class="route-info-header-title">Ruta calculada</h4>
+</div>
+<div class="route-info-row">
+<span class="route-info-icon">📏</span>
+<span class="route-info-label">Distancia</span>
+<span class="route-info-value" id="map-route-distance">--</span>
+</div>
+<div class="route-info-row">
+<span class="route-info-icon">⏱️</span>
+<span class="route-info-label">Tiempo estimado</span>
+<span class="route-info-value" id="map-route-duration">--</span>
+</div>
+<button type="button" class="route-info-clear" onclick="clearRoute()"><span>🗑️</span> Limpiar ruta</button>
+</div>
 <div class="map-controls">
 <button class="map-btn" onclick="resetMap()" title="Centrar">🏠</button>
 <button class="map-btn" onclick="goToMyLocation()" title="Mi ubicación">📍</button>
@@ -1916,12 +2020,23 @@ function drawRoute(geometry, distance, duration, instructions) {
   });
   routeEndMarker = L.marker(latlngs[latlngs.length - 1], { icon: endIcon }).addTo(map).bindPopup("🏁 Destino");
   map.fitBounds(routeLayer.getBounds(), { padding: [40, 40], maxZoom: 16 });
+
+  // Mostrar panel de info en el mapa
+  const panel = document.getElementById("route-info-panel");
+  if (panel) {
+    document.getElementById("map-route-distance").textContent = formatDistance(distance);
+    document.getElementById("map-route-duration").textContent = formatDuration(duration);
+    panel.classList.add("active");
+  }
 }
 
 function clearRoute() {
   if (routeLayer) { map.removeLayer(routeLayer); routeLayer = null; }
   if (routeStartMarker) { map.removeLayer(routeStartMarker); routeStartMarker = null; }
   if (routeEndMarker) { map.removeLayer(routeEndMarker); routeEndMarker = null; }
+  // Ocultar panel de info en el mapa
+  const panel = document.getElementById("route-info-panel");
+  if (panel) panel.classList.remove("active");
 }
 
 function formatDistance(meters) {
