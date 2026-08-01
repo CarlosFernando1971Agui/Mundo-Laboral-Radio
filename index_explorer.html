@@ -1690,6 +1690,16 @@ if (map) {
 }
 
 
+// ==================== UTILIDADES ====================
+function escapeHtml(text) {
+  if (typeof text !== "string") return String(text);
+  return text.replace(/&/g, "&amp;")
+             .replace(/</g, "&lt;")
+             .replace(/>/g, "&gt;")
+             .replace(/"/g, "&quot;")
+             .replace(/'/g, "&#039;");
+}
+
 // ==================== RUTAS / DIRECTIONS ====================
 let routeLayer = null;
 let routeStartMarker = null;
