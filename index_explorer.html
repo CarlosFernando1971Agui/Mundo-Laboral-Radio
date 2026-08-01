@@ -207,8 +207,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 .route-actions .btn-primary { flex: 1; }
 .route-actions .btn-secondary { flex: 1; background: #333; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem; font-family: inherit; transition: 0.2s; }
 .route-actions .btn-secondary:hover { background: #444; }
-.route-legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.7rem; }
-.route-legend-dot { width: 12px; height: 4px; border-radius: 2px; }
 </style>
 </head>
 <body>
@@ -354,11 +352,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 <span style="font-size:20px;opacity:0.6">🗺️</span>
 </button>
 </div>
-
-<button type="button" class="btn-primary" style="width:100%;margin-top:10px" onclick="openRouteModal(currentDetailId)">
-<span>🗺️</span> Cómo llegar aquí
-</button>
-
+<button type="button" class="btn-primary" style="width:100%;margin-top:10px" onclick="openRouteModal(currentDetailId)"><span>🗺️</span> Cómo llegar aquí</button>
+</div>
 </div>
 </div>
 
@@ -590,8 +585,14 @@ async function updatePlaceStatus(id, status) {
 
 // ==================== SINCRONIZACION EN TIEMPO REAL ====================
 function startRealtimeSync() {
+  // Timeout de seguridad: si en 6 segundos no responde, mostrar offline
+  const syncTimeout = setTimeout(() => {
+    updateStatus("🟡 Modo offline", "#f7b731");
+  }, 6000);
+
   if (!firebaseReady || !db) {
     console.log("Firebase not ready, using localStorage only");
+    clearTimeout(syncTimeout);
     updateStatus("🟡 Modo offline", "#f7b731");
     return;
   }
@@ -640,6 +641,7 @@ function startRealtimeSync() {
     renderMarkers(); 
     updateCount();
     if (isAdmin) { updateAdminCounts(); renderAdminGrid(); }
+    clearTimeout(syncTimeout);
     updateStatus("🟢 Conectado", "#26de81");
 
     // Iniciar listener de tiempo real
@@ -649,6 +651,7 @@ function startRealtimeSync() {
     syncPendingLocalPlaces();
 
   }).catch((error) => {
+    clearTimeout(syncTimeout);
     console.error("FIREBASE LOAD ERROR:", error.code || "", "-", error.message);
 
     if (error.code === "permission-denied") {
@@ -864,46 +867,13 @@ function initMap() {
 }
 
 function drawProvinceBoundaries() {
-  // Polígonos aproximados basados en la geografía real de las provincias de Santa Cruz, Bolivia.
-  // Se usan múltiples vértices para evitar solapamientos entre provincias.
-
-  // VALLEGRANDE — sur de Florida, limita al norte de forma irregular
-  provincePolygons.vallegrande = L.polygon([
-    [-18.05, -64.30],  // NW: límite con Caballero (zona Moro Moro)
-    [-18.10, -64.10],  // N:  límite con Florida/Caballero
-    [-18.35, -63.80],  // NE: límite con Florida
-    [-18.70, -63.58],  // E:  límite con Cordillera
-    [-19.10, -63.55],  // SE
-    [-19.18, -63.65],  // S
-    [-19.18, -64.30],  // SW: límite con Chuquisaca
-    [-18.80, -64.38],  // W
-    [-18.05, -64.30]   // cerrar
-  ], { color: "#e94560", weight: 2.5, fillColor: "#e94560", fillOpacity: 0.04, dashArray: "8, 8" }).addTo(map);
-
-  // FLORIDA — norte de Vallegrande, forma irregular
-  provincePolygons.florida = L.polygon([
-    [-17.60, -64.05],  // NW
-    [-17.60, -63.50],  // N
-    [-18.00, -63.50],  // NE
-    [-18.25, -63.55],  // E
-    [-18.35, -63.70],  // SE: límite con Vallegrande
-    [-18.20, -63.90],  // S:  límite con Vallegrande
-    [-18.10, -64.10],  // SW: límite con Vallegrande/Caballero
-    [-17.85, -64.20],  // W:  límite con Caballero
-    [-17.60, -64.05]   // cerrar
-  ], { color: "#4ecdc4", weight: 2.5, fillColor: "#4ecdc4", fillOpacity: 0.04, dashArray: "8, 8" }).addTo(map);
-
-  // CABALLERO — oeste de Florida y Vallegrande
-  provincePolygons.caballero = L.polygon([
-    [-17.43, -64.50],  // NW
-    [-17.43, -64.10],  // N
-    [-17.70, -64.05],  // NE
-    [-17.90, -64.10],  // E
-    [-18.10, -64.15],  // SE: límite con Vallegrande
-    [-18.15, -64.30],  // S
-    [-17.90, -64.50],  // SW
-    [-17.43, -64.50]   // cerrar
-  ], { color: "#f7b731", weight: 2.5, fillColor: "#f7b731", fillOpacity: 0.04, dashArray: "8, 8" }).addTo(map);
+  // Rectángulos aproximados SIN solapamiento entre provincias
+  // Vallegrande: sur, limita al norte con Florida en lat ~-18.32
+  provincePolygons.vallegrande = L.polygon([[-18.32, -64.35], [-18.32, -63.50], [-19.18, -63.50], [-19.18, -64.35]], { color: "#e94560", weight: 2, fillColor: "#e94560", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map);
+  // Florida: norte de Vallegrande, limita al sur en lat ~-18.32
+  provincePolygons.florida = L.polygon([[-17.60, -64.35], [-17.60, -63.50], [-18.32, -63.50], [-18.32, -64.35]], { color: "#4ecdc4", weight: 2, fillColor: "#4ecdc4", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map);
+  // Caballero: al oeste
+  provincePolygons.caballero = L.polygon([[-17.43, -64.55], [-17.43, -64.15], [-18.15, -64.15], [-18.15, -64.55]], { color: "#f7b731", weight: 2, fillColor: "#f7b731", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map);
 }
 
 function setProvince(prov) {
@@ -1753,23 +1723,17 @@ function swapRoutePoints() {
   const startLng = document.getElementById("route-start-lng").value;
   const destLat = document.getElementById("route-dest-lat").value;
   const destLng = document.getElementById("route-dest-lng").value;
-
-  // Solo intercambiar si ambos tienen coordenadas
   if (!startLat || !destLat) {
-    showToast("⚠️ Necesitas un origen con coordenadas para intercambiar", "#f7b731");
+    showToast("⚠️ Necesitas un origen con coordenadas", "#f7b731");
     return;
   }
-
   const tempName = originInput.value;
   originInput.value = destInput.value;
   destInput.value = tempName;
-
   document.getElementById("route-start-lat").value = destLat;
   document.getElementById("route-start-lng").value = destLng;
   document.getElementById("route-dest-lat").value = startLat;
   document.getElementById("route-dest-lng").value = startLng;
-
-  // Recalcular si ya hay ruta
   if (routeLayer) calculateRouteFromInputs();
 }
 
@@ -1786,7 +1750,6 @@ function useMyLocationAsStart() {
       const lng = position.coords.longitude;
       document.getElementById("route-start-lat").value = lat;
       document.getElementById("route-start-lng").value = lng;
-      // Reverse geocoding con Nominatim
       fetch("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + lat + "&lon=" + lng + "&zoom=18&addressdetails=1")
         .then(r => r.json())
         .then(data => {
@@ -1832,19 +1795,14 @@ function calculateRouteFromInputs() {
     showToast("⚠️ Destino no válido", "#f7b731");
     return;
   }
-
-  // Si ya tenemos coordenadas de inicio (GPS), usarlas directamente
   if (!isNaN(startLat) && !isNaN(startLng)) {
     calculateRoute(startLat, startLng, destLat, destLng);
     return;
   }
-
-  // Si no, geocodificar el texto de origen
   if (!originText) {
     showToast("⚠️ Escribe un origen o usa GPS", "#f7b731");
     return;
   }
-
   showLoading("Buscando origen...");
   geocodeAddress(originText, function(result, error) {
     hideLoading();
@@ -1876,11 +1834,9 @@ function calculateRoute(startLat, startLng, endLat, endLng) {
       }
       const route = data.routes[0];
       const geometry = route.geometry;
-      const distance = route.distance; // metros
-      const duration = route.duration; // segundos
+      const distance = route.distance;
+      const duration = route.duration;
       const legs = route.legs;
-
-      // Extraer instrucciones de los pasos
       let instructions = [];
       if (legs && legs.length > 0) {
         legs.forEach(leg => {
@@ -1895,13 +1851,9 @@ function calculateRoute(startLat, startLng, endLat, endLng) {
           }
         });
       }
-
       drawRoute(geometry, distance, duration, instructions);
-
       document.getElementById("route-distance").textContent = formatDistance(distance);
       document.getElementById("route-duration").textContent = formatDuration(duration);
-
-      // Renderizar instrucciones simplificadas
       const instrContainer = document.getElementById("route-instructions");
       if (instructions.length > 0) {
         let html = '<p style="margin:0 0 6px 0;font-size:0.72rem;color:var(--text-muted);font-weight:600">Instrucciones:</p>';
@@ -1920,7 +1872,6 @@ function calculateRoute(startLat, startLng, endLat, endLng) {
       } else {
         instrContainer.innerHTML = "";
       }
-
       document.getElementById("route-result").classList.add("active");
       showToast("✅ Ruta calculada: " + formatDistance(distance) + " · " + formatDuration(duration), "#26de81");
     })
@@ -1933,38 +1884,27 @@ function calculateRoute(startLat, startLng, endLat, endLng) {
 
 function drawRoute(geometry, distance, duration, instructions) {
   clearRoute();
-
   if (!geometry || !geometry.coordinates) return;
-
-  // Convertir GeoJSON [lng, lat] → Leaflet [lat, lng]
   const latlngs = geometry.coordinates.map(coord => [coord[1], coord[0]]);
-
   routeLayer = L.polyline(latlngs, {
     color: "#e94560",
     weight: 5,
     opacity: 0.85,
     lineCap: "round",
-    lineJoin: "round",
-    dashArray: null
+    lineJoin: "round"
   }).addTo(map);
-
-  // Marcador de inicio (verde)
   const startIcon = L.divIcon({
     className: "custom-marker",
     html: '<div style="width:14px;height:14px;background:#26de81;border-radius:50%;border:3px solid white;box-shadow:0 0 0 4px rgba(38,222,129,0.3)"></div>',
     iconSize: [14, 14], iconAnchor: [7, 7]
   });
   routeStartMarker = L.marker(latlngs[0], { icon: startIcon }).addTo(map).bindPopup("🚀 Inicio de ruta");
-
-  // Marcador de fin (rojo)
   const endIcon = L.divIcon({
     className: "custom-marker",
     html: '<div style="width:14px;height:14px;background:#e94560;border-radius:50%;border:3px solid white;box-shadow:0 0 0 4px rgba(233,69,96,0.3)"></div>',
     iconSize: [14, 14], iconAnchor: [7, 7]
   });
   routeEndMarker = L.marker(latlngs[latlngs.length - 1], { icon: endIcon }).addTo(map).bindPopup("🏁 Destino");
-
-  // Ajustar vista para mostrar toda la ruta
   map.fitBounds(routeLayer.getBounds(), { padding: [40, 40], maxZoom: 16 });
 }
 
