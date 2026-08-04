@@ -611,23 +611,18 @@ const fallbackImg65 = "data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/20
 const fallbackImg260 = "data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22260%22%20height=%22150%22%3E%3Crect%20fill=%22%23333%22%20width=%22260%22%20height=%22150%22/%3E%3Ctext%20x=%2250%25%22%20y=%2250%25%22%20text-anchor=%22middle%22%20dy=%22.3em%22%20fill=%22%23666%22%20font-size=%2224%22%3E%F0%9F%93%B7%3C/text%3E%3C/svg%3E";
 const fallbackImg400 = "data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22400%22%20height=%22300%22%3E%3Crect%20fill=%22%23222%22%20width=%22400%22%20height=%22300%22/%3E%3Ctext%20x=%2250%25%22%20y=%2250%25%22%20text-anchor=%22middle%22%20dy=%22.3em%22%20fill=%22%23555%22%20font-size=%2240%22%3E%F0%9F%93%B7%3C/text%3E%3C/svg%3E";
 
-// ==================== NOTIFICACIONES ADMIN ====================
-// MÉTODO 1: ntfy.sh (Recomendado - Funciona inmediatamente)
+// ==================== NOTIFICACION ntfy.sh ====================
+// NO REQUIERE API KEY, NO REQUIERE BOT, NO REQUIERE REGISTRO
 // 1. Instala la app "ntfy" en tu Android (Play Store o F-Droid)
-// 2. Suscríbete al topic: mundolaboral-explorer
-// 3. Listo. Recibirás notificaciones push al instante.
+// 2. Abre la app, toca +, escribe el topic: mundolaboral-explorer
+// 3. Listo. Cada subida te llega notificacion push al instante.
 const NTFY_TOPIC = "mundolaboral-explorer";
-
-// MÉTODO 2: Cloud Function (Opcional - Más profesional)
-// Si despliegas la Cloud Function de Firebase, descomenta y configura:
-// const CLOUD_FUNCTION_URL = "https://us-central1-TU-PROYECTO.cloudfunctions.net/notifyAdmin";
 
 async function notifyAdmin(place) {
     const provinceName = provinces[place.province] ? provinces[place.province].name : place.province;
     const catLabel = categoryLabels[place.category] || place.category;
-    const desc = (place.description || "Sin descripción").substring(0, 200);
+    const desc = (place.description || "Sin descripcion").substring(0, 200);
 
-    // ===== MÉTODO 1: ntfy.sh (Sin API key, gratuito, instantáneo) =====
     try {
         await fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
             method: "POST",
@@ -638,34 +633,10 @@ async function notifyAdmin(place) {
                 "Tags": "camera,warning"
             }
         });
-        console.log("✅ Notificación ntfy.sh enviada");
+        console.log("✅ Notificacion ntfy enviada");
     } catch(e) {
-        console.warn("Error ntfy.sh:", e);
+        console.warn("Error ntfy:", e);
     }
-
-    // ===== MÉTODO 2: Cloud Function (descomenta si la despliegas) =====
-    /*
-    if (typeof CLOUD_FUNCTION_URL !== "undefined") {
-        try {
-            await fetch(CLOUD_FUNCTION_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name: place.name,
-                    category: catLabel,
-                    province: provinceName,
-                    description: desc,
-                    lat: place.lat,
-                    lng: place.lng,
-                    image: place.image
-                })
-            });
-            console.log("✅ Notificación Cloud Function enviada");
-        } catch(e) {
-            console.warn("Error Cloud Function:", e);
-        }
-    }
-    */
 }
 
 function saveToLocal() { localStorage.setItem("valles_places_v2", JSON.stringify(places)); }
@@ -1404,7 +1375,7 @@ async function handleSubmit(event) {
       applyFilter(); renderPlaces(); renderMarkers(); updateCount(); closeForm();
       map.setView([lat, lng], 15);
 
-      // Notificar al admin sobre nueva subida
+      // Notificar al admin via ntfy.sh
       notifyAdmin(newPlace);
 
       if (firebaseReady && db && !result.local) {
