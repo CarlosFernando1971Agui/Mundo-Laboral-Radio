@@ -182,6 +182,118 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 .footer{position:fixed;bottom:0;left:0;right:0;padding:8px 16px;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,0.08);text-align:center;font-size:0.72rem;color:var(--text-muted);z-index:100;white-space:nowrap}
 .main-container{height:calc(100vh - 58px - 34px)}
 @media(max-width:768px){.footer{font-size:0.65rem;padding:6px 10px}}
+
+/* ===== MODAL DE RUTAS ===== */
+.route-modal .modal-content { max-width: 460px; }
+.route-input-group { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
+.route-input-group .form-input { flex: 1; margin: 0; }
+.route-swap-btn { width: 36px; height: 36px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 14px; }
+.route-swap-btn:hover { color: #fff; border-color: var(--accent); transform: rotate(180deg); }
+.route-btn-gps { background: linear-gradient(135deg, #0f3460, #1a5276); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--cyan); padding: 8px 12px; font-size: 0.78rem; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.2s; font-family: inherit; white-space: nowrap; }
+.route-btn-gps:hover { border-color: var(--cyan); }
+.route-result { background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px; margin-top: 12px; display: none; }
+.route-result.active { display: block; }
+.route-result-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.route-result-row:last-child { margin-bottom: 0; }
+.route-result-icon { font-size: 1.1rem; width: 24px; text-align: center; }
+.route-result-label { font-size: 0.75rem; color: var(--text-muted); }
+.route-result-value { font-size: 0.9rem; color: #fff; font-weight: 600; }
+.route-instructions { max-height: 180px; overflow-y: auto; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); }
+.route-step { display: flex; gap: 8px; padding: 6px 0; font-size: 0.78rem; color: #ccc; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.route-step:last-child { border-bottom: none; }
+.route-step-icon { font-size: 0.9rem; flex-shrink: 0; width: 20px; text-align: center; }
+.route-step-text { line-height: 1.4; }
+.route-actions { display: flex; gap: 8px; margin-top: 12px; }
+.route-actions .btn-primary { flex: 1; }
+.route-actions .btn-secondary { flex: 1; background: #333; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem; font-family: inherit; transition: 0.2s; }
+.route-actions .btn-secondary:hover { background: #444; }
+
+/* ===== PANEL DE RUTA EN EL MAPA ===== */
+.route-info-panel {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 14px 18px;
+  z-index: 1000;
+  min-width: 220px;
+  display: none;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+.route-info-panel.active {
+  display: block;
+  animation: routePanelIn 0.3s ease;
+}
+@keyframes routePanelIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.route-info-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.route-info-header-icon {
+  font-size: 1.2rem;
+}
+.route-info-header-title {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 700;
+}
+.route-info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.route-info-row:last-child {
+  margin-bottom: 0;
+}
+.route-info-icon {
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+}
+.route-info-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.route-info-value {
+  font-size: 0.9rem;
+  color: #fff;
+  font-weight: 600;
+  margin-left: auto;
+}
+.route-info-clear {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.route-info-clear:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
 </style>
 </head>
 <body>
@@ -232,6 +344,23 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 
 <main class="map-wrapper">
 <div id="map"></div>
+<div class="route-info-panel" id="route-info-panel">
+<div class="route-info-header">
+<span class="route-info-header-icon">🛣️</span>
+<h4 class="route-info-header-title">Ruta calculada</h4>
+</div>
+<div class="route-info-row">
+<span class="route-info-icon">📏</span>
+<span class="route-info-label">Distancia</span>
+<span class="route-info-value" id="map-route-distance">--</span>
+</div>
+<div class="route-info-row">
+<span class="route-info-icon">⏱️</span>
+<span class="route-info-label">Tiempo estimado</span>
+<span class="route-info-value" id="map-route-duration">--</span>
+</div>
+<button type="button" class="route-info-clear" onclick="clearRoute()"><span>🗑️</span> Limpiar ruta</button>
+</div>
 <div class="map-controls">
 <button class="map-btn" onclick="resetMap()" title="Centrar">🏠</button>
 <button class="map-btn" onclick="goToMyLocation()" title="Mi ubicación">📍</button>
@@ -327,6 +456,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 <span style="font-size:20px;opacity:0.6">🗺️</span>
 </button>
 </div>
+<button type="button" class="btn-primary" style="width:100%;margin-top:10px" onclick="openRouteModal(window.currentDetailId)"><span>🗺️</span> Cómo llegar aquí</button>
+</div>
 </div>
 </div>
 
@@ -347,6 +478,59 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 </div>
 </div>
 
+
+<div class="modal-overlay route-modal" id="route-modal">
+<div class="modal-content">
+<div class="modal-header">
+<h2 class="modal-title">🗺️ Cómo llegar</h2>
+<button class="modal-close" onclick="closeRouteModal()">×</button>
+</div>
+<div>
+<div class="form-group">
+<label class="form-label">📍 Origen</label>
+<div class="route-input-group">
+<input type="text" class="form-input" id="route-origin" placeholder="Escribe una dirección o usa GPS..." style="flex:1">
+<button type="button" class="route-btn-gps" onclick="useMyLocationAsStart()" title="Usar mi ubicación"><span>📡</span> GPS</button>
+</div>
+</div>
+<div style="display:flex;justify-content:center;margin:-4px 0 4px 0">
+<button type="button" class="route-swap-btn" onclick="swapRoutePoints()" title="Intercambiar origen y destino">⇅</button>
+</div>
+<div class="form-group">
+<label class="form-label">🏁 Destino</label>
+<input type="text" class="form-input" id="route-destination" placeholder="Destino" readonly style="background:rgba(0,0,0,0.4);color:#aaa">
+<input type="hidden" id="route-dest-lat">
+<input type="hidden" id="route-dest-lng">
+<input type="hidden" id="route-start-lat">
+<input type="hidden" id="route-start-lng">
+</div>
+<div class="route-actions">
+<button type="button" class="btn-primary" onclick="calculateRouteFromInputs()"><span>🛣️</span> Calcular ruta</button>
+<button type="button" class="btn-secondary" onclick="clearRoute(); closeRouteModal();"><span>✕</span> Cerrar</button>
+</div>
+<div class="route-result" id="route-result">
+<div class="route-result-row">
+<span class="route-result-icon">📏</span>
+<div>
+<p class="route-result-label">Distancia</p>
+<p class="route-result-value" id="route-distance">--</p>
+</div>
+</div>
+<div class="route-result-row">
+<span class="route-result-icon">⏱️</span>
+<div>
+<p class="route-result-label">Tiempo estimado</p>
+<p class="route-result-value" id="route-duration">--</p>
+</div>
+</div>
+<div class="route-instructions" id="route-instructions"></div>
+<div class="route-actions" style="margin-top:10px">
+<button type="button" class="btn-secondary" style="width:100%" onclick="clearRoute(); document.getElementById('route-result').classList.remove('active');"><span>🗑️</span> Limpiar ruta del mapa</button>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div class="admin-panel" id="admin-panel">
 <div class="admin-container">
 <div class="admin-header">
@@ -505,8 +689,14 @@ async function updatePlaceStatus(id, status) {
 
 // ==================== SINCRONIZACION EN TIEMPO REAL ====================
 function startRealtimeSync() {
+  // Timeout de seguridad: si en 6 segundos no responde, mostrar offline
+  const syncTimeout = setTimeout(() => {
+    updateStatus("🟡 Modo offline", "#f7b731");
+  }, 6000);
+
   if (!firebaseReady || !db) {
     console.log("Firebase not ready, using localStorage only");
+    clearTimeout(syncTimeout);
     updateStatus("🟡 Modo offline", "#f7b731");
     return;
   }
@@ -555,6 +745,7 @@ function startRealtimeSync() {
     renderMarkers(); 
     updateCount();
     if (isAdmin) { updateAdminCounts(); renderAdminGrid(); }
+    clearTimeout(syncTimeout);
     updateStatus("🟢 Conectado", "#26de81");
 
     // Iniciar listener de tiempo real
@@ -564,6 +755,7 @@ function startRealtimeSync() {
     syncPendingLocalPlaces();
 
   }).catch((error) => {
+    clearTimeout(syncTimeout);
     console.error("FIREBASE LOAD ERROR:", error.code || "", "-", error.message);
 
     if (error.code === "permission-denied") {
@@ -779,9 +971,13 @@ function initMap() {
 }
 
 function drawProvinceBoundaries() {
-  provincePolygons.vallegrande = L.polygon([[-18.29, -64.30], [-18.29, -63.53], [-19.18, -63.53], [-19.18, -64.30]], { color: "#e94560", weight: 2, fillColor: "#e94560", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map).bindPopup("Provincia Vallegrande");
-  provincePolygons.florida = L.polygon([[-17.60, -64.30], [-17.60, -63.50], [-18.65, -63.50], [-18.65, -64.30]], { color: "#4ecdc4", weight: 2, fillColor: "#4ecdc4", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map).bindPopup("Provincia Florida");
-  provincePolygons.caballero = L.polygon([[-17.43, -64.50], [-17.43, -64.07], [-18.15, -64.07], [-18.15, -64.50]], { color: "#f7b731", weight: 2, fillColor: "#f7b731", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map).bindPopup("Provincia Caballero");
+  // Rectángulos aproximados SIN solapamiento entre provincias
+  // Vallegrande: sur, limita al norte con Florida en lat ~-18.32
+  provincePolygons.vallegrande = L.polygon([[-18.32, -64.35], [-18.32, -63.50], [-19.18, -63.50], [-19.18, -64.35]], { color: "#e94560", weight: 2, fillColor: "#e94560", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map);
+  // Florida: norte de Vallegrande, limita al sur en lat ~-18.32
+  provincePolygons.florida = L.polygon([[-17.60, -64.35], [-17.60, -63.50], [-18.32, -63.50], [-18.32, -64.35]], { color: "#4ecdc4", weight: 2, fillColor: "#4ecdc4", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map);
+  // Caballero: al oeste
+  provincePolygons.caballero = L.polygon([[-17.43, -64.55], [-17.43, -64.15], [-18.15, -64.15], [-18.15, -64.55]], { color: "#f7b731", weight: 2, fillColor: "#f7b731", fillOpacity: 0.03, dashArray: "8, 8" }).addTo(map);
 }
 
 function setProvince(prov) {
@@ -1169,9 +1365,9 @@ async function handleSubmit(event) {
   }
 }
 
-let currentDetailId = null;
+window.currentDetailId = null;
 function showDetail(id) {
-  currentDetailId = id;
+  window.currentDetailId = id;
   // Cerrar cualquier popup de Leaflet abierto
   if (map) map.closePopup();
   const place = places.find(p => p.id === id);
@@ -1495,6 +1691,7 @@ window.onclick = function(event) {
   if (event.target.id === "detail-modal") closeDetail();
   if (event.target.id === "login-modal") closeAdminLogin();
   if (event.target.id === "data-modal") closeDataManager();
+  if (event.target.id === "route-modal") closeRouteModal();
 };
 
 // ==================== GESTION DE DATOS (EXPORTAR/IMPORTAR) ====================
@@ -1596,6 +1793,265 @@ if (map) {
   });
 }
 
+
+// ==================== UTILIDADES ====================
+function escapeHtml(text) {
+  if (typeof text !== "string") return String(text);
+  return text.replace(/&/g, "&amp;")
+             .replace(/</g, "&lt;")
+             .replace(/>/g, "&gt;")
+             .replace(/"/g, "&quot;")
+             .replace(/'/g, "&#039;");
+}
+
+// ==================== RUTAS / DIRECTIONS ====================
+let routeLayer = null;
+let routeStartMarker = null;
+let routeEndMarker = null;
+// currentDetailId ya está declarada en showDetail() del código original
+
+function openRouteModal(placeId) {
+  window.currentDetailId = placeId;
+  const place = places.find(p => p.id === placeId);
+  if (!place) return;
+  document.getElementById("route-destination").value = place.name;
+  document.getElementById("route-dest-lat").value = place.lat;
+  document.getElementById("route-dest-lng").value = place.lng;
+  document.getElementById("route-origin").value = "";
+  document.getElementById("route-start-lat").value = "";
+  document.getElementById("route-start-lng").value = "";
+  document.getElementById("route-result").classList.remove("active");
+  document.getElementById("route-modal").classList.add("active");
+}
+
+function closeRouteModal() {
+  document.getElementById("route-modal").classList.remove("active");
+  document.body.style.overflow = "";
+  requestAnimationFrame(() => { if (map) map.invalidateSize(); });
+}
+
+function swapRoutePoints() {
+  const originInput = document.getElementById("route-origin");
+  const destInput = document.getElementById("route-destination");
+  const startLat = document.getElementById("route-start-lat").value;
+  const startLng = document.getElementById("route-start-lng").value;
+  const destLat = document.getElementById("route-dest-lat").value;
+  const destLng = document.getElementById("route-dest-lng").value;
+  if (!startLat || !destLat) {
+    showToast("⚠️ Necesitas un origen con coordenadas", "#f7b731");
+    return;
+  }
+  const tempName = originInput.value;
+  originInput.value = destInput.value;
+  destInput.value = tempName;
+  document.getElementById("route-start-lat").value = destLat;
+  document.getElementById("route-start-lng").value = destLng;
+  document.getElementById("route-dest-lat").value = startLat;
+  document.getElementById("route-dest-lng").value = startLng;
+  if (routeLayer) calculateRouteFromInputs();
+}
+
+function useMyLocationAsStart() {
+  const statusEl = document.getElementById("route-origin");
+  if (!navigator.geolocation) {
+    showToast("❌ Geolocalización no soportada", "#e94560");
+    return;
+  }
+  statusEl.placeholder = "📡 Buscando...";
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      document.getElementById("route-start-lat").value = lat;
+      document.getElementById("route-start-lng").value = lng;
+      fetch("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + lat + "&lon=" + lng + "&zoom=18&addressdetails=1")
+        .then(r => r.json())
+        .then(data => {
+          const name = data.display_name || ("Mi ubicación (" + lat.toFixed(4) + ", " + lng.toFixed(4) + ")");
+          statusEl.value = name.split(",").slice(0, 3).join(",");
+        })
+        .catch(() => {
+          statusEl.value = "Mi ubicación (" + lat.toFixed(5) + ", " + lng.toFixed(5) + ")";
+        });
+      showToast("📍 Ubicación obtenida", "#4ecdc4");
+    },
+    () => {
+      statusEl.placeholder = "Escribe una dirección o usa GPS...";
+      showToast("❌ No se pudo obtener ubicación", "#e94560");
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}
+
+function geocodeAddress(query, callback) {
+  if (!query || query.trim().length < 3) { callback(null, "Dirección muy corta"); return; }
+  const url = "https://nominatim.openstreetmap.org/search?format=json&q=" + encodeURIComponent(query.trim()) + "&limit=1&countrycodes=bo";
+  fetch(url, { headers: { "Accept-Language": "es" } })
+    .then(r => r.json())
+    .then(data => {
+      if (data && data.length > 0) {
+        callback({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon), name: data[0].display_name }, null);
+      } else {
+        callback(null, "No se encontró la dirección. Intenta ser más específico.");
+      }
+    })
+    .catch(() => callback(null, "Error de conexión con el servicio de geocodificación."));
+}
+
+function calculateRouteFromInputs() {
+  const originText = document.getElementById("route-origin").value.trim();
+  const destLat = parseFloat(document.getElementById("route-dest-lat").value);
+  const destLng = parseFloat(document.getElementById("route-dest-lng").value);
+  let startLat = parseFloat(document.getElementById("route-start-lat").value);
+  let startLng = parseFloat(document.getElementById("route-start-lng").value);
+
+  if (isNaN(destLat) || isNaN(destLng)) {
+    showToast("⚠️ Destino no válido", "#f7b731");
+    return;
+  }
+  if (!isNaN(startLat) && !isNaN(startLng)) {
+    calculateRoute(startLat, startLng, destLat, destLng);
+    return;
+  }
+  if (!originText) {
+    showToast("⚠️ Escribe un origen o usa GPS", "#f7b731");
+    return;
+  }
+  showLoading("Buscando origen...");
+  geocodeAddress(originText, function(result, error) {
+    hideLoading();
+    if (error) {
+      showToast("❌ " + error, "#e94560");
+      return;
+    }
+    document.getElementById("route-start-lat").value = result.lat;
+    document.getElementById("route-start-lng").value = result.lng;
+    document.getElementById("route-origin").value = result.name.split(",").slice(0, 3).join(",");
+    calculateRoute(result.lat, result.lng, destLat, destLng);
+  });
+}
+
+function calculateRoute(startLat, startLng, endLat, endLng) {
+  showLoading("Calculando ruta...");
+  const url = "https://router.project-osrm.org/route/v1/driving/" + startLng + "," + startLat + ";" + endLng + "," + endLat + "?overview=full&geometries=geojson&steps=true";
+
+  fetch(url)
+    .then(r => {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    })
+    .then(data => {
+      hideLoading();
+      if (data.code !== "Ok" || !data.routes || data.routes.length === 0) {
+        showToast("❌ No se pudo calcular la ruta", "#e94560");
+        return;
+      }
+      const route = data.routes[0];
+      const geometry = route.geometry;
+      const distance = route.distance;
+      const duration = route.duration;
+      const legs = route.legs;
+      let instructions = [];
+      if (legs && legs.length > 0) {
+        legs.forEach(leg => {
+          if (leg.steps) {
+            leg.steps.forEach(step => {
+              instructions.push({
+                text: step.maneuver ? (step.name || "Continuar") : "Continuar",
+                distance: step.distance,
+                type: step.maneuver ? step.maneuver.type : "straight"
+              });
+            });
+          }
+        });
+      }
+      drawRoute(geometry, distance, duration, instructions);
+      document.getElementById("route-distance").textContent = formatDistance(distance);
+      document.getElementById("route-duration").textContent = formatDuration(duration);
+      const instrContainer = document.getElementById("route-instructions");
+      if (instructions.length > 0) {
+        let html = '<p style="margin:0 0 6px 0;font-size:0.72rem;color:var(--text-muted);font-weight:600">Instrucciones:</p>';
+        instructions.slice(0, 20).forEach((inst, i) => {
+          let icon = "➡️";
+          if (inst.type && inst.type.includes("left")) icon = "⬅️";
+          else if (inst.type && inst.type.includes("right")) icon = "➡️";
+          else if (inst.type && inst.type.includes("uturn")) icon = "↩️";
+          else if (inst.type && inst.type.includes("roundabout")) icon = "🔄";
+          else if (inst.type && inst.type.includes("arrive")) icon = "🏁";
+          else if (inst.type && inst.type.includes("depart")) icon = "🚀";
+          html += '<div class="route-step"><span class="route-step-icon">' + icon + '</span><span class="route-step-text">' + escapeHtml(inst.text) + ' <span style="color:#888">(' + formatDistance(inst.distance) + ')</span></span></div>';
+        });
+        if (instructions.length > 20) html += '<div class="route-step" style="color:#888;font-style:italic">... y ' + (instructions.length - 20) + ' pasos más</div>';
+        instrContainer.innerHTML = html;
+      } else {
+        instrContainer.innerHTML = "";
+      }
+      document.getElementById("route-result").classList.add("active");
+      showToast("✅ Ruta calculada: " + formatDistance(distance) + " · " + formatDuration(duration), "#26de81");
+    })
+    .catch(err => {
+      hideLoading();
+      console.error("Routing error:", err);
+      showToast("❌ Error al calcular la ruta. Intenta de nuevo.", "#e94560");
+    });
+}
+
+function drawRoute(geometry, distance, duration, instructions) {
+  clearRoute();
+  if (!geometry || !geometry.coordinates) return;
+  const latlngs = geometry.coordinates.map(coord => [coord[1], coord[0]]);
+  routeLayer = L.polyline(latlngs, {
+    color: "#e94560",
+    weight: 5,
+    opacity: 0.85,
+    lineCap: "round",
+    lineJoin: "round"
+  }).addTo(map);
+  const startIcon = L.divIcon({
+    className: "custom-marker",
+    html: '<div style="width:14px;height:14px;background:#26de81;border-radius:50%;border:3px solid white;box-shadow:0 0 0 4px rgba(38,222,129,0.3)"></div>',
+    iconSize: [14, 14], iconAnchor: [7, 7]
+  });
+  routeStartMarker = L.marker(latlngs[0], { icon: startIcon }).addTo(map).bindPopup("🚀 Inicio de ruta");
+  const endIcon = L.divIcon({
+    className: "custom-marker",
+    html: '<div style="width:14px;height:14px;background:#e94560;border-radius:50%;border:3px solid white;box-shadow:0 0 0 4px rgba(233,69,96,0.3)"></div>',
+    iconSize: [14, 14], iconAnchor: [7, 7]
+  });
+  routeEndMarker = L.marker(latlngs[latlngs.length - 1], { icon: endIcon }).addTo(map).bindPopup("🏁 Destino");
+  map.fitBounds(routeLayer.getBounds(), { padding: [40, 40], maxZoom: 16 });
+
+  // Mostrar panel de info en el mapa
+  const panel = document.getElementById("route-info-panel");
+  if (panel) {
+    document.getElementById("map-route-distance").textContent = formatDistance(distance);
+    document.getElementById("map-route-duration").textContent = formatDuration(duration);
+    panel.classList.add("active");
+  }
+}
+
+function clearRoute() {
+  if (routeLayer) { map.removeLayer(routeLayer); routeLayer = null; }
+  if (routeStartMarker) { map.removeLayer(routeStartMarker); routeStartMarker = null; }
+  if (routeEndMarker) { map.removeLayer(routeEndMarker); routeEndMarker = null; }
+  // Ocultar panel de info en el mapa
+  const panel = document.getElementById("route-info-panel");
+  if (panel) panel.classList.remove("active");
+}
+
+function formatDistance(meters) {
+  if (meters >= 1000) return (meters / 1000).toFixed(1) + " km";
+  return Math.round(meters) + " m";
+}
+
+function formatDuration(seconds) {
+  const mins = Math.round(seconds / 60);
+  if (mins < 60) return mins + " min";
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return h + " h " + (m > 0 ? m + " min" : "");
+}
+
 window.setProvince = setProvince;
 window.setFilter = setFilter;
 window.toggleSidebar = toggleSidebar;
@@ -1625,6 +2081,12 @@ window.openDataManager = openDataManager;
 window.closeDataManager = closeDataManager;
 window.exportData = exportData;
 window.handleImportFile = handleImportFile;
+window.openRouteModal = openRouteModal;
+window.closeRouteModal = closeRouteModal;
+window.swapRoutePoints = swapRoutePoints;
+window.useMyLocationAsStart = useMyLocationAsStart;
+window.calculateRouteFromInputs = calculateRouteFromInputs;
+window.clearRoute = clearRoute;
 </script>
 
 <div class="modal-overlay" id="image-modal" onclick="closeImageModal()">
