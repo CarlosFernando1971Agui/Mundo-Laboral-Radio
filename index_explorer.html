@@ -576,13 +576,20 @@ let app, db, storage;
 let firebaseReady = false;
 let unsubscribeSnapshot = null;
 
+// Detectar si estamos en protocolo file:/// (sin servidor web)
+const isFileProtocol = window.location.protocol === "file:";
+if (isFileProtocol) {
+  console.warn("⚠️ Archivo local detectado. Firebase Storage estara deshabilitado para evitar errores CORS. Las imagenes se guardaran como base64.");
+}
+
 try {
   app = initializeApp(firebaseConfig);
   db = getFirestore(app);
-  storage = getStorage(app);
+  // En file:/// no usar Firebase Storage (CORS bloquea uploads)
+  storage = isFileProtocol ? null : getStorage(app);
   firebaseReady = true;
-  updateStatus("🟢 Conectado", "#26de81");
-  console.log("Firebase initialized successfully");
+  updateStatus(isFileProtocol ? "🟡 Modo local (sin servidor)" : "🟢 Conectado", isFileProtocol ? "#f7b731" : "#26de81");
+  console.log("Firebase initialized. Storage:", storage ? "activo" : "desactivado (archivo local)");
 } catch (e) {
   console.warn("Firebase init failed:", e.message);
   firebaseReady = false;
@@ -622,55 +629,20 @@ async function notifyAdmin(place) {
     const provinceName = provinces[place.province] ? provinces[place.province].name : place.province;
     const catLabel = categoryLabels[place.category] || place.category;
     const desc = (place.description || "Sin descripcion").substring(0, 200);
-    const bodyText = `${place.name}\n${catLabel} | ${provinceName}\n${desc}\n📍 ${place.lat.toFixed(6)}, ${place.lng.toFixed(6)}`;
 
-    // METODO 1: Fetch normal (funciona si esta en servidor web)
-    try {
-        const resp = await fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
-            method: "POST",
-            body: bodyText,
-            headers: {
-                "Title": "📸 Nuevo lugar en Explorer",
-                "Priority": "high",
-                "Tags": "camera,warning"
-            }
-        });
-        if (resp.ok || resp.status === 0) {
-            console.log("✅ Notificacion ntfy enviada (fetch)");
-            return;
-        }
-    } catch(e) {
-        console.warn("ntfy fetch fallo:", e.message);
-    }
-
-    // METODO 2: Fetch con no-cors (envia la peticion aunque no pueda leer respuesta)
     try {
         await fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
             method: "POST",
-            mode: "no-cors",
-            body: bodyText,
+            body: `${place.name}\n${catLabel} | ${provinceName}\n${desc}\n📍 ${place.lat.toFixed(6)}, ${place.lng.toFixed(6)}`,
             headers: {
                 "Title": "📸 Nuevo lugar en Explorer",
                 "Priority": "high",
                 "Tags": "camera,warning"
             }
         });
-        console.log("✅ Notificacion ntfy enviada (no-cors)");
-        return;
+        console.log("✅ Notificacion ntfy enviada");
     } catch(e) {
-        console.warn("ntfy no-cors fallo:", e.message);
-    }
-
-    // METODO 3: Imagen/pixel tracking (funciona desde file:/// y cualquier lugar)
-    // ntfy.sh tambien acepta GET requests
-    try {
-        const msg = encodeURIComponent(bodyText);
-        const title = encodeURIComponent("📸 Nuevo lugar en Explorer");
-        const img = new Image();
-        img.src = `https://ntfy.sh/${NTFY_TOPIC}?title=${title}&message=${msg}&priority=high&tags=camera,warning`;
-        console.log("✅ Notificacion ntfy enviada (pixel GET)");
-    } catch(e) {
-        console.warn("ntfy pixel fallo:", e.message);
+        console.warn("Error ntfy:", e);
     }
 }
 
@@ -937,6 +909,7 @@ async function syncPendingLocalPlaces() {
 }
 
 async function uploadImage(file) {
+  // Si no hay Firebase Storage, usar base64 directamente (sin errores CORS)
   if (!firebaseReady || !storage) {
     return new Promise((resolve) => { 
       const r = new FileReader(); 
@@ -944,6 +917,7 @@ async function uploadImage(file) {
       r.readAsDataURL(file); 
     });
   }
+
   const fileName = "places/" + Date.now() + "_" + file.name.replace(/[^a-zA-Z0-9.]/g, "_");
   const storageRef = ref(storage, fileName);
   const uploadTask = uploadBytesResumable(storageRef, file);
@@ -952,11 +926,17 @@ async function uploadImage(file) {
     let completed = false;
     const timeout = setTimeout(() => {
       if (!completed) { completed = true; reject(new Error("Firebase Storage timeout")); }
-    }, 10000); // 10 segundos maximo
+    }, 10000);
 
     uploadTask.on("state_changed",
       (snapshot) => { updateProgress((snapshot.bytesTransferred / snapshot.totalBytes) * 100); },
-      (error) => { if (!completed) { completed = true; clearTimeout(timeout); reject(error); } },
+      (error) => { 
+        if (!completed) { 
+          completed = true; clearTimeout(timeout); 
+          console.warn("Firebase Storage upload error:", error.code, error.message);
+          reject(error); 
+        } 
+      },
       async () => {
         if (!completed) {
           completed = true; clearTimeout(timeout);
@@ -1369,11 +1349,16 @@ async function handleSubmit(event) {
             uploadImage(selectedFile),
             new Promise((_, reject) => setTimeout(() => reject(new Error("upload timeout")), 8000))
           ]); 
+          console.log("Imagen subida a Firebase:", imageUrl.substring(0, 60) + "...");
         } catch (e) { 
+          console.warn("Firebase Storage fallo, usando base64:", e.message);
           imageUrl = selectedFileData;
+          showToast("⚠️ Guardado localmente (sin servidor web)", "#f7b731");
         }
       } else {
+        // Modo local: usar base64 directamente, sin intentar Firebase
         imageUrl = selectedFileData;
+        console.log("Modo local: imagen guardada como base64");
       }
     }
 
