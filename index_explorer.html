@@ -611,6 +611,69 @@ const fallbackImg65 = "data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/20
 const fallbackImg260 = "data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22260%22%20height=%22150%22%3E%3Crect%20fill=%22%23333%22%20width=%22260%22%20height=%22150%22/%3E%3Ctext%20x=%2250%25%22%20y=%2250%25%22%20text-anchor=%22middle%22%20dy=%22.3em%22%20fill=%22%23666%22%20font-size=%2224%22%3E%F0%9F%93%B7%3C/text%3E%3C/svg%3E";
 const fallbackImg400 = "data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22400%22%20height=%22300%22%3E%3Crect%20fill=%22%23222%22%20width=%22400%22%20height=%22300%22/%3E%3Ctext%20x=%2250%25%22%20y=%2250%25%22%20text-anchor=%22middle%22%20dy=%22.3em%22%20fill=%22%23555%22%20font-size=%2240%22%3E%F0%9F%93%B7%3C/text%3E%3C/svg%3E";
 
+// ==================== NOTIFICACION ntfy.sh ====================
+// NO REQUIERE API KEY, NO REQUIERE BOT, NO REQUIERE REGISTRO
+// 1. Instala la app "ntfy" en tu Android (Play Store o F-Droid)
+// 2. Abre la app, toca +, escribe el topic: mundolaboral-explorer
+// 3. Listo. Cada subida te llega notificacion push al instante.
+const NTFY_TOPIC = "mundolaboral-explorer";
+
+async function notifyAdmin(place) {
+    const provinceName = provinces[place.province] ? provinces[place.province].name : place.province;
+    const catLabel = categoryLabels[place.category] || place.category;
+    const desc = (place.description || "Sin descripcion").substring(0, 200);
+    const bodyText = `${place.name}\n${catLabel} | ${provinceName}\n${desc}\n📍 ${place.lat.toFixed(6)}, ${place.lng.toFixed(6)}`;
+
+    // METODO 1: Fetch normal (funciona si esta en servidor web)
+    try {
+        const resp = await fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+            method: "POST",
+            body: bodyText,
+            headers: {
+                "Title": "📸 Nuevo lugar en Explorer",
+                "Priority": "high",
+                "Tags": "camera,warning"
+            }
+        });
+        if (resp.ok || resp.status === 0) {
+            console.log("✅ Notificacion ntfy enviada (fetch)");
+            return;
+        }
+    } catch(e) {
+        console.warn("ntfy fetch fallo:", e.message);
+    }
+
+    // METODO 2: Fetch con no-cors (envia la peticion aunque no pueda leer respuesta)
+    try {
+        await fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+            method: "POST",
+            mode: "no-cors",
+            body: bodyText,
+            headers: {
+                "Title": "📸 Nuevo lugar en Explorer",
+                "Priority": "high",
+                "Tags": "camera,warning"
+            }
+        });
+        console.log("✅ Notificacion ntfy enviada (no-cors)");
+        return;
+    } catch(e) {
+        console.warn("ntfy no-cors fallo:", e.message);
+    }
+
+    // METODO 3: Imagen/pixel tracking (funciona desde file:/// y cualquier lugar)
+    // ntfy.sh tambien acepta GET requests
+    try {
+        const msg = encodeURIComponent(bodyText);
+        const title = encodeURIComponent("📸 Nuevo lugar en Explorer");
+        const img = new Image();
+        img.src = `https://ntfy.sh/${NTFY_TOPIC}?title=${title}&message=${msg}&priority=high&tags=camera,warning`;
+        console.log("✅ Notificacion ntfy enviada (pixel GET)");
+    } catch(e) {
+        console.warn("ntfy pixel fallo:", e.message);
+    }
+}
+
 function saveToLocal() { localStorage.setItem("valles_places_v2", JSON.stringify(places)); }
 function loadFromLocal() { const d = localStorage.getItem("valles_places_v2"); return d ? JSON.parse(d) : []; }
 
@@ -1346,6 +1409,9 @@ async function handleSubmit(event) {
       // savePlaceToFirebase ya agrego el lugar a 'places' (local o via Firebase)
       applyFilter(); renderPlaces(); renderMarkers(); updateCount(); closeForm();
       map.setView([lat, lng], 15);
+
+      // Notificar al admin via ntfy.sh
+      notifyAdmin(newPlace);
 
       if (firebaseReady && db && !result.local) {
         showToast("✅ Enviado para revisión", "#26de81");
