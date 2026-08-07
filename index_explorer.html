@@ -294,6 +294,147 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
   opacity: 0.9;
   transform: translateY(-1px);
 }
+
+/* ===== LISTA DE LUGARES ===== */
+.places-list-panel {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(10px);
+  z-index: 3000;
+  overflow-y: auto;
+  padding: 20px;
+}
+.places-list-panel.active {
+  display: block;
+}
+.places-list-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, var(--bg-dark), var(--bg-mid));
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 24px;
+  min-height: 80vh;
+}
+.places-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.places-list-title {
+  margin: 0;
+  color: var(--accent);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.places-province-section {
+  margin-bottom: 24px;
+}
+.places-province-title {
+  margin: 0 0 12px 0;
+  font-size: 1.1rem;
+  color: #fff;
+  padding: 8px 14px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 10px;
+  border-left: 4px solid var(--accent);
+}
+.places-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.place-list-card {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.place-list-card:hover {
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
+}
+.place-list-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+}
+.place-list-body {
+  padding: 12px;
+}
+.place-list-name {
+  margin: 0 0 4px 0;
+  font-size: 0.95rem;
+  color: #fff;
+}
+.place-list-meta {
+  margin: 0 0 8px 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.place-list-desc {
+  margin: 0 0 10px 0;
+  font-size: 0.78rem;
+  color: #aaa;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.place-list-actions {
+  display: flex;
+  gap: 6px;
+}
+.place-list-btn {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.2s;
+  font-family: inherit;
+  color: #fff;
+}
+.place-list-btn-wa {
+  background: linear-gradient(135deg, #25D366, #128C7E);
+}
+.place-list-btn-fb {
+  background: linear-gradient(135deg, #1877F2, #0d5cb6);
+}
+.place-list-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.place-list-empty {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+}
+@media (max-width: 600px) {
+  .places-grid {
+    grid-template-columns: 1fr;
+  }
+  .places-list-container {
+    padding: 16px;
+  }
+}
 </style>
 </head>
 <body>
@@ -320,6 +461,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 <p class="header-status" id="conn-status">⏳ Cargando...</p>
 <button class="btn-icon" id="admin-btn" onclick="openAdminLogin()" title="Panel Admin">🔒</button>
 <button class="btn-icon" onclick="openDataManager()" title="Exportar/Importar datos">💾</button>
+<button class="btn-icon" onclick="openPlacesList()" title="Ver lista de lugares">📋</button>
 <button class="btn-primary" onclick="openForm()"><span>📷</span> <span class="btn-text">Subir</span></button>
 </div>
 </header>
@@ -456,6 +598,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 <span style="font-size:20px;opacity:0.6">🗺️</span>
 </button>
 </div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button type="button" class="btn-primary" style="flex:1;background:linear-gradient(135deg,#25D366,#128C7E)" onclick="sharePlace('wa')"><span>📱</span> WhatsApp</button>
+<button type="button" class="btn-primary" style="flex:1;background:linear-gradient(135deg,#1877F2,#0d5cb6)" onclick="sharePlace('fb')"><span>📘</span> Facebook</button>
+</div>
 <button type="button" class="btn-primary" style="width:100%;margin-top:10px" onclick="openRouteModal(window.currentDetailId)"><span>🗺️</span> Cómo llegar aquí</button>
 </div>
 </div>
@@ -530,6 +676,16 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 </div>
 </div>
 </div>
+</div>
+
+<div class="places-list-panel" id="places-list-panel">
+  <div class="places-list-container">
+    <div class="places-list-header">
+      <h2 class="places-list-title">📋 Lista de Lugares</h2>
+      <button class="modal-close" onclick="closePlacesList()" style="color:#fff">×</button>
+    </div>
+    <div id="places-list-content"></div>
+  </div>
 </div>
 <div class="admin-panel" id="admin-panel">
 <div class="admin-container">
@@ -689,6 +845,13 @@ async function updatePlaceStatus(id, status) {
 
 // ==================== SINCRONIZACION EN TIEMPO REAL ====================
 function startRealtimeSync() {
+  // Si no hay Firebase, no intentar conectar
+  if (!firebaseReady || !db) {
+    console.log("Firebase no disponible, usando solo localStorage");
+    updateStatus("🟡 Modo offline", "#f7b731");
+    return;
+  }
+
   // Timeout de seguridad: si en 6 segundos no responde, mostrar offline
   const syncTimeout = setTimeout(() => {
     updateStatus("🟡 Modo offline", "#f7b731");
@@ -874,34 +1037,12 @@ async function syncPendingLocalPlaces() {
 }
 
 async function uploadImage(file) {
-  if (!firebaseReady || !storage) {
-    return new Promise((resolve) => { 
-      const r = new FileReader(); 
-      r.onload = (e) => resolve(e.target.result); 
-      r.readAsDataURL(file); 
-    });
-  }
-  const fileName = "places/" + Date.now() + "_" + file.name.replace(/[^a-zA-Z0-9.]/g, "_");
-  const storageRef = ref(storage, fileName);
-  const uploadTask = uploadBytesResumable(storageRef, file);
-
-  return new Promise((resolve, reject) => {
-    let completed = false;
-    const timeout = setTimeout(() => {
-      if (!completed) { completed = true; reject(new Error("Firebase Storage timeout")); }
-    }, 10000); // 10 segundos maximo
-
-    uploadTask.on("state_changed",
-      (snapshot) => { updateProgress((snapshot.bytesTransferred / snapshot.totalBytes) * 100); },
-      (error) => { if (!completed) { completed = true; clearTimeout(timeout); reject(error); } },
-      async () => {
-        if (!completed) {
-          completed = true; clearTimeout(timeout);
-          try { const url = await getDownloadURL(uploadTask.snapshot.ref); resolve(url); }
-          catch (e) { reject(e); }
-        }
-      }
-    );
+  // NUNCA usamos Firebase Storage (requiere plan de pago).
+  // Guardamos la imagen como base64 en Firestore/localStorage.
+  return new Promise((resolve) => { 
+    const r = new FileReader(); 
+    r.onload = (e) => resolve(e.target.result); 
+    r.readAsDataURL(file); 
   });
 }
 
@@ -917,29 +1058,58 @@ function showToast(message, color) {
 }
 
 document.addEventListener("DOMContentLoaded", async function() {
-  initMap();
-  requestAnimationFrame(() => { if (map) map.invalidateSize(); });
+  try {
+    initMap();
+    requestAnimationFrame(() => { if (map) map.invalidateSize(); });
 
-  // PASO 1: Cargar datos locales INMEDIATAMENTE (offline-first)
-  // Los usuarios deben ver sus datos sin esperar a Firebase
-  const localData = loadFromLocal();
-  if (Array.isArray(localData) && localData.length > 0) {
-    places = localData;
-  } else {
-    places = [];
+    // PASO 1: Cargar datos locales INMEDIATAMENTE (offline-first)
+    const localData = loadFromLocal();
+    if (Array.isArray(localData) && localData.length > 0) {
+      places = localData;
+      console.log("Datos locales cargados:", places.length, "lugares");
+    } else {
+      places = [];
+      console.log("Sin datos locales");
+    }
+
+    // PASO 2: Renderizar inmediatamente con datos locales
+    applyFilter(); renderPlaces(); renderMarkers(); updateCount();
+    setProvince("vallegrande");
+
+    // PASO 3: Timeout de seguridad - si Firebase no responde, mostrar offline
+    setTimeout(() => {
+      const status = document.getElementById("conn-status");
+      if (status && status.textContent.includes("Cargando")) {
+        updateStatus("🟡 Modo offline", "#f7b731");
+      }
+    }, 4000);
+
+    // PASO 4: Iniciar sincronizacion con Firebase en segundo plano
+    startRealtimeSync();
+
+    setTimeout(() => { if (map) map.invalidateSize(); }, 200);
+    setTimeout(() => { if (map) map.invalidateSize(); }, 500);
+
+    // Abrir lugar desde URL hash (#place=ID)
+    setTimeout(() => {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith("#place=")) {
+        const placeId = decodeURIComponent(hash.replace("#place=", ""));
+        const place = places.find(p => p.id === placeId);
+        if (place) {
+          setProvince(place.province);
+          setTimeout(() => {
+            map.setView([place.lat, place.lng], 16);
+            showDetail(place.id);
+          }, 300);
+        }
+      }
+    }, 800);
+  } catch (e) {
+    console.error("Error en inicializacion:", e);
+    updateStatus("🔴 Error de carga", "#e94560");
+    document.getElementById("count-text").textContent = "Error al cargar datos";
   }
-
-  // PASO 2: Renderizar inmediatamente con datos locales
-  applyFilter(); renderPlaces(); renderMarkers(); updateCount();
-  setProvince("vallegrande");
-
-  // PASO 3: Iniciar sincronizacion con Firebase en segundo plano
-  // Esto NO bloquea la UI. Si Firebase falla o tarda, el usuario ya ve sus datos.
-  // Si alguien sube una foto desde otro dispositivo, aparece automaticamente aqui.
-  startRealtimeSync();
-
-  setTimeout(() => { if (map) map.invalidateSize(); }, 200);
-  setTimeout(() => { if (map) map.invalidateSize(); }, 500);
 });
 
 
@@ -1297,21 +1467,10 @@ async function handleSubmit(event) {
     showLoading("Subiendo...");
     document.getElementById("upload-progress").style.display = "block";
 
-    // 1. Preparar imagen
+    // 1. Preparar imagen (base64, sin Firebase Storage)
     let imageUrl = fallbackImg400;
     if (selectedFile && selectedFileData) {
-      if (firebaseReady && storage) {
-        try { 
-          imageUrl = await Promise.race([
-            uploadImage(selectedFile),
-            new Promise((_, reject) => setTimeout(() => reject(new Error("upload timeout")), 8000))
-          ]); 
-        } catch (e) { 
-          imageUrl = selectedFileData;
-        }
-      } else {
-        imageUrl = selectedFileData;
-      }
+      imageUrl = selectedFileData;
     }
 
     // 2. Crear objeto lugar
@@ -1363,6 +1522,24 @@ async function handleSubmit(event) {
     if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = ""; submitBtn.style.cursor = ""; }
     isSubmitting = false;
   }
+}
+
+function sharePlace(platform) {
+    const place = places.find(p => p.id === window.currentDetailId);
+    if (!place) return;
+
+    const provinceName = provinces[place.province] ? provinces[place.province].name : place.province;
+    const catLabel = categoryLabels[place.category] || place.category;
+    const url = window.location.href.split("#")[0] + "#place=" + encodeURIComponent(place.id);
+    const text = "📸 " + place.name + " - " + catLabel + " en " + provinceName + "
+📍 " + place.lat.toFixed(6) + ", " + place.lng.toFixed(6) + "
+";
+
+    if (platform === "wa") {
+        window.open("https://wa.me/?text=" + encodeURIComponent(text + "Ver en el Explorer: " + url), "_blank");
+    } else if (platform === "fb") {
+        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url) + "&quote=" + encodeURIComponent(text), "_blank", "width=600,height=400");
+    }
 }
 
 window.currentDetailId = null;
@@ -2050,6 +2227,75 @@ function formatDuration(seconds) {
   const h = Math.floor(mins / 60);
   const m = mins % 60;
   return h + " h " + (m > 0 ? m + " min" : "");
+}
+
+window.sharePlace = sharePlace;
+
+function openPlacesList() {
+  renderPlacesList();
+  document.getElementById("places-list-panel").classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function closePlacesList() {
+  document.getElementById("places-list-panel").classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+function renderPlacesList() {
+  const container = document.getElementById("places-list-content");
+  if (!Array.isArray(places) || places.length === 0) {
+    container.innerHTML = '<div class="place-list-empty"><div style="font-size:48px;margin-bottom:12px">📭</div><h3>No hay lugares registrados</h3><p>Se el primero en subir una foto.</p></div>';
+    return;
+  }
+
+  // Agrupar por provincia
+  const byProvince = {};
+  places.forEach(p => {
+    if (!p || !p.province) return;
+    const provKey = p.province;
+    if (!byProvince[provKey]) byProvince[provKey] = [];
+    byProvince[provKey].push(p);
+  });
+
+  let html = '';
+  const provOrder = ['vallegrande', 'florida', 'caballero'];
+
+  provOrder.forEach(provKey => {
+    if (!byProvince[provKey] || byProvince[provKey].length === 0) return;
+    const provName = provinces[provKey] ? provinces[provKey].name : provKey;
+    const provColor = provinces[provKey] ? provinces[provKey].color : '#e94560';
+
+    html += '<div class="places-province-section">';
+    html += '<h3 class="places-province-title" style="border-left-color:' + provColor + '">' + provName + ' (' + byProvince[provKey].length + ')</h3>';
+    html += '<div class="places-grid">';
+
+    byProvince[provKey].forEach(place => {
+      const catLabel = categoryLabels[place.category] || place.category;
+      const catColor = categoryColors[place.category] || '#e94560';
+      const desc = (place.description || "Sin descripcion").substring(0, 80);
+      const url = window.location.href.split("#")[0] + "#place=" + encodeURIComponent(place.id);
+      const shareText = "📸 " + place.name + " - " + catLabel + " en " + provName + "
+📍 " + place.lat.toFixed(6) + ", " + place.lng.toFixed(6) + "
+";
+
+      html += '<div class="place-list-card">';
+      html += '<img src="' + (place.image || fallbackImg260) + '" class="place-list-img" alt="" onclick="showDetail('' + place.id + ''); closePlacesList();" onerror="this.src='' + fallbackImg260 + ''">';
+      html += '<div class="place-list-body">';
+      html += '<h4 class="place-list-name">' + escapeHtml(place.name) + '</h4>';
+      html += '<p class="place-list-meta"><span style="color:' + catColor + '">●</span> ' + catLabel + ' · ' + place.date + '</p>';
+      html += '<p class="place-list-desc">' + escapeHtml(desc) + '</p>';
+      html += '<div class="place-list-actions">';
+      html += '<button class="place-list-btn place-list-btn-wa" onclick="window.open('https://wa.me/?text=' + encodeURIComponent(shareText + "Ver en el Explorer: " + url) + '', '_blank')"><span>📱</span> WhatsApp</button>';
+      html += '<button class="place-list-btn place-list-btn-fb" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url) + '&quote=' + encodeURIComponent(shareText) + '', '_blank', 'width=600,height=400')"><span>📘</span> Facebook</button>';
+      html += '</div>';
+      html += '</div></div>';
+    });
+
+    html += '</div></div>';
+  });
+
+  container.innerHTML = html;
 }
 
 window.setProvince = setProvince;
