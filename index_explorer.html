@@ -456,6 +456,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135d
 <span style="font-size:20px;opacity:0.6">🗺️</span>
 </button>
 </div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button type="button" class="btn-primary" style="flex:1;background:linear-gradient(135deg,#25D366,#128C7E)" onclick="sharePlace('wa')"><span>📱</span> WhatsApp</button>
+<button type="button" class="btn-primary" style="flex:1;background:linear-gradient(135deg,#1877F2,#0d5cb6)" onclick="sharePlace('fb')"><span>📘</span> Facebook</button>
+</div>
 <button type="button" class="btn-primary" style="width:100%;margin-top:10px" onclick="openRouteModal(window.currentDetailId)"><span>🗺️</span> Cómo llegar aquí</button>
 </div>
 </div>
@@ -940,6 +944,22 @@ document.addEventListener("DOMContentLoaded", async function() {
 
   setTimeout(() => { if (map) map.invalidateSize(); }, 200);
   setTimeout(() => { if (map) map.invalidateSize(); }, 500);
+
+  // Abrir lugar desde URL hash (#place=ID)
+  setTimeout(() => {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith("#place=")) {
+      const placeId = decodeURIComponent(hash.replace("#place=", ""));
+      const place = places.find(p => p.id === placeId);
+      if (place) {
+        setProvince(place.province);
+        setTimeout(() => {
+          map.setView([place.lat, place.lng], 16);
+          showDetail(place.id);
+        }, 300);
+      }
+    }
+  }, 800);
 });
 
 
@@ -1363,6 +1383,24 @@ async function handleSubmit(event) {
     if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = ""; submitBtn.style.cursor = ""; }
     isSubmitting = false;
   }
+}
+
+function sharePlace(platform) {
+    const place = places.find(p => p.id === window.currentDetailId);
+    if (!place) return;
+
+    const provinceName = provinces[place.province] ? provinces[place.province].name : place.province;
+    const catLabel = categoryLabels[place.category] || place.category;
+    const url = window.location.href.split("#")[0] + "#place=" + encodeURIComponent(place.id);
+    const text = "📸 " + place.name + " - " + catLabel + " en " + provinceName + "
+📍 " + place.lat.toFixed(6) + ", " + place.lng.toFixed(6) + "
+";
+
+    if (platform === "wa") {
+        window.open("https://wa.me/?text=" + encodeURIComponent(text + "Ver en el Explorer: " + url), "_blank");
+    } else if (platform === "fb") {
+        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url) + "&quote=" + encodeURIComponent(text), "_blank", "width=600,height=400");
+    }
 }
 
 window.currentDetailId = null;
@@ -2052,6 +2090,7 @@ function formatDuration(seconds) {
   return h + " h " + (m > 0 ? m + " min" : "");
 }
 
+window.sharePlace = sharePlace;
 window.setProvince = setProvince;
 window.setFilter = setFilter;
 window.toggleSidebar = toggleSidebar;
