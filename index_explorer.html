@@ -2249,7 +2249,7 @@ function renderPlacesList() {
 
   // Agrupar por provincia
   const byProvince = {};
-  places.forEach(p => {
+  places.forEach(function(p) {
     if (!p || !p.province) return;
     const provKey = p.province;
     if (!byProvince[provKey]) byProvince[provKey] = [];
@@ -2259,7 +2259,7 @@ function renderPlacesList() {
   let html = '';
   const provOrder = ['vallegrande', 'florida', 'caballero'];
 
-  provOrder.forEach(provKey => {
+  provOrder.forEach(function(provKey) {
     if (!byProvince[provKey] || byProvince[provKey].length === 0) return;
     const provName = provinces[provKey] ? provinces[provKey].name : provKey;
     const provColor = provinces[provKey] ? provinces[provKey].color : '#e94560';
@@ -2268,22 +2268,24 @@ function renderPlacesList() {
     html += '<h3 class="places-province-title" style="border-left-color:' + provColor + '">' + provName + ' (' + byProvince[provKey].length + ')</h3>';
     html += '<div class="places-grid">';
 
-    byProvince[provKey].forEach(place => {
+    byProvince[provKey].forEach(function(place) {
       const catLabel = categoryLabels[place.category] || place.category;
       const catColor = categoryColors[place.category] || '#e94560';
       const desc = (place.description || "Sin descripcion").substring(0, 80);
       const url = window.location.href.split("#")[0] + "#place=" + encodeURIComponent(place.id);
       const shareText = "📸 " + place.name + " - " + catLabel + " en " + provName + "\n📍 " + place.lat.toFixed(6) + ", " + place.lng.toFixed(6) + "\n";
+      const waUrl = "https://wa.me/?text=" + encodeURIComponent(shareText + "Ver en el Explorer: " + url);
+      const fbUrl = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url) + "&quote=" + encodeURIComponent(shareText);
 
       html += '<div class="place-list-card">';
-      html += '<img src="' + (place.image || fallbackImg260) + '" class="place-list-img" alt="" onclick="showDetail('' + place.id + ''); closePlacesList();" onerror="this.src='' + fallbackImg260 + ''">';
+      html += '<img src="' + (place.image || fallbackImg260) + '" class="place-list-img" alt="" onclick="showDetail(' + JSON.stringify(place.id) + '); closePlacesList();" onerror="this.onerror=null;this.src=' + JSON.stringify(fallbackImg260) + '">';
       html += '<div class="place-list-body">';
       html += '<h4 class="place-list-name">' + escapeHtml(place.name) + '</h4>';
       html += '<p class="place-list-meta"><span style="color:' + catColor + '">●</span> ' + catLabel + ' · ' + place.date + '</p>';
       html += '<p class="place-list-desc">' + escapeHtml(desc) + '</p>';
       html += '<div class="place-list-actions">';
-      html += '<button class="place-list-btn place-list-btn-wa" onclick="window.open('https://wa.me/?text=' + encodeURIComponent(shareText + "Ver en el Explorer: " + url) + '', '_blank')"><span>📱</span> WhatsApp</button>';
-      html += '<button class="place-list-btn place-list-btn-fb" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url) + '&quote=' + encodeURIComponent(shareText) + '', '_blank', 'width=600,height=400')"><span>📘</span> Facebook</button>';
+      html += '<button class="place-list-btn place-list-btn-wa" onclick="window.open(' + JSON.stringify(waUrl) + ', '_blank')"><span>📱</span> WhatsApp</button>';
+      html += '<button class="place-list-btn place-list-btn-fb" onclick="window.open(' + JSON.stringify(fbUrl) + ', '_blank', 'width=600,height=400')"><span>📘</span> Facebook</button>';
       html += '</div>';
       html += '</div></div>';
     });
