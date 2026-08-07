@@ -1531,9 +1531,7 @@ function sharePlace(platform) {
     const provinceName = provinces[place.province] ? provinces[place.province].name : place.province;
     const catLabel = categoryLabels[place.category] || place.category;
     const url = window.location.href.split("#")[0] + "#place=" + encodeURIComponent(place.id);
-    const text = "📸 " + place.name + " - " + catLabel + " en " + provinceName + "
-📍 " + place.lat.toFixed(6) + ", " + place.lng.toFixed(6) + "
-";
+    const text = "📸 " + place.name + " - " + catLabel + " en " + provinceName + "\n📍 " + place.lat.toFixed(6) + ", " + place.lng.toFixed(6) + "\n";
 
     if (platform === "wa") {
         window.open("https://wa.me/?text=" + encodeURIComponent(text + "Ver en el Explorer: " + url), "_blank");
@@ -2275,9 +2273,7 @@ function renderPlacesList() {
       const catColor = categoryColors[place.category] || '#e94560';
       const desc = (place.description || "Sin descripcion").substring(0, 80);
       const url = window.location.href.split("#")[0] + "#place=" + encodeURIComponent(place.id);
-      const shareText = "📸 " + place.name + " - " + catLabel + " en " + provName + "
-📍 " + place.lat.toFixed(6) + ", " + place.lng.toFixed(6) + "
-";
+      const shareText = "📸 " + place.name + " - " + catLabel + " en " + provName + "\n📍 " + place.lat.toFixed(6) + ", " + place.lng.toFixed(6) + "\n";
 
       html += '<div class="place-list-card">';
       html += '<img src="' + (place.image || fallbackImg260) + '" class="place-list-img" alt="" onclick="showDetail('' + place.id + ''); closePlacesList();" onerror="this.src='' + fallbackImg260 + ''">';
