@@ -805,76 +805,214 @@
         </div>
 
         <div id="videos" class="seccion">
-            <div class="sub-nav">
-                <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active">CLASICOS</button>
-                <button onclick="cambiarVideo('live')" id="sub-btn-live">TRANSMISION EN VIVO</button>
+            <div class="sub-nav video-categories">
+                <button onclick="cambiarVideo('clasico')" id="sub-btn-clasico" class="active"><i class="fas fa-star"></i> CLASICOS</button>
+                <button onclick="cambiarVideo('mixes')" id="sub-btn-mixes"><i class="fas fa-music"></i> MIXES</button>
+                <button onclick="cambiarVideo('variado')" id="sub-btn-variado"><i class="fas fa-random"></i> VARIADO</button>
+                <button onclick="cambiarVideo('rock')" id="sub-btn-rock"><i class="fas fa-guitar"></i> ROCK</button>
+                <button onclick="cambiarVideo('cumbias')" id="sub-btn-cumbias"><i class="fas fa-drum"></i> CUMBIAS</button>
+                <button onclick="cambiarVideo('live')" id="sub-btn-live"><i class="fas fa-broadcast-tower"></i> EN VIVO</button>
             </div>
+
+            <!-- CLASICOS -->
             <div id="clasico-box" class="video-box active">
-                <div class="live-layout" id="clasico-layout">
-                    <div class="live-player-area" id="clasico-player-area">
-                        <div class="iframe-container" style="border-radius:15px 15px 0 0;">
-                            <div id="player-clasico"></div>
-                        </div>
-                        <div class="player-controls" id="controls-clasico">
-                            <div class="video-title-display" id="title-clasico">Cargando...</div>
-                            <button onclick="playerClasicoPrev()" title="Anterior"><i class="fas fa-step-backward"></i></button>
-                            <button class="play-btn" onclick="playerClasicoToggle()" id="btn-play-clasico" title="Play/Pause"><i class="fas fa-play"></i></button>
-                            <button onclick="playerClasicoStop()" title="Stop"><i class="fas fa-stop"></i></button>
-                            <button onclick="playerClasicoNext()" title="Siguiente"><i class="fas fa-step-forward"></i></button>
-                            <div class="progress-container" onclick="playerClasicoSeek(event)" id="progress-clasico-container">
-                                <div class="progress-bar" id="progress-clasico"></div>
-                            </div>
-                            <div class="time-display" id="time-clasico">0:00 / 0:00</div>
-                        </div>
+                <div class="video-player-wrapper">
+                    <div class="iframe-container" style="border-radius:15px 15px 0 0;">
+                        <div id="player-clasico"></div>
                     </div>
-                    <div class="live-playlist" id="clasico-playlist-sidebar" style="display:flex;">
-                        <div class="playlist-header"><i class="fas fa-list"></i> Clásicos del Canal <button onclick="recargarClasicos()" style="margin-left:auto;background:#fff;color:#ff4d4d;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.8em;font-weight:bold;"><i class="fas fa-sync-alt"></i> Actualizar</button></div>
-                        <div class="playlist-loading" id="clasico-playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
-                        <div class="playlist-items" id="clasico-playlist-items"></div>
-                        <div class="playlist-error" id="clasico-playlist-error" style="display:none;">
-                            <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
-                            <small id="clasico-playlist-error-msg">Verifica tu conexion.</small>
+                    <div class="player-controls" id="controls-clasico">
+                        <div class="video-title-display" id="title-clasico">Cargando...</div>
+                        <button onclick="playerClasicoPrev()" title="Anterior"><i class="fas fa-step-backward"></i></button>
+                        <button class="play-btn" onclick="playerClasicoToggle()" id="btn-play-clasico" title="Play/Pause"><i class="fas fa-play"></i></button>
+                        <button onclick="playerClasicoStop()" title="Stop"><i class="fas fa-stop"></i></button>
+                        <button onclick="playerClasicoNext()" title="Siguiente"><i class="fas fa-step-forward"></i></button>
+                        <div class="progress-container" onclick="playerClasicoSeek(event)" id="progress-clasico-container">
+                            <div class="progress-bar" id="progress-clasico"></div>
                         </div>
+                        <div class="time-display" id="time-clasico">0:00 / 0:00</div>
+                    </div>
+                </div>
+                <div class="playlist-section">
+                    <div class="playlist-header-bar">
+                        <span><i class="fas fa-list"></i> Clásicos del Canal</span>
+                        <button onclick="recargarClasicos()" class="playlist-refresh-btn"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="playlist-loading" id="clasico-playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
+                    <div class="playlist-grid" id="clasico-playlist-items"></div>
+                    <div class="playlist-error" id="clasico-playlist-error" style="display:none;">
+                        <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
+                        <small id="clasico-playlist-error-msg">Verifica tu conexion.</small>
                     </div>
                 </div>
             </div>
+
+            <!-- MIXES -->
+            <div id="mixes-box" class="video-box">
+                <div class="video-player-wrapper">
+                    <div class="iframe-container" style="border-radius:15px 15px 0 0;">
+                        <div id="player-mixes"></div>
+                    </div>
+                    <div class="player-controls" id="controls-mixes">
+                        <div class="video-title-display" id="title-mixes">Cargando...</div>
+                        <button onclick="playerMixesPrev()" title="Anterior"><i class="fas fa-step-backward"></i></button>
+                        <button class="play-btn" onclick="playerMixesToggle()" id="btn-play-mixes" title="Play/Pause"><i class="fas fa-play"></i></button>
+                        <button onclick="playerMixesStop()" title="Stop"><i class="fas fa-stop"></i></button>
+                        <button onclick="playerMixesNext()" title="Siguiente"><i class="fas fa-step-forward"></i></button>
+                        <div class="progress-container" onclick="playerMixesSeek(event)" id="progress-mixes-container">
+                            <div class="progress-bar" id="progress-mixes"></div>
+                        </div>
+                        <div class="time-display" id="time-mixes">0:00 / 0:00</div>
+                    </div>
+                </div>
+                <div class="playlist-section">
+                    <div class="playlist-header-bar">
+                        <span><i class="fas fa-list"></i> Mixes</span>
+                        <button onclick="recargarMixes()" class="playlist-refresh-btn"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="playlist-loading" id="mixes-playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
+                    <div class="playlist-grid" id="mixes-playlist-items"></div>
+                    <div class="playlist-error" id="mixes-playlist-error" style="display:none;">
+                        <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
+                        <small id="mixes-playlist-error-msg">Verifica tu conexion.</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VARIADO -->
+            <div id="variado-box" class="video-box">
+                <div class="video-player-wrapper">
+                    <div class="iframe-container" style="border-radius:15px 15px 0 0;">
+                        <div id="player-variado"></div>
+                    </div>
+                    <div class="player-controls" id="controls-variado">
+                        <div class="video-title-display" id="title-variado">Cargando...</div>
+                        <button onclick="playerVariadoPrev()" title="Anterior"><i class="fas fa-step-backward"></i></button>
+                        <button class="play-btn" onclick="playerVariadoToggle()" id="btn-play-variado" title="Play/Pause"><i class="fas fa-play"></i></button>
+                        <button onclick="playerVariadoStop()" title="Stop"><i class="fas fa-stop"></i></button>
+                        <button onclick="playerVariadoNext()" title="Siguiente"><i class="fas fa-step-forward"></i></button>
+                        <div class="progress-container" onclick="playerVariadoSeek(event)" id="progress-variado-container">
+                            <div class="progress-bar" id="progress-variado"></div>
+                        </div>
+                        <div class="time-display" id="time-variado">0:00 / 0:00</div>
+                    </div>
+                </div>
+                <div class="playlist-section">
+                    <div class="playlist-header-bar">
+                        <span><i class="fas fa-list"></i> Variado</span>
+                        <button onclick="recargarVariado()" class="playlist-refresh-btn"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="playlist-loading" id="variado-playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
+                    <div class="playlist-grid" id="variado-playlist-items"></div>
+                    <div class="playlist-error" id="variado-playlist-error" style="display:none;">
+                        <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
+                        <small id="variado-playlist-error-msg">Verifica tu conexion.</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROCK -->
+            <div id="rock-box" class="video-box">
+                <div class="video-player-wrapper">
+                    <div class="iframe-container" style="border-radius:15px 15px 0 0;">
+                        <div id="player-rock"></div>
+                    </div>
+                    <div class="player-controls" id="controls-rock">
+                        <div class="video-title-display" id="title-rock">Cargando...</div>
+                        <button onclick="playerRockPrev()" title="Anterior"><i class="fas fa-step-backward"></i></button>
+                        <button class="play-btn" onclick="playerRockToggle()" id="btn-play-rock" title="Play/Pause"><i class="fas fa-play"></i></button>
+                        <button onclick="playerRockStop()" title="Stop"><i class="fas fa-stop"></i></button>
+                        <button onclick="playerRockNext()" title="Siguiente"><i class="fas fa-step-forward"></i></button>
+                        <div class="progress-container" onclick="playerRockSeek(event)" id="progress-rock-container">
+                            <div class="progress-bar" id="progress-rock"></div>
+                        </div>
+                        <div class="time-display" id="time-rock">0:00 / 0:00</div>
+                    </div>
+                </div>
+                <div class="playlist-section">
+                    <div class="playlist-header-bar">
+                        <span><i class="fas fa-list"></i> Rock</span>
+                        <button onclick="recargarRock()" class="playlist-refresh-btn"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="playlist-loading" id="rock-playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
+                    <div class="playlist-grid" id="rock-playlist-items"></div>
+                    <div class="playlist-error" id="rock-playlist-error" style="display:none;">
+                        <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
+                        <small id="rock-playlist-error-msg">Verifica tu conexion.</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CUMBIAS -->
+            <div id="cumbias-box" class="video-box">
+                <div class="video-player-wrapper">
+                    <div class="iframe-container" style="border-radius:15px 15px 0 0;">
+                        <div id="player-cumbias"></div>
+                    </div>
+                    <div class="player-controls" id="controls-cumbias">
+                        <div class="video-title-display" id="title-cumbias">Cargando...</div>
+                        <button onclick="playerCumbiasPrev()" title="Anterior"><i class="fas fa-step-backward"></i></button>
+                        <button class="play-btn" onclick="playerCumbiasToggle()" id="btn-play-cumbias" title="Play/Pause"><i class="fas fa-play"></i></button>
+                        <button onclick="playerCumbiasStop()" title="Stop"><i class="fas fa-stop"></i></button>
+                        <button onclick="playerCumbiasNext()" title="Siguiente"><i class="fas fa-step-forward"></i></button>
+                        <div class="progress-container" onclick="playerCumbiasSeek(event)" id="progress-cumbias-container">
+                            <div class="progress-bar" id="progress-cumbias"></div>
+                        </div>
+                        <div class="time-display" id="time-cumbias">0:00 / 0:00</div>
+                    </div>
+                </div>
+                <div class="playlist-section">
+                    <div class="playlist-header-bar">
+                        <span><i class="fas fa-list"></i> Cumbias</span>
+                        <button onclick="recargarCumbias()" class="playlist-refresh-btn"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="playlist-loading" id="cumbias-playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
+                    <div class="playlist-grid" id="cumbias-playlist-items"></div>
+                    <div class="playlist-error" id="cumbias-playlist-error" style="display:none;">
+                        <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
+                        <small id="cumbias-playlist-error-msg">Verifica tu conexion.</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRANSMISION EN VIVO -->
             <div id="live-box" class="video-box">
                 <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
                     <button id="btn-ver-vivo" class="live-btn active" onclick="mostrarLive()">VER EN VIVO</button>
                     <button id="btn-ver-lista" class="live-btn" onclick="mostrarPlaylist()">VER LISTA DE VIDEOS</button>
                 </div>
-                <div class="live-layout" id="live-layout">
-                    <div class="live-player-area" id="live-player-area">
-                        <div class="iframe-container" style="border-radius:15px 15px 0 0;">
-                            <iframe id="frame-live" src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A&controls=0&modestbranding=1&disablekb=1" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>
+                <div class="video-player-wrapper" id="live-wrapper">
+                    <div class="iframe-container" style="border-radius:15px 15px 0 0;">
+                        <iframe id="frame-live" src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A&controls=0&modestbranding=1&disablekb=1" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>
+                    </div>
+                    <div class="player-controls" id="controls-live">
+                        <div class="video-title-display" id="title-live">Transmisión en Vivo</div>
+                        <button onclick="playerLivePrev()" title="Anterior"><i class="fas fa-step-backward"></i></button>
+                        <button class="play-btn" onclick="playerLiveToggle()" id="btn-play-live" title="Play/Pause"><i class="fas fa-play"></i></button>
+                        <button onclick="playerLiveStop()" title="Stop"><i class="fas fa-stop"></i></button>
+                        <button onclick="playerLiveNext()" title="Siguiente"><i class="fas fa-step-forward"></i></button>
+                        <div class="progress-container" onclick="playerLiveSeek(event)" id="progress-live-container">
+                            <div class="progress-bar" id="progress-live"></div>
                         </div>
-                        <div class="player-controls" id="controls-live">
-                            <div class="video-title-display" id="title-live">Transmisión en Vivo</div>
-                            <button onclick="playerLivePrev()" title="Anterior"><i class="fas fa-step-backward"></i></button>
-                            <button class="play-btn" onclick="playerLiveToggle()" id="btn-play-live" title="Play/Pause"><i class="fas fa-play"></i></button>
-                            <button onclick="playerLiveStop()" title="Stop"><i class="fas fa-stop"></i></button>
-                            <button onclick="playerLiveNext()" title="Siguiente"><i class="fas fa-step-forward"></i></button>
-                            <div class="progress-container" onclick="playerLiveSeek(event)" id="progress-live-container">
-                                <div class="progress-bar" id="progress-live"></div>
-                            </div>
-                            <div class="time-display" id="time-live">EN VIVO</div>
+                        <div class="time-display" id="time-live">EN VIVO</div>
+                    </div>
+                </div>
+                <div class="playlist-section" id="live-playlist-section" style="display:none;">
+                    <div class="playlist-header-bar">
+                        <span><i class="fas fa-list"></i> Videos del Canal</span>
+                        <button onclick="if(API_KEY){playlistVideos=[];fetchPlaylistItemsDirect(API_KEY);}" class="playlist-refresh-btn"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="playlist-loading" id="playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
+                    <div class="playlist-grid" id="playlist-items"></div>
+                    <div class="playlist-api-setup" id="playlist-api-setup" style="display:none;">
+                        <div class="api-setup-box">
+                            <i class="fas fa-key"></i>
+                            <p>API Key configurada. Haz clic para cargar los videos del canal.</p>
+                            <button onclick="guardarApiKey()" class="api-save-btn"><i class="fas fa-play"></i> Cargar Videos del Canal</button>
                         </div>
                     </div>
-                    <div class="live-playlist" id="playlist-sidebar" style="display:none;">
-                        <div class="playlist-header"><i class="fas fa-list"></i> Videos del Canal <button onclick="if(API_KEY){playlistVideos=[];fetchPlaylistItemsDirect(API_KEY);}" style="margin-left:auto;background:#fff;color:#ff4d4d;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.8em;font-weight:bold;"><i class="fas fa-sync-alt"></i> Actualizar</button></div>
-                        <div class="playlist-loading" id="playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
-                        <div class="playlist-items" id="playlist-items"></div>
-                        <div class="playlist-api-setup" id="playlist-api-setup" style="display:none;">
-                            <div class="api-setup-box">
-                                <i class="fas fa-key"></i>
-                                <p>API Key configurada. Haz clic para cargar los videos del canal.</p>
-                                <button onclick="guardarApiKey()" class="api-save-btn"><i class="fas fa-play"></i> Cargar Videos del Canal</button>
-                            </div>
-                        </div>
-                        <div class="playlist-error" id="playlist-error" style="display:none;">
-                            <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
-                            <small id="playlist-error-msg">Verifica tu conexion o API Key.</small>
-                        </div>
+                    <div class="playlist-error" id="playlist-error" style="display:none;">
+                        <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
+                        <small id="playlist-error-msg">Verifica tu conexion o API Key.</small>
                     </div>
                 </div>
             </div>
@@ -1012,208 +1150,240 @@
 <script>
     // ====== YOUTUBE IFRAME API - CONTROLES PERSONALIZADOS ======
     var playerClasico = null;
+    var playerMixes = null;
+    var playerVariado = null;
+    var playerRock = null;
+    var playerCumbias = null;
     var playerLive = null;
     var ytApiReady = false;
-    var clasicoProgressInterval = null;
-    var liveProgressInterval = null;
     var livePlaying = false;
+
+    // Playlist IDs
+    var CLASICOS_PLAYLIST_ID = 'PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC';
+    var MIXES_PLAYLIST_ID = 'PLhNUar8noPOlyEPCHi73fRkymSKcQfaAG';
+    var VARIADO_PLAYLIST_ID = 'PLhNUar8noPOlg-zx7l0O9eLRLAMZn6iHV';
+    var ROCK_PLAYLIST_ID = 'PLhNUar8noPOkUqrsVqPzbsfhzLwdgHRSw';
+    var CUMBIAS_PLAYLIST_ID = 'PLhNUar8noPOk5ynkt0m76cgv9F_xvDeNb';
+    var CHANNEL_ID = 'UCUJY-xgeGJokDh-5Ho_Wb9A';
+    var API_KEY = 'AIzaSyD93mpAa7LzQRNUEaW9fuYy6sLnuwl6LJY';
+
+    // Arrays de videos
+    var clasicosVideos = [];
+    var currentClasicoIndex = 0;
+    var clasicosLoaded = false;
+    var clasicoProgressInterval = null;
+
+    var mixesVideos = [];
+    var currentMixesIndex = 0;
+    var mixesLoaded = false;
+    var mixesProgressInterval = null;
+
+    var variadoVideos = [];
+    var currentVariadoIndex = 0;
+    var variadoLoaded = false;
+    var variadoProgressInterval = null;
+
+    var rockVideos = [];
+    var currentRockIndex = 0;
+    var rockLoaded = false;
+    var rockProgressInterval = null;
+
+    var cumbiasVideos = [];
+    var currentCumbiasIndex = 0;
+    var cumbiasLoaded = false;
+    var cumbiasProgressInterval = null;
+
+    var playlistVideos = [];
+    var currentPlaylistIndex = 0;
 
     function onYouTubeIframeAPIReady() {
         ytApiReady = true;
         initPlayerClasico();
+        initPlayerMixes();
+        initPlayerVariado();
+        initPlayerRock();
+        initPlayerCumbias();
         initPlayerLive();
-        // Si los videos ya se cargaron antes de que la API estuviera lista
-        if (clasicosVideos.length > 0 && playerClasico && playerClasico.loadVideoById) {
-            playerClasico.loadVideoById(clasicosVideos[0].id);
-            updateClasicoTitle();
-        }
-        if (playlistVideos.length > 0 && playerLive && playerLive.loadVideoById) {
-            playerLive.loadVideoById(playlistVideos[0].id);
-            updateLiveTitle();
-        }
+    }
+
+    function initPlayerGeneric(id, containerId, firstId, onReadyFn, onStateFn) {
+        if (!document.getElementById(containerId)) return null;
+        return new YT.Player(containerId, {
+            height: '100%', width: '100%', videoId: firstId || '',
+            playerVars: { controls: 0, modestbranding: 1, rel: 0, disablekb: 1, fs: 1, iv_load_policy: 3, autoplay: 0, showinfo: 0 },
+            events: { onReady: onReadyFn, onStateChange: onStateFn }
+        });
     }
 
     function initPlayerClasico() {
-        if (!document.getElementById('player-clasico')) return;
         var firstId = clasicosVideos.length > 0 ? clasicosVideos[0].id : '';
-        playerClasico = new YT.Player('player-clasico', {
-            height: '100%',
-            width: '100%',
-            videoId: firstId,
-            playerVars: {
-                controls: 0,
-                modestbranding: 1,
-                rel: 0,
-                disablekb: 1,
-                fs: 1,
-                iv_load_policy: 3,
-                autoplay: 0,
-                showinfo: 0
-            },
-            events: {
-                onReady: onPlayerClasicoReady,
-                onStateChange: onPlayerClasicoStateChange
-            }
-        });
+        playerClasico = initPlayerGeneric('clasico', 'player-clasico', firstId, onPlayerClasicoReady, onPlayerClasicoStateChange);
     }
-
+    function initPlayerMixes() {
+        var firstId = mixesVideos.length > 0 ? mixesVideos[0].id : '';
+        playerMixes = initPlayerGeneric('mixes', 'player-mixes', firstId, onPlayerMixesReady, onPlayerMixesStateChange);
+    }
+    function initPlayerVariado() {
+        var firstId = variadoVideos.length > 0 ? variadoVideos[0].id : '';
+        playerVariado = initPlayerGeneric('variado', 'player-variado', firstId, onPlayerVariadoReady, onPlayerVariadoStateChange);
+    }
+    function initPlayerRock() {
+        var firstId = rockVideos.length > 0 ? rockVideos[0].id : '';
+        playerRock = initPlayerGeneric('rock', 'player-rock', firstId, onPlayerRockReady, onPlayerRockStateChange);
+    }
+    function initPlayerCumbias() {
+        var firstId = cumbiasVideos.length > 0 ? cumbiasVideos[0].id : '';
+        playerCumbias = initPlayerGeneric('cumbias', 'player-cumbias', firstId, onPlayerCumbiasReady, onPlayerCumbiasStateChange);
+    }
     function initPlayerLive() {
         if (!document.getElementById('player-live')) return;
         playerLive = new YT.Player('player-live', {
-            height: '100%',
-            width: '100%',
-            videoId: '',
-            playerVars: {
-                controls: 0,
-                modestbranding: 1,
-                rel: 0,
-                disablekb: 1,
-                fs: 1,
-                iv_load_policy: 3,
-                autoplay: 0,
-                showinfo: 0
-            },
-            events: {
-                onReady: onPlayerLiveReady,
-                onStateChange: onPlayerLiveStateChange
-            }
+            height: '100%', width: '100%', videoId: '',
+            playerVars: { controls: 0, modestbranding: 1, rel: 0, disablekb: 1, fs: 1, iv_load_policy: 3, autoplay: 0, showinfo: 0 },
+            events: { onReady: onPlayerLiveReady, onStateChange: onPlayerLiveStateChange }
         });
     }
 
-    function onPlayerClasicoReady(event) {
-        updateClasicoTitle();
-    }
+    function onPlayerClasicoReady(e){ updateClasicoTitle(); }
+    function onPlayerMixesReady(e){ updateMixesTitle(); }
+    function onPlayerVariadoReady(e){ updateVariadoTitle(); }
+    function onPlayerRockReady(e){ updateRockTitle(); }
+    function onPlayerCumbiasReady(e){ updateCumbiasTitle(); }
+    function onPlayerLiveReady(e){ updateLiveTitle(); }
 
-    function onPlayerLiveReady(event) {
-        updateLiveTitle();
-    }
-
-    function onPlayerLiveStateChange(event) {
-        livePlaying = (event.data === YT.PlayerState.PLAYING);
+    function onPlayerClasicoStateChange(e){ handleStateChange(e, 'clasico', playerClasico, clasicoProgressInterval, startClasicoProgress, stopClasicoProgress, playerClasicoNext); }
+    function onPlayerMixesStateChange(e){ handleStateChange(e, 'mixes', playerMixes, mixesProgressInterval, startMixesProgress, stopMixesProgress, playerMixesNext); }
+    function onPlayerVariadoStateChange(e){ handleStateChange(e, 'variado', playerVariado, variadoProgressInterval, startVariadoProgress, stopVariadoProgress, playerVariadoNext); }
+    function onPlayerRockStateChange(e){ handleStateChange(e, 'rock', playerRock, rockProgressInterval, startRockProgress, stopRockProgress, playerRockNext); }
+    function onPlayerCumbiasStateChange(e){ handleStateChange(e, 'cumbias', playerCumbias, cumbiasProgressInterval, startCumbiasProgress, stopCumbiasProgress, playerCumbiasNext); }
+    function onPlayerLiveStateChange(e){
+        livePlaying = (e.data === YT.PlayerState.PLAYING);
         updateLivePlayButton();
     }
 
-    function onPlayerClasicoStateChange(event) {
-        var icon = document.querySelector('#btn-play-clasico i');
+    function handleStateChange(event, prefix, player, interval, startFn, stopFn, nextFn) {
+        var icon = document.querySelector('#btn-play-' + prefix + ' i');
         if (!icon) return;
         if (event.data == YT.PlayerState.PLAYING) {
             icon.className = 'fas fa-pause';
-            startClasicoProgress();
+            startFn();
         } else {
             icon.className = 'fas fa-play';
-            stopClasicoProgress();
+            stopFn();
         }
         if (event.data == YT.PlayerState.ENDED) {
-            playerClasicoNext();
+            nextFn();
         }
     }
 
-    function startClasicoProgress() {
-        if (clasicoProgressInterval) clearInterval(clasicoProgressInterval);
-        clasicoProgressInterval = setInterval(updateClasicoProgress, 500);
-    }
+    // Progress functions
+    function startClasicoProgress() { startProgress('clasico', playerClasico, clasicoProgressInterval); }
+    function stopClasicoProgress() { clasicoProgressInterval = stopProgress(clasicoProgressInterval); }
+    function startMixesProgress() { startProgress('mixes', playerMixes, mixesProgressInterval); }
+    function stopMixesProgress() { mixesProgressInterval = stopProgress(mixesProgressInterval); }
+    function startVariadoProgress() { startProgress('variado', playerVariado, variadoProgressInterval); }
+    function stopVariadoProgress() { variadoProgressInterval = stopProgress(variadoProgressInterval); }
+    function startRockProgress() { startProgress('rock', playerRock, rockProgressInterval); }
+    function stopRockProgress() { rockProgressInterval = stopProgress(rockProgressInterval); }
+    function startCumbiasProgress() { startProgress('cumbias', playerCumbias, cumbiasProgressInterval); }
+    function stopCumbiasProgress() { cumbiasProgressInterval = stopProgress(cumbiasProgressInterval); }
 
-    function stopClasicoProgress() {
-        if (clasicoProgressInterval) {
-            clearInterval(clasicoProgressInterval);
-            clasicoProgressInterval = null;
-        }
+    function startProgress(prefix, player, interval) {
+        if (interval) clearInterval(interval);
+        return setInterval(function() { updateProgress(prefix, player); }, 500);
     }
-
-    function updateClasicoProgress() {
-        if (!playerClasico || !playerClasico.getCurrentTime) return;
-        var current = playerClasico.getCurrentTime();
-        var duration = playerClasico.getDuration();
+    function stopProgress(interval) {
+        if (interval) clearInterval(interval);
+        return null;
+    }
+    function updateProgress(prefix, player) {
+        if (!player || !player.getCurrentTime) return;
+        var current = player.getCurrentTime();
+        var duration = player.getDuration();
         if (duration > 0) {
             var pct = (current / duration) * 100;
-            document.getElementById('progress-clasico').style.width = pct + '%';
-            document.getElementById('time-clasico').textContent = formatTime(current) + ' / ' + formatTime(duration);
+            document.getElementById('progress-' + prefix).style.width = pct + '%';
+            document.getElementById('time-' + prefix).textContent = formatTime(current) + ' / ' + formatTime(duration);
         }
     }
 
-    function playerClasicoToggle() {
-        if (!playerClasico || !playerClasico.playVideo) return;
-        var state = playerClasico.getPlayerState();
-        if (state == YT.PlayerState.PLAYING) {
-            playerClasico.pauseVideo();
-        } else {
-            playerClasico.playVideo();
-        }
+    // Title updates
+    function updateClasicoTitle(){ var v=clasicosVideos[currentClasicoIndex]; document.getElementById('title-clasico').textContent=v?v.title:'Sin video'; }
+    function updateMixesTitle(){ var v=mixesVideos[currentMixesIndex]; document.getElementById('title-mixes').textContent=v?v.title:'Sin video'; }
+    function updateVariadoTitle(){ var v=variadoVideos[currentVariadoIndex]; document.getElementById('title-variado').textContent=v?v.title:'Sin video'; }
+    function updateRockTitle(){ var v=rockVideos[currentRockIndex]; document.getElementById('title-rock').textContent=v?v.title:'Sin video'; }
+    function updateCumbiasTitle(){ var v=cumbiasVideos[currentCumbiasIndex]; document.getElementById('title-cumbias').textContent=v?v.title:'Sin video'; }
+    function updateLiveTitle(){ document.getElementById('title-live').textContent='Transmisión en Vivo'; }
+
+    // Toggle functions
+    function playerClasicoToggle(){ togglePlayer(playerClasico); }
+    function playerMixesToggle(){ togglePlayer(playerMixes); }
+    function playerVariadoToggle(){ togglePlayer(playerVariado); }
+    function playerRockToggle(){ togglePlayer(playerRock); }
+    function playerCumbiasToggle(){ togglePlayer(playerCumbias); }
+    function playerLiveToggle(){
+        if (!playerLive || !playerLive.playVideo) return;
+        if (livePlaying){ playerLive.pauseVideo(); livePlaying=false; }
+        else { playerLive.playVideo(); livePlaying=true; }
+        updateLivePlayButton();
+    }
+    function togglePlayer(player){
+        if (!player || !player.playVideo) return;
+        var state = player.getPlayerState();
+        if (state == YT.PlayerState.PLAYING){ player.pauseVideo(); }
+        else { player.playVideo(); }
     }
 
-    function playerClasicoStop() {
-        if (!playerClasico || !playerClasico.stopVideo) return;
-        playerClasico.stopVideo();
-        document.getElementById('progress-clasico').style.width = '0%';
-        document.getElementById('time-clasico').textContent = '0:00 / 0:00';
+    // Stop functions
+    function playerClasicoStop(){ stopPlayer(playerClasico, 'clasico'); }
+    function playerMixesStop(){ stopPlayer(playerMixes, 'mixes'); }
+    function playerVariadoStop(){ stopPlayer(playerVariado, 'variado'); }
+    function playerRockStop(){ stopPlayer(playerRock, 'rock'); }
+    function playerCumbiasStop(){ stopPlayer(playerCumbias, 'cumbias'); }
+    function playerLiveStop(){
+        if (!playerLive || !playerLive.stopVideo) return;
+        playerLive.stopVideo(); livePlaying=false; updateLivePlayButton();
+    }
+    function stopPlayer(player, prefix){
+        if (!player || !player.stopVideo) return;
+        player.stopVideo();
+        document.getElementById('progress-' + prefix).style.width = '0%';
+        document.getElementById('time-' + prefix).textContent = '0:00 / 0:00';
     }
 
-    function playerClasicoNext() {
-        if (clasicosVideos.length === 0) return;
-        currentClasicoIndex = (currentClasicoIndex + 1) % clasicosVideos.length;
-        cargarVideoClasico(currentClasicoIndex);
-    }
+    // Next/Prev functions
+    function playerClasicoNext(){ if(clasicosVideos.length===0)return; currentClasicoIndex=(currentClasicoIndex+1)%clasicosVideos.length; cargarVideoClasico(currentClasicoIndex); }
+    function playerClasicoPrev(){ if(clasicosVideos.length===0)return; currentClasicoIndex=(currentClasicoIndex-1+clasicosVideos.length)%clasicosVideos.length; cargarVideoClasico(currentClasicoIndex); }
+    function playerMixesNext(){ if(mixesVideos.length===0)return; currentMixesIndex=(currentMixesIndex+1)%mixesVideos.length; cargarVideoMixes(currentMixesIndex); }
+    function playerMixesPrev(){ if(mixesVideos.length===0)return; currentMixesIndex=(currentMixesIndex-1+mixesVideos.length)%mixesVideos.length; cargarVideoMixes(currentMixesIndex); }
+    function playerVariadoNext(){ if(variadoVideos.length===0)return; currentVariadoIndex=(currentVariadoIndex+1)%variadoVideos.length; cargarVideoVariado(currentVariadoIndex); }
+    function playerVariadoPrev(){ if(variadoVideos.length===0)return; currentVariadoIndex=(currentVariadoIndex-1+variadoVideos.length)%variadoVideos.length; cargarVideoVariado(currentVariadoIndex); }
+    function playerRockNext(){ if(rockVideos.length===0)return; currentRockIndex=(currentRockIndex+1)%rockVideos.length; cargarVideoRock(currentRockIndex); }
+    function playerRockPrev(){ if(rockVideos.length===0)return; currentRockIndex=(currentRockIndex-1+rockVideos.length)%rockVideos.length; cargarVideoRock(currentRockIndex); }
+    function playerCumbiasNext(){ if(cumbiasVideos.length===0)return; currentCumbiasIndex=(currentCumbiasIndex+1)%cumbiasVideos.length; cargarVideoCumbias(currentCumbiasIndex); }
+    function playerCumbiasPrev(){ if(cumbiasVideos.length===0)return; currentCumbiasIndex=(currentCumbiasIndex-1+cumbiasVideos.length)%cumbiasVideos.length; cargarVideoCumbias(currentCumbiasIndex); }
+    function playerLiveNext(){ if(playlistVideos.length===0)return; currentPlaylistIndex=(currentPlaylistIndex+1)%playlistVideos.length; cargarVideoPlaylist(currentPlaylistIndex); }
+    function playerLivePrev(){ if(playlistVideos.length===0)return; currentPlaylistIndex=(currentPlaylistIndex-1+playlistVideos.length)%playlistVideos.length; cargarVideoPlaylist(currentPlaylistIndex); }
 
-    function playerClasicoPrev() {
-        if (clasicosVideos.length === 0) return;
-        currentClasicoIndex = (currentClasicoIndex - 1 + clasicosVideos.length) % clasicosVideos.length;
-        cargarVideoClasico(currentClasicoIndex);
-    }
-
-    function playerClasicoSeek(event) {
-        if (!playerClasico || !playerClasico.getDuration) return;
-        var container = document.getElementById('progress-clasico-container');
+    // Seek functions
+    function playerClasicoSeek(e){ seekPlayer(playerClasico, e, 'clasico'); }
+    function playerMixesSeek(e){ seekPlayer(playerMixes, e, 'mixes'); }
+    function playerVariadoSeek(e){ seekPlayer(playerVariado, e, 'variado'); }
+    function playerRockSeek(e){ seekPlayer(playerRock, e, 'rock'); }
+    function playerCumbiasSeek(e){ seekPlayer(playerCumbias, e, 'cumbias'); }
+    function playerLiveSeek(e){ /* No seek for live */ }
+    function seekPlayer(player, event, prefix){
+        if (!player || !player.getDuration) return;
+        var container = document.getElementById('progress-' + prefix + '-container');
         var rect = container.getBoundingClientRect();
         var x = event.clientX - rect.left;
         var pct = Math.max(0, Math.min(1, x / rect.width));
-        var duration = playerClasico.getDuration();
-        playerClasico.seekTo(duration * pct, true);
+        player.seekTo(player.getDuration() * pct, true);
     }
 
-    function updateClasicoTitle() {
-        var video = clasicosVideos[currentClasicoIndex];
-        document.getElementById('title-clasico').textContent = video ? video.title : 'Sin video';
-    }
-
-    // ====== LIVE PLAYER CONTROLES ======
-    function playerLiveToggle() {
-        if (!playerLive || !playerLive.playVideo) return;
-        if (livePlaying) {
-            playerLive.pauseVideo();
-            livePlaying = false;
-        } else {
-            playerLive.playVideo();
-            livePlaying = true;
-        }
-        updateLivePlayButton();
-    }
-
-    function updateLivePlayButton() {
+    function updateLivePlayButton(){
         var icon = document.querySelector('#btn-play-live i');
-        if (icon) icon.className = livePlaying ? 'fas fa-pause' : 'fas fa-play';
-    }
-
-    function playerLiveStop() {
-        if (!playerLive || !playerLive.stopVideo) return;
-        playerLive.stopVideo();
-        livePlaying = false;
-        updateLivePlayButton();
-    }
-
-    function playerLiveNext() {
-        if (playlistVideos.length === 0) return;
-        currentPlaylistIndex = (currentPlaylistIndex + 1) % playlistVideos.length;
-        cargarVideoPlaylist(currentPlaylistIndex);
-    }
-
-    function playerLivePrev() {
-        if (playlistVideos.length === 0) return;
-        currentPlaylistIndex = (currentPlaylistIndex - 1 + playlistVideos.length) % playlistVideos.length;
-        cargarVideoPlaylist(currentPlaylistIndex);
-    }
-
-    function playerLiveSeek(event) {
-        // Seek no disponible para live stream sin API
+        if(icon) icon.className = livePlaying ? 'fas fa-pause' : 'fas fa-play';
     }
 
     function formatTime(seconds) {
@@ -1223,6 +1393,285 @@
         return m + ':' + String(s).padStart(2, '0');
     }
 
+    // ====== FETCH GENÉRICO CON PAGINACIÓN ======
+    function fetchPlaylistGeneric(apiKey, playlistId, prefix, onDone) {
+        document.getElementById(prefix + '-playlist-loading').style.display = 'block';
+        document.getElementById(prefix + '-playlist-error').style.display = 'none';
+        document.getElementById(prefix + '-playlist-items').innerHTML = '';
+
+        var videos = [];
+        function fetchPage(pageToken) {
+            var url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + playlistId + '&key=' + apiKey;
+            if (pageToken) url += '&pageToken=' + pageToken;
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.timeout = 15000;
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        try {
+                            var data = JSON.parse(xhr.responseText);
+                            if (data.items) {
+                                data.items.forEach(function(item) {
+                                    var s = item.snippet;
+                                    if (s && s.resourceId && s.resourceId.videoId) {
+                                        videos.push({ id: s.resourceId.videoId, title: s.title || 'Sin titulo', duration: '--:--' });
+                                    }
+                                });
+                            }
+                            if (data.nextPageToken) {
+                                fetchPage(data.nextPageToken);
+                            } else {
+                                document.getElementById(prefix + '-playlist-loading').style.display = 'none';
+                                document.getElementById(prefix + '-playlist-error').style.display = 'none';
+                                onDone(videos);
+                            }
+                        } catch(e) {
+                            showPlaylistErrorGeneric(prefix, 'Error al procesar la lista.');
+                        }
+                    } else if (xhr.status === 403) {
+                        showPlaylistErrorGeneric(prefix, 'API Key invalida o sin cuota.');
+                    } else if (xhr.status === 0) {
+                        showPlaylistErrorGeneric(prefix, 'Error de conexion.');
+                    } else {
+                        showPlaylistErrorGeneric(prefix, 'Error ' + xhr.status);
+                    }
+                }
+            };
+            xhr.onerror = function() { showPlaylistErrorGeneric(prefix, 'Error de red.'); };
+            xhr.ontimeout = function() { showPlaylistErrorGeneric(prefix, 'Tiempo de espera agotado.'); };
+            xhr.send();
+        }
+        fetchPage(null);
+    }
+
+    function showPlaylistErrorGeneric(prefix, msg) {
+        document.getElementById(prefix + '-playlist-loading').style.display = 'none';
+        document.getElementById(prefix + '-playlist-error').style.display = 'block';
+        document.getElementById(prefix + '-playlist-error-msg').textContent = msg;
+    }
+
+    function renderPlaylistGrid(videos, prefix, currentIndex) {
+        var container = document.getElementById(prefix + '-playlist-items');
+        var html = '';
+        videos.forEach(function(video, idx) {
+            var activeClass = idx === currentIndex ? 'active' : '';
+            var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
+            var fnName = 'cargarVideo' + prefix.charAt(0).toUpperCase() + prefix.slice(1);
+            html += '<div class="playlist-item ' + activeClass + '" onclick="' + fnName + '(' + idx + ')">' +
+                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" onerror="this.style.display='none'">' +
+                '<div class="playlist-info">' +
+                '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
+                '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
+                '</div></div>';
+        });
+        container.innerHTML = html;
+    }
+
+    // Cargar video functions
+    function cargarVideoClasico(index) {
+        currentClasicoIndex = index;
+        var video = clasicosVideos[index];
+        if (video && playerClasico && playerClasico.loadVideoById) playerClasico.loadVideoById(video.id);
+        renderPlaylistGrid(clasicosVideos, 'clasico', currentClasicoIndex);
+        updateClasicoTitle();
+    }
+    function cargarVideoMixes(index) {
+        currentMixesIndex = index;
+        var video = mixesVideos[index];
+        if (video && playerMixes && playerMixes.loadVideoById) playerMixes.loadVideoById(video.id);
+        renderPlaylistGrid(mixesVideos, 'mixes', currentMixesIndex);
+        updateMixesTitle();
+    }
+    function cargarVideoVariado(index) {
+        currentVariadoIndex = index;
+        var video = variadoVideos[index];
+        if (video && playerVariado && playerVariado.loadVideoById) playerVariado.loadVideoById(video.id);
+        renderPlaylistGrid(variadoVideos, 'variado', currentVariadoIndex);
+        updateVariadoTitle();
+    }
+    function cargarVideoRock(index) {
+        currentRockIndex = index;
+        var video = rockVideos[index];
+        if (video && playerRock && playerRock.loadVideoById) playerRock.loadVideoById(video.id);
+        renderPlaylistGrid(rockVideos, 'rock', currentRockIndex);
+        updateRockTitle();
+    }
+    function cargarVideoCumbias(index) {
+        currentCumbiasIndex = index;
+        var video = cumbiasVideos[index];
+        if (video && playerCumbias && playerCumbias.loadVideoById) playerCumbias.loadVideoById(video.id);
+        renderPlaylistGrid(cumbiasVideos, 'cumbias', currentCumbiasIndex);
+        updateCumbiasTitle();
+    }
+    function cargarVideoPlaylist(index) {
+        currentPlaylistIndex = index;
+        var video = playlistVideos[index];
+        if (video && playerLive && playerLive.loadVideoById) playerLive.loadVideoById(video.id);
+        renderPlaylistGrid(playlistVideos, 'playlist', currentPlaylistIndex);
+        updateLiveTitle();
+    }
+
+    // Recargar functions
+    function recargarClasicos() {
+        clasicosVideos = []; clasicosLoaded = false;
+        fetchPlaylistGeneric(API_KEY, CLASICOS_PLAYLIST_ID, 'clasico', function(vids) {
+            clasicosVideos = vids; clasicosLoaded = true; cargarVideoClasico(0);
+        });
+    }
+    function recargarMixes() {
+        mixesVideos = []; mixesLoaded = false;
+        fetchPlaylistGeneric(API_KEY, MIXES_PLAYLIST_ID, 'mixes', function(vids) {
+            mixesVideos = vids; mixesLoaded = true; cargarVideoMixes(0);
+        });
+    }
+    function recargarVariado() {
+        variadoVideos = []; variadoLoaded = false;
+        fetchPlaylistGeneric(API_KEY, VARIADO_PLAYLIST_ID, 'variado', function(vids) {
+            variadoVideos = vids; variadoLoaded = true; cargarVideoVariado(0);
+        });
+    }
+    function recargarRock() {
+        rockVideos = []; rockLoaded = false;
+        fetchPlaylistGeneric(API_KEY, ROCK_PLAYLIST_ID, 'rock', function(vids) {
+            rockVideos = vids; rockLoaded = true; cargarVideoRock(0);
+        });
+    }
+    function recargarCumbias() {
+        cumbiasVideos = []; cumbiasLoaded = false;
+        fetchPlaylistGeneric(API_KEY, CUMBIAS_PLAYLIST_ID, 'cumbias', function(vids) {
+            cumbiasVideos = vids; cumbiasLoaded = true; cargarVideoCumbias(0);
+        });
+    }
+
+    // ====== LIVE / CANAL ======
+    function mostrarLive() {
+        document.getElementById('btn-ver-vivo').classList.add('active');
+        document.getElementById('btn-ver-lista').classList.remove('active');
+        document.getElementById('live-playlist-section').style.display = 'none';
+        if (playerLive && playerLive.loadVideoById) {
+            playerLive.loadVideoById('live_stream?channel=' + CHANNEL_ID);
+        }
+        document.getElementById('title-live').textContent = 'Transmisión en Vivo';
+        livePlaying = false; updateLivePlayButton();
+    }
+
+    function mostrarPlaylist() {
+        document.getElementById('btn-ver-vivo').classList.remove('active');
+        document.getElementById('btn-ver-lista').classList.add('active');
+        document.getElementById('live-playlist-section').style.display = 'block';
+        document.getElementById('playlist-api-setup').style.display = 'none';
+        if (!playlistVideos || playlistVideos.length === 0) {
+            fetchVideosWithAPI(API_KEY);
+        } else {
+            renderPlaylistGrid(playlistVideos, 'playlist', currentPlaylistIndex);
+        }
+    }
+
+    function recargarPlaylist() {
+        playlistVideos = [];
+        fetchVideosWithAPI(API_KEY);
+    }
+
+    function fetchVideosWithAPI(apiKey) {
+        document.getElementById('playlist-loading').style.display = 'block';
+        document.getElementById('playlist-api-setup').style.display = 'none';
+        document.getElementById('playlist-error').style.display = 'none';
+        document.getElementById('playlist-items').innerHTML = '';
+
+        var channelUrl = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' + CHANNEL_ID + '&key=' + apiKey;
+        var xhr1 = new XMLHttpRequest();
+        xhr1.open('GET', channelUrl, true);
+        xhr1.timeout = 15000;
+        xhr1.onreadystatechange = function() {
+            if (xhr1.readyState === 4) {
+                if (xhr1.status === 200) {
+                    try {
+                        var data = JSON.parse(xhr1.responseText);
+                        if (data.items && data.items[0] && data.items[0].contentDetails) {
+                            var uploadsId = data.items[0].contentDetails.relatedPlaylists.uploads;
+                            fetchPlaylistItems(apiKey, uploadsId);
+                        } else {
+                            showPlaylistError('No se encontro la lista de uploads del canal.');
+                        }
+                    } catch(e) {
+                        showPlaylistError('Error al parsear respuesta del canal.');
+                    }
+                } else if (xhr1.status === 403) {
+                    showPlaylistError('API Key invalida o sin cuota.');
+                } else if (xhr1.status === 0) {
+                    showPlaylistError('Error de conexion.');
+                } else {
+                    showPlaylistError('Error ' + xhr1.status);
+                }
+            }
+        };
+        xhr1.onerror = function() { showPlaylistError('Error de red.'); };
+        xhr1.ontimeout = function() { showPlaylistError('Tiempo de espera agotado.'); };
+        xhr1.send();
+    }
+
+    function fetchPlaylistItems(apiKey, playlistId) {
+        playlistVideos = [];
+        function fetchPage(pageToken) {
+            var url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + playlistId + '&key=' + apiKey;
+            if (pageToken) url += '&pageToken=' + pageToken;
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open('GET', url, true);
+            xhr2.timeout = 15000;
+            xhr2.onreadystatechange = function() {
+                if (xhr2.readyState === 4) {
+                    if (xhr2.status === 200) {
+                        try {
+                            var data = JSON.parse(xhr2.responseText);
+                            if (data.items) {
+                                data.items.forEach(function(item) {
+                                    var s = item.snippet;
+                                    if (s && s.resourceId && s.resourceId.videoId) {
+                                        playlistVideos.push({ id: s.resourceId.videoId, title: s.title || 'Sin titulo', duration: '--:--' });
+                                    }
+                                });
+                            }
+                            if (data.nextPageToken) {
+                                fetchPage(data.nextPageToken);
+                            } else {
+                                if (playlistVideos.length > 0) {
+                                    document.getElementById('playlist-loading').style.display = 'none';
+                                    document.getElementById('playlist-error').style.display = 'none';
+                                    cargarVideoPlaylist(0);
+                                } else {
+                                    showPlaylistError('El canal no tiene videos publicos.');
+                                }
+                            }
+                        } catch(e) {
+                            showPlaylistError('Error al procesar la lista.');
+                        }
+                    } else if (xhr2.status === 403) {
+                        showPlaylistError('API Key invalida o sin cuota.');
+                    } else if (xhr2.status === 0) {
+                        showPlaylistError('Error de conexion.');
+                    } else {
+                        showPlaylistError('Error ' + xhr2.status);
+                    }
+                }
+            };
+            xhr2.onerror = function() { showPlaylistError('Error de red.'); };
+            xhr2.ontimeout = function() { showPlaylistError('Tiempo de espera agotado.'); };
+            xhr2.send();
+        }
+        fetchPage(null);
+    }
+
+    function showPlaylistError(msg) {
+        document.getElementById('playlist-loading').style.display = 'none';
+        document.getElementById('playlist-error').style.display = 'block';
+        document.getElementById('playlist-error-msg').textContent = msg;
+    }
+
+    function guardarApiKey() {
+        document.getElementById('playlist-api-setup').style.display = 'none';
+        fetchVideosWithAPI(API_KEY);
+    }
 
     // ====== CONFIGURACION SUPABASE ======
     var SUPABASE_URL = 'https://dwchiapkvpzodiymlyew.supabase.co';
@@ -1298,16 +1747,29 @@
     function cambiarVideo(tipo) {
         document.querySelectorAll('.video-box').forEach(function(v) { v.classList.remove('active'); });
         document.querySelectorAll('.sub-nav button').forEach(function(b) { b.classList.remove('active'); });
-        if(tipo === 'clasico') {
-            document.getElementById('clasico-box').classList.add('active');
-            document.getElementById('sub-btn-clasico').classList.add('active');
-            // Auto-load clasicos sidebar when switching to clasicos
-            if (!clasicosLoaded) {
-                fetchClasicosPlaylist(API_KEY);
-            }
-        } else {
-            document.getElementById('live-box').classList.add('active');
-            document.getElementById('sub-btn-live').classList.add('active');
+        document.getElementById(tipo + '-box').classList.add('active');
+        document.getElementById('sub-btn-' + tipo).classList.add('active');
+
+        if (tipo === 'clasico' && !clasicosLoaded) {
+            fetchPlaylistGeneric(API_KEY, CLASICOS_PLAYLIST_ID, 'clasico', function(vids) {
+                clasicosVideos = vids; clasicosLoaded = true; cargarVideoClasico(0);
+            });
+        } else if (tipo === 'mixes' && !mixesLoaded) {
+            fetchPlaylistGeneric(API_KEY, MIXES_PLAYLIST_ID, 'mixes', function(vids) {
+                mixesVideos = vids; mixesLoaded = true; cargarVideoMixes(0);
+            });
+        } else if (tipo === 'variado' && !variadoLoaded) {
+            fetchPlaylistGeneric(API_KEY, VARIADO_PLAYLIST_ID, 'variado', function(vids) {
+                variadoVideos = vids; variadoLoaded = true; cargarVideoVariado(0);
+            });
+        } else if (tipo === 'rock' && !rockLoaded) {
+            fetchPlaylistGeneric(API_KEY, ROCK_PLAYLIST_ID, 'rock', function(vids) {
+                rockVideos = vids; rockLoaded = true; cargarVideoRock(0);
+            });
+        } else if (tipo === 'cumbias' && !cumbiasLoaded) {
+            fetchPlaylistGeneric(API_KEY, CUMBIAS_PLAYLIST_ID, 'cumbias', function(vids) {
+                cumbiasVideos = vids; cumbiasLoaded = true; cargarVideoCumbias(0);
+            });
         }
     }
 
@@ -1347,123 +1809,6 @@
     }
 
     // ====== YOUTUBE CLASICOS ======
-    var CLASICOS_PLAYLIST_ID = 'PLhNUar8noPOkFDwCuMzKKuZcdNnuygyrC';
-    var clasicosVideos = [];
-    var currentClasicoIndex = 0;
-    var clasicosLoaded = false;
-
-    function recargarClasicos() {
-        clasicosVideos = [];
-        clasicosLoaded = false;
-        fetchClasicosPlaylist(API_KEY);
-    }
-
-    function fetchClasicosPlaylist(apiKey) {
-        document.getElementById('clasico-playlist-loading').style.display = 'block';
-        document.getElementById('clasico-playlist-error').style.display = 'none';
-        document.getElementById('clasico-playlist-items').innerHTML = '';
-
-        clasicosVideos = [];
-        clasicosLoaded = false;
-
-        function fetchPage(pageToken) {
-            var playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + CLASICOS_PLAYLIST_ID + '&key=' + apiKey;
-            if (pageToken) playlistUrl += '&pageToken=' + pageToken;
-
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', playlistUrl, true);
-            xhr.timeout = 15000;
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        try {
-                            var data = JSON.parse(xhr.responseText);
-                            if (data.items && data.items.length > 0) {
-                                data.items.forEach(function(item) {
-                                    var snippet = item.snippet;
-                                    if (snippet && snippet.resourceId && snippet.resourceId.videoId) {
-                                        clasicosVideos.push({
-                                            id: snippet.resourceId.videoId,
-                                            title: snippet.title || 'Sin titulo',
-                                            duration: '--:--'
-                                        });
-                                    }
-                                });
-                            }
-                            if (data.nextPageToken) {
-                                fetchPage(data.nextPageToken);
-                            } else {
-                                document.getElementById('clasico-playlist-loading').style.display = 'none';
-                                document.getElementById('clasico-playlist-error').style.display = 'none';
-                                clasicosLoaded = true;
-                                if (clasicosVideos.length > 0) {
-                                    cargarVideoClasico(0);
-                                } else {
-                                    showClasicosError('La playlist no tiene videos.');
-                                }
-                            }
-                        } catch(e) {
-                            showClasicosError('Error al procesar la lista de videos.');
-                        }
-                    } else if (xhr.status === 403) {
-                        showClasicosError('API Key invalida o sin cuota. Crea una nueva en Google Cloud Console.');
-                    } else if (xhr.status === 0) {
-                        showClasicosError('Error de conexion. Verifica tu internet.');
-                    } else {
-                        showClasicosError('Error ' + xhr.status + ' al cargar la playlist.');
-                    }
-                }
-            };
-            xhr.onerror = function() {
-                showClasicosError('Error de red. Verifica tu conexion a internet.');
-            };
-            xhr.ontimeout = function() {
-                showClasicosError('Tiempo de espera agotado. Intenta de nuevo.');
-            };
-            xhr.send();
-        }
-        fetchPage(null);
-    }
-
-    function showClasicosError(msg) {
-        document.getElementById('clasico-playlist-loading').style.display = 'none';
-        document.getElementById('clasico-playlist-error').style.display = 'block';
-        document.getElementById('clasico-playlist-error-msg').textContent = msg;
-    }
-
-    function cargarVideoClasico(index) {
-        currentClasicoIndex = index;
-        var video = clasicosVideos[index];
-        if (video) {
-            if (playerClasico && playerClasico.loadVideoById) {
-                playerClasico.loadVideoById(video.id);
-            } else {
-                // Fallback si la API no esta lista
-                var iframe = document.getElementById('frame-clasico');
-                if (iframe) iframe.src = 'https://www.youtube.com/embed/' + video.id + '?rel=0&autoplay=1';
-            }
-        }
-        renderClasicosSidebar();
-        updateClasicoTitle();
-    }
-
-    function renderClasicosSidebar() {
-        var container = document.getElementById('clasico-playlist-items');
-        var html = '';
-        clasicosVideos.forEach(function(video, idx) {
-            var activeClass = idx === currentClasicoIndex ? 'active' : '';
-            var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
-            html += '<div class="playlist-item ' + activeClass + '" onclick="cargarVideoClasico(' + idx + ')">' +
-                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" onerror="this.style.display=\'none\'">' +
-                '<div class="playlist-info">' +
-                '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
-                '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
-                '</div></div>';
-        });
-        container.innerHTML = html;
-    }
-
-    // ====== YOUTUBE LIVE ======
     var CHANNEL_ID = 'UCUJY-xgeGJokDh-5Ho_Wb9A';
     var API_KEY = 'AIzaSyD93mpAa7LzQRNUEaW9fuYy6sLnuwl6LJY';
     var playlistVideos = [];
