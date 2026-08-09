@@ -1076,7 +1076,7 @@
         var iframe = document.getElementById('frame-clasico');
         var video = clasicosVideos[index];
         if (video) {
-            iframe.src = 'https://www.youtube.com/embed/' + video.id + '?rel=0';
+            iframe.src = 'https://www.youtube.com/embed/' + video.id + '?rel=0&autoplay=1';
         }
         renderClasicosSidebar();
     }
@@ -1236,7 +1236,7 @@
         var iframe = document.getElementById('frame-live');
         var video = playlistVideos[index];
         if (video) {
-            iframe.src = 'https://www.youtube.com/embed/' + video.id + '?rel=0';
+            iframe.src = 'https://www.youtube.com/embed/' + video.id + '?rel=0&autoplay=1';
         }
         renderPlaylistSidebar();
     }
