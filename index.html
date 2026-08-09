@@ -1012,57 +1012,65 @@
         document.getElementById('clasico-playlist-items').innerHTML = '';
 
         clasicosVideos = [];
-        var playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + CLASICOS_PLAYLIST_ID + '&key=' + apiKey;
+        clasicosLoaded = false;
 
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', playlistUrl, true);
-        xhr.timeout = 15000;
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr.responseText);
-                        if (data.items && data.items.length > 0) {
-                            data.items.forEach(function(item) {
-                                var snippet = item.snippet;
-                                if (snippet && snippet.resourceId && snippet.resourceId.videoId) {
-                                    clasicosVideos.push({
-                                        id: snippet.resourceId.videoId,
-                                        title: snippet.title || 'Sin titulo',
-                                        duration: '--:--'
-                                    });
-                                }
-                            });
-                            document.getElementById('clasico-playlist-loading').style.display = 'none';
-                            document.getElementById('clasico-playlist-error').style.display = 'none';
-                            clasicosLoaded = true;
-                            if (clasicosVideos.length > 0) {
-                                cargarVideoClasico(0);
-                            } else {
-                                showClasicosError('La playlist no tiene videos.');
+        function fetchPage(pageToken) {
+            var playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + CLASICOS_PLAYLIST_ID + '&key=' + apiKey;
+            if (pageToken) playlistUrl += '&pageToken=' + pageToken;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', playlistUrl, true);
+            xhr.timeout = 15000;
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        try {
+                            var data = JSON.parse(xhr.responseText);
+                            if (data.items && data.items.length > 0) {
+                                data.items.forEach(function(item) {
+                                    var snippet = item.snippet;
+                                    if (snippet && snippet.resourceId && snippet.resourceId.videoId) {
+                                        clasicosVideos.push({
+                                            id: snippet.resourceId.videoId,
+                                            title: snippet.title || 'Sin titulo',
+                                            duration: '--:--'
+                                        });
+                                    }
+                                });
                             }
-                        } else {
-                            showClasicosError('No se encontraron videos en la playlist.');
+                            if (data.nextPageToken) {
+                                fetchPage(data.nextPageToken);
+                            } else {
+                                document.getElementById('clasico-playlist-loading').style.display = 'none';
+                                document.getElementById('clasico-playlist-error').style.display = 'none';
+                                clasicosLoaded = true;
+                                if (clasicosVideos.length > 0) {
+                                    cargarVideoClasico(0);
+                                } else {
+                                    showClasicosError('La playlist no tiene videos.');
+                                }
+                            }
+                        } catch(e) {
+                            showClasicosError('Error al procesar la lista de videos.');
                         }
-                    } catch(e) {
-                        showClasicosError('Error al procesar la lista de videos.');
+                    } else if (xhr.status === 403) {
+                        showClasicosError('API Key invalida o sin cuota. Crea una nueva en Google Cloud Console.');
+                    } else if (xhr.status === 0) {
+                        showClasicosError('Error de conexion. Verifica tu internet.');
+                    } else {
+                        showClasicosError('Error ' + xhr.status + ' al cargar la playlist.');
                     }
-                } else if (xhr.status === 403) {
-                    showClasicosError('API Key invalida o sin cuota. Crea una nueva en Google Cloud Console.');
-                } else if (xhr.status === 0) {
-                    showClasicosError('Error de conexion. Verifica tu internet.');
-                } else {
-                    showClasicosError('Error ' + xhr.status + ' al cargar la playlist.');
                 }
-            }
-        };
-        xhr.onerror = function() {
-            showClasicosError('Error de red. Verifica tu conexion a internet.');
-        };
-        xhr.ontimeout = function() {
-            showClasicosError('Tiempo de espera agotado. Intenta de nuevo.');
-        };
-        xhr.send();
+            };
+            xhr.onerror = function() {
+                showClasicosError('Error de red. Verifica tu conexion a internet.');
+            };
+            xhr.ontimeout = function() {
+                showClasicosError('Tiempo de espera agotado. Intenta de nuevo.');
+            };
+            xhr.send();
+        }
+        fetchPage(null);
     }
 
     function showClasicosError(msg) {
@@ -1173,56 +1181,63 @@
 
     function fetchPlaylistItems(apiKey, playlistId) {
         playlistVideos = [];
-        var playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + playlistId + '&key=' + apiKey;
 
-        var xhr2 = new XMLHttpRequest();
-        xhr2.open('GET', playlistUrl, true);
-        xhr2.timeout = 15000;
-        xhr2.onreadystatechange = function() {
-            if (xhr2.readyState === 4) {
-                if (xhr2.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr2.responseText);
-                        if (data.items && data.items.length > 0) {
-                            data.items.forEach(function(item) {
-                                var snippet = item.snippet;
-                                if (snippet && snippet.resourceId && snippet.resourceId.videoId) {
-                                    playlistVideos.push({
-                                        id: snippet.resourceId.videoId,
-                                        title: snippet.title || 'Sin titulo',
-                                        duration: '--:--'
-                                    });
-                                }
-                            });
-                            if (playlistVideos.length > 0) {
-                                document.getElementById('playlist-loading').style.display = 'none';
-                                document.getElementById('playlist-error').style.display = 'none';
-                                cargarVideoPlaylist(0);
-                            } else {
-                                showPlaylistError('El canal no tiene videos publicos.');
+        function fetchPage(pageToken) {
+            var playlistUrl = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + playlistId + '&key=' + apiKey;
+            if (pageToken) playlistUrl += '&pageToken=' + pageToken;
+
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open('GET', playlistUrl, true);
+            xhr2.timeout = 15000;
+            xhr2.onreadystatechange = function() {
+                if (xhr2.readyState === 4) {
+                    if (xhr2.status === 200) {
+                        try {
+                            var data = JSON.parse(xhr2.responseText);
+                            if (data.items && data.items.length > 0) {
+                                data.items.forEach(function(item) {
+                                    var snippet = item.snippet;
+                                    if (snippet && snippet.resourceId && snippet.resourceId.videoId) {
+                                        playlistVideos.push({
+                                            id: snippet.resourceId.videoId,
+                                            title: snippet.title || 'Sin titulo',
+                                            duration: '--:--'
+                                        });
+                                    }
+                                });
                             }
-                        } else {
-                            showPlaylistError('No se encontraron videos en el canal.');
+                            if (data.nextPageToken) {
+                                fetchPage(data.nextPageToken);
+                            } else {
+                                if (playlistVideos.length > 0) {
+                                    document.getElementById('playlist-loading').style.display = 'none';
+                                    document.getElementById('playlist-error').style.display = 'none';
+                                    cargarVideoPlaylist(0);
+                                } else {
+                                    showPlaylistError('El canal no tiene videos publicos.');
+                                }
+                            }
+                        } catch(e) {
+                            showPlaylistError('Error al procesar la lista de videos.');
                         }
-                    } catch(e) {
-                        showPlaylistError('Error al procesar la lista de videos.');
+                    } else if (xhr2.status === 403) {
+                        showPlaylistError('API Key invalida o sin cuota.');
+                    } else if (xhr2.status === 0) {
+                        showPlaylistError('Error de conexion. Verifica tu internet.');
+                    } else {
+                        showPlaylistError('Error ' + xhr2.status + ' al cargar videos.');
                     }
-                } else if (xhr2.status === 403) {
-                    showPlaylistError('API Key invalida o sin cuota.');
-                } else if (xhr2.status === 0) {
-                    showPlaylistError('Error de conexion. Verifica tu internet.');
-                } else {
-                    showPlaylistError('Error ' + xhr2.status + ' al cargar videos.');
                 }
-            }
-        };
-        xhr2.onerror = function() {
-            showPlaylistError('Error de red al cargar videos.');
-        };
-        xhr2.ontimeout = function() {
-            showPlaylistError('Tiempo de espera agotado.');
-        };
-        xhr2.send();
+            };
+            xhr2.onerror = function() {
+                showPlaylistError('Error de red al cargar videos.');
+            };
+            xhr2.ontimeout = function() {
+                showPlaylistError('Tiempo de espera agotado.');
+            };
+            xhr2.send();
+        }
+        fetchPage(null);
     }
 
     function showPlaylistError(msg) {
