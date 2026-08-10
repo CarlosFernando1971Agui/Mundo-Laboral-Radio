@@ -752,73 +752,6 @@
             .time-display { min-width: 70px; font-size: 0.7em; }
         }
     
-    
-        .banner-extra { display: none; }
-        body.videos-active .banner-extra { display: block; }
-
-        .playlist-side {
-            width: 100%;
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 12px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            max-height: calc(100vh - 140px);
-        }
-        .playlist-side .playlist-header-bar {
-            background: var(--rojo);
-            color: white;
-            padding: 12px 15px;
-            font-weight: bold;
-            font-size: 0.95em;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-        .playlist-side .playlist-header-bar span {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .playlist-side .playlist-refresh-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8em;
-            transition: 0.2s;
-        }
-        .playlist-side .playlist-refresh-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-        .playlist-side .playlist-grid {
-            overflow-y: auto;
-            max-height: calc(100vh - 220px);
-            padding: 8px;
-            flex: 1;
-        }
-        .playlist-side .playlist-loading {
-            text-align: center;
-            padding: 30px 15px;
-            color: #888;
-            font-size: 0.9em;
-        }
-        .playlist-side .playlist-error {
-            text-align: center;
-            padding: 20px 15px;
-            color: #ff8a8a;
-            font-size: 0.85em;
-            background: rgba(255, 77, 77, 0.05);
-            border-radius: 8px;
-            margin: 8px;
-        }
-        body.videos-active #right-banners-normal { display: none; }
-        body.videos-active #right-playlist { display: flex !important; }
     </style>
 <meta name="referrer" content="no-referrer-when-downgrade">
 <script src="https://www.youtube.com/iframe_api"></script>
@@ -878,7 +811,6 @@
                 <button onclick="cambiarVideo('variado')" id="sub-btn-variado"><i class="fas fa-random"></i> VARIADO</button>
                 <button onclick="cambiarVideo('rock')" id="sub-btn-rock"><i class="fas fa-guitar"></i> ROCK</button>
                 <button onclick="cambiarVideo('cumbias')" id="sub-btn-cumbias"><i class="fas fa-drum"></i> CUMBIAS</button>
-                <button onclick="cambiarVideo('notivideos')" id="sub-btn-notivideos"><i class="fas fa-newspaper"></i> NOTIVIDEOS</button>
                 <button onclick="cambiarVideo('live')" id="sub-btn-live"><i class="fas fa-broadcast-tower"></i> EN VIVO</button>
             </div>
 
@@ -1042,38 +974,6 @@
                 </div>
             </div>
 
-            <!-- NOTIVIDEOS -->
-            <div id="notivideos-box" class="video-box">
-                <div class="video-player-wrapper">
-                    <div class="iframe-container" style="border-radius:15px 15px 0 0;">
-                        <div id="player-notivideos"></div>
-                    </div>
-                    <div class="player-controls" id="controls-notivideos">
-                        <div class="video-title-display" id="title-notivideos">Cargando...</div>
-                        <button onclick="playerNotivideosPrev()" title="Anterior"><i class="fas fa-step-backward"></i></button>
-                        <button class="play-btn" onclick="playerNotivideosToggle()" id="btn-play-notivideos" title="Play/Pause"><i class="fas fa-play"></i></button>
-                        <button onclick="playerNotivideosStop()" title="Stop"><i class="fas fa-stop"></i></button>
-                        <button onclick="playerNotivideosNext()" title="Siguiente"><i class="fas fa-step-forward"></i></button>
-                        <div class="progress-container" onclick="playerNotivideosSeek(event)" id="progress-notivideos-container">
-                            <div class="progress-bar" id="progress-notivideos"></div>
-                        </div>
-                        <div class="time-display" id="time-notivideos">0:00 / 0:00</div>
-                    </div>
-                </div>
-                <div class="playlist-section">
-                    <div class="playlist-header-bar">
-                        <span><i class="fas fa-list"></i> NotiVideos</span>
-                        <button onclick="recargarNotivideos()" class="playlist-refresh-btn"><i class="fas fa-sync-alt"></i> Actualizar</button>
-                    </div>
-                    <div class="playlist-loading" id="notivideos-playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
-                    <div class="playlist-grid" id="notivideos-playlist-items"></div>
-                    <div class="playlist-error" id="notivideos-playlist-error" style="display:none;">
-                        <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
-                        <small id="notivideos-playlist-error-msg">Verifica tu conexion.</small>
-                    </div>
-                </div>
-            </div>
-
             <!-- TRANSMISION EN VIVO -->
             <div id="live-box" class="video-box">
                 <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
@@ -1224,23 +1124,10 @@
         </div>
     </div>
 
-    <aside class="banner-side" id="right-banners">
-        <div id="right-banners-normal">
-            <img src="sanmateo.jpg" class="banner-img" alt="Ad">
-            <img src="centroagricola.jpg" class="banner-img" alt="Ad">
-            <img src="escreador.png" class="banner-img" alt="Ad">
-        </div>
-        <div class="playlist-side" id="right-playlist" style="display:none;">
-            <div class="playlist-header-bar">
-                <span id="side-playlist-title"><i class="fas fa-list"></i> Playlist</span>
-                <button onclick="recargarPlaylistActiva()" class="playlist-refresh-btn" title="Actualizar"><i class="fas fa-sync-alt"></i></button>
-            </div>
-            <div class="playlist-loading" id="side-playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
-            <div class="playlist-grid" id="side-playlist-items"></div>
-            <div class="playlist-error" id="side-playlist-error" style="display:none;">
-                <i class="fas fa-exclamation-circle"></i> <span id="side-playlist-error-msg">Error</span>
-            </div>
-        </div>
+    <aside class="banner-side">
+        <img src="sanmateo.jpg" class="banner-img" alt="Ad">
+        <img src="centroagricola.jpg" class="banner-img" alt="Ad">
+        <img src="escreador.png" class="banner-img" alt="Ad">
     </aside>
 </div>
 
@@ -1306,13 +1193,6 @@
     var cumbiasLoaded = false;
     var cumbiasProgressInterval = null;
 
-    var NOTIVIDEOS_PLAYLIST_ID = 'PLLL35vAuI4q8';
-    var notivideosVideos = [];
-    var currentNotivideosIndex = 0;
-    var notivideosLoaded = false;
-    var notivideosProgressInterval = null;
-    var playerNotivideos = null;
-
     var playlistVideos = [];
     var currentPlaylistIndex = 0;
 
@@ -1323,7 +1203,6 @@
         initPlayerVariado();
         initPlayerRock();
         initPlayerCumbias();
-        initPlayerNotivideos();
         initPlayerLive();
     }
 
@@ -1356,10 +1235,6 @@
         var firstId = cumbiasVideos.length > 0 ? cumbiasVideos[0].id : '';
         playerCumbias = initPlayerGeneric('cumbias', 'player-cumbias', firstId, onPlayerCumbiasReady, onPlayerCumbiasStateChange);
     }
-    function initPlayerNotivideos() {
-        var firstId = notivideosVideos.length > 0 ? notivideosVideos[0].id : '';
-        playerNotivideos = initPlayerGeneric('notivideos', 'player-notivideos', firstId, onPlayerNotivideosReady, onPlayerNotivideosStateChange);
-    }
     function initPlayerLive() {
         if (!document.getElementById('player-live')) return;
         playerLive = new YT.Player('player-live', {
@@ -1374,7 +1249,6 @@
     function onPlayerVariadoReady(e){ updateVariadoTitle(); }
     function onPlayerRockReady(e){ updateRockTitle(); }
     function onPlayerCumbiasReady(e){ updateCumbiasTitle(); }
-    function onPlayerNotivideosReady(e){ updateNotivideosTitle(); }
     function onPlayerLiveReady(e){ updateLiveTitle(); }
 
     function onPlayerClasicoStateChange(e){ handleStateChange(e, 'clasico', playerClasico, clasicoProgressInterval, startClasicoProgress, stopClasicoProgress, playerClasicoNext); }
@@ -1382,7 +1256,6 @@
     function onPlayerVariadoStateChange(e){ handleStateChange(e, 'variado', playerVariado, variadoProgressInterval, startVariadoProgress, stopVariadoProgress, playerVariadoNext); }
     function onPlayerRockStateChange(e){ handleStateChange(e, 'rock', playerRock, rockProgressInterval, startRockProgress, stopRockProgress, playerRockNext); }
     function onPlayerCumbiasStateChange(e){ handleStateChange(e, 'cumbias', playerCumbias, cumbiasProgressInterval, startCumbiasProgress, stopCumbiasProgress, playerCumbiasNext); }
-    function onPlayerNotivideosStateChange(e){ handleStateChange(e, 'notivideos', playerNotivideos, notivideosProgressInterval, startNotivideosProgress, stopNotivideosProgress, playerNotivideosNext); }
     function onPlayerLiveStateChange(e){
         livePlaying = (e.data === YT.PlayerState.PLAYING);
         updateLivePlayButton();
@@ -1440,7 +1313,6 @@
     function updateVariadoTitle(){ var v=variadoVideos[currentVariadoIndex]; document.getElementById('title-variado').textContent=v?v.title:'Sin video'; }
     function updateRockTitle(){ var v=rockVideos[currentRockIndex]; document.getElementById('title-rock').textContent=v?v.title:'Sin video'; }
     function updateCumbiasTitle(){ var v=cumbiasVideos[currentCumbiasIndex]; document.getElementById('title-cumbias').textContent=v?v.title:'Sin video'; }
-    function updateNotivideosTitle(){ var v=notivideosVideos[currentNotivideosIndex]; document.getElementById('title-notivideos').textContent=v?v.title:'Sin video'; }
     function updateLiveTitle(){ document.getElementById('title-live').textContent='Transmisión en Vivo'; }
 
     // Toggle functions
@@ -1455,7 +1327,6 @@
         else { playerLive.playVideo(); livePlaying=true; }
         updateLivePlayButton();
     }
-    function playerNotivideosToggle(){ togglePlayer(playerNotivideos); }
     function togglePlayer(player){
         if (!player || !player.playVideo) return;
         var state = player.getPlayerState();
@@ -1473,7 +1344,6 @@
         if (!playerLive || !playerLive.stopVideo) return;
         playerLive.stopVideo(); livePlaying=false; updateLivePlayButton();
     }
-    function playerNotivideosStop(){ stopPlayer(playerNotivideos, 'notivideos'); }
     function stopPlayer(player, prefix){
         if (!player || !player.stopVideo) return;
         player.stopVideo();
@@ -1502,7 +1372,6 @@
     function playerRockSeek(e){ seekPlayer(playerRock, e, 'rock'); }
     function playerCumbiasSeek(e){ seekPlayer(playerCumbias, e, 'cumbias'); }
     function playerLiveSeek(e){ /* No seek for live */ }
-    function playerNotivideosSeek(e){ seekPlayer(playerNotivideos, e, 'notivideos'); }
     function seekPlayer(player, event, prefix){
         if (!player || !player.getDuration) return;
         var container = document.getElementById('progress-' + prefix + '-container');
@@ -1605,7 +1474,6 @@
         var video = clasicosVideos[index];
         if (video && playerClasico && playerClasico.loadVideoById) playerClasico.loadVideoById(video.id);
         renderPlaylistGrid(clasicosVideos, 'clasico', currentClasicoIndex);
-        renderSidePlaylist(clasicosVideos, currentClasicoIndex, 'clasico');
         updateClasicoTitle();
     }
     function cargarVideoMixes(index) {
@@ -1613,7 +1481,6 @@
         var video = mixesVideos[index];
         if (video && playerMixes && playerMixes.loadVideoById) playerMixes.loadVideoById(video.id);
         renderPlaylistGrid(mixesVideos, 'mixes', currentMixesIndex);
-        renderSidePlaylist(mixesVideos, currentMixesIndex, 'mixes');
         updateMixesTitle();
     }
     function cargarVideoVariado(index) {
@@ -1621,7 +1488,6 @@
         var video = variadoVideos[index];
         if (video && playerVariado && playerVariado.loadVideoById) playerVariado.loadVideoById(video.id);
         renderPlaylistGrid(variadoVideos, 'variado', currentVariadoIndex);
-        renderSidePlaylist(variadoVideos, currentVariadoIndex, 'variado');
         updateVariadoTitle();
     }
     function cargarVideoRock(index) {
@@ -1629,7 +1495,6 @@
         var video = rockVideos[index];
         if (video && playerRock && playerRock.loadVideoById) playerRock.loadVideoById(video.id);
         renderPlaylistGrid(rockVideos, 'rock', currentRockIndex);
-        renderSidePlaylist(rockVideos, currentRockIndex, 'rock');
         updateRockTitle();
     }
     function cargarVideoCumbias(index) {
@@ -1637,7 +1502,6 @@
         var video = cumbiasVideos[index];
         if (video && playerCumbias && playerCumbias.loadVideoById) playerCumbias.loadVideoById(video.id);
         renderPlaylistGrid(cumbiasVideos, 'cumbias', currentCumbiasIndex);
-        renderSidePlaylist(cumbiasVideos, currentCumbiasIndex, 'cumbias');
         updateCumbiasTitle();
     }
     function cargarVideoPlaylist(index) {
@@ -1645,7 +1509,6 @@
         var video = playlistVideos[index];
         if (video && playerLive && playerLive.loadVideoById) playerLive.loadVideoById(video.id);
         renderPlaylistGrid(playlistVideos, 'playlist', currentPlaylistIndex);
-        renderSidePlaylist(playlistVideos, currentPlaylistIndex, 'live');
         updateLiveTitle();
     }
 
@@ -1678,20 +1541,6 @@
         cumbiasVideos = []; cumbiasLoaded = false;
         fetchPlaylistGeneric(API_KEY, CUMBIAS_PLAYLIST_ID, 'cumbias', function(vids) {
             cumbiasVideos = vids; cumbiasLoaded = true; cargarVideoCumbias(0);
-        });
-    }
-    function cargarVideoNotivideos(index) {
-        currentNotivideosIndex = index;
-        var video = notivideosVideos[index];
-        if (video && playerNotivideos && playerNotivideos.loadVideoById) playerNotivideos.loadVideoById(video.id);
-        renderPlaylistGrid(notivideosVideos, 'notivideos', currentNotivideosIndex);
-        renderSidePlaylist(notivideosVideos, currentNotivideosIndex, 'notivideos');
-        updateNotivideosTitle();
-    }
-    function recargarNotivideos() {
-        notivideosVideos = []; notivideosLoaded = false;
-        fetchPlaylistGeneric(API_KEY, NOTIVIDEOS_PLAYLIST_ID, 'notivideos', function(vids) {
-            notivideosVideos = vids; notivideosLoaded = true; cargarVideoNotivideos(0);
         });
     }
 
@@ -1887,114 +1736,8 @@
         }
     }
 
-    // ====== SIDE PLAYLIST ======
-    function renderSidePlaylist(videos, currentIndex, prefix) {
-        var container = document.getElementById('side-playlist-items');
-        var loading = document.getElementById('side-playlist-loading');
-        var error = document.getElementById('side-playlist-error');
-        var title = document.getElementById('side-playlist-title');
-        if (loading) loading.style.display = 'none';
-        if (error) error.style.display = 'none';
-        var titles = {
-            'clasico': 'Clásicos del Canal',
-            'mixes': 'Mixes',
-            'variado': 'Variado',
-            'rock': 'Rock',
-            'cumbias': 'Cumbias',
-            'notivideos': 'NotiVideos',
-            'live': 'Videos del Canal'
-        };
-        if (title) title.innerHTML = '<i class="fas fa-list"></i> ' + (titles[prefix] || 'Playlist');
-        if (!container) return;
-        if (!videos || videos.length === 0) {
-            container.innerHTML = '';
-            if (loading) loading.style.display = 'block';
-            return;
-        }
-        var html = '';
-        videos.forEach(function(video, idx) {
-            var activeClass = idx === currentIndex ? 'active' : '';
-            var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
-            html += '<div class="playlist-item ' + activeClass + '" onclick="sideCargarVideo(\'' + prefix + '\', ' + idx + ')">' +
-                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" onerror="this.style.display=\'none\'">' +
-                '<div class="playlist-info">' +
-                '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
-                '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
-                '</div></div>';
-        });
-        container.innerHTML = html;
-    }
-
-    function sideCargarVideo(prefix, index) {
-        switch(prefix) {
-            case 'clasico': cargarVideoClasico(index); break;
-            case 'mixes': cargarVideoMixes(index); break;
-            case 'variado': cargarVideoVariado(index); break;
-            case 'rock': cargarVideoRock(index); break;
-            case 'cumbias': cargarVideoCumbias(index); break;
-            case 'notivideos': cargarVideoNotivideos(index); break;
-            case 'live': cargarVideoPlaylist(index); break;
-        }
-    }
-
-    function recargarPlaylistActiva() {
-        var activeBtn = document.querySelector('.sub-nav.video-categories button.active');
-        if (!activeBtn) return;
-        var id = activeBtn.id.replace('sub-btn-', '');
-        switch(id) {
-            case 'clasico': recargarClasicos(); break;
-            case 'mixes': recargarMixes(); break;
-            case 'variado': recargarVariado(); break;
-            case 'rock': recargarRock(); break;
-            case 'cumbias': recargarCumbias(); break;
-            case 'notivideos': recargarNotivideos(); break;
-            case 'live': recargarPlaylist(); break;
-        }
-    }
-
-    function stopAllVideoPlayers() {
-        var players = [
-            {p: playerClasico, prefix: 'clasico', stopInt: stopClasicoProgress},
-            {p: playerMixes, prefix: 'mixes', stopInt: stopMixesProgress},
-            {p: playerVariado, prefix: 'variado', stopInt: stopVariadoProgress},
-            {p: playerRock, prefix: 'rock', stopInt: stopRockProgress},
-            {p: playerCumbias, prefix: 'cumbias', stopInt: stopCumbiasProgress},
-            {p: playerNotivideos, prefix: 'notivideos', stopInt: stopNotivideosProgress},
-            {p: playerLive, prefix: 'live', stopInt: function(){}}
-        ];
-        players.forEach(function(item) {
-            if (item.p && item.p.stopVideo) {
-                item.p.stopVideo();
-                if (item.stopInt) item.stopInt();
-                var prog = document.getElementById('progress-' + item.prefix);
-                if (prog) prog.style.width = '0%';
-                var time = document.getElementById('time-' + item.prefix);
-                if (time) time.textContent = item.prefix === 'live' ? 'EN VIVO' : '0:00 / 0:00';
-                var btn = document.querySelector('#btn-play-' + item.prefix + ' i');
-                if (btn) btn.className = 'fas fa-play';
-            }
-        });
-        livePlaying = false;
-    }
-
-    function showSideEmpty() {
-        var loading = document.getElementById('side-playlist-loading');
-        var items = document.getElementById('side-playlist-items');
-        var title = document.getElementById('side-playlist-title');
-        if (loading) loading.style.display = 'none';
-        if (items) items.innerHTML = '<div style="text-align:center;padding:30px 15px;color:#888;"><i class="fas fa-tv" style="font-size:32px;color:#444;margin-bottom:10px;display:block;"></i>Selecciona una categoría de videos.</div>';
-        if (title) title.innerHTML = '<i class="fas fa-list"></i> Playlist';
-    }
-
     // ====== NAVEGACION GENERAL ======
     function ir(id) {
-        if (id !== 'videos') {
-            stopAllVideoPlayers();
-            document.body.classList.remove('videos-active');
-            showSideEmpty();
-        } else {
-            document.body.classList.add('videos-active');
-        }
         document.querySelectorAll('.seccion').forEach(function(s) { s.classList.remove('active'); });
         document.querySelectorAll('#main-nav button').forEach(function(b) { b.classList.remove('active'); });
         document.getElementById(id).classList.add('active');
@@ -2002,29 +1745,6 @@
     }
 
     function cambiarVideo(tipo) {
-        var players = [
-            {p: playerClasico, prefix: 'clasico', stopInt: stopClasicoProgress},
-            {p: playerMixes, prefix: 'mixes', stopInt: stopMixesProgress},
-            {p: playerVariado, prefix: 'variado', stopInt: stopVariadoProgress},
-            {p: playerRock, prefix: 'rock', stopInt: stopRockProgress},
-            {p: playerCumbias, prefix: 'cumbias', stopInt: stopCumbiasProgress},
-            {p: playerNotivideos, prefix: 'notivideos', stopInt: stopNotivideosProgress},
-            {p: playerLive, prefix: 'live', stopInt: function(){}}
-        ];
-        players.forEach(function(item) {
-            if (item.prefix !== tipo && item.p && item.p.stopVideo) {
-                item.p.stopVideo();
-                if (item.stopInt) item.stopInt();
-                var prog = document.getElementById('progress-' + item.prefix);
-                if (prog) prog.style.width = '0%';
-                var time = document.getElementById('time-' + item.prefix);
-                if (time) time.textContent = item.prefix === 'live' ? 'EN VIVO' : '0:00 / 0:00';
-                var btn = document.querySelector('#btn-play-' + item.prefix + ' i');
-                if (btn) btn.className = 'fas fa-play';
-            }
-        });
-        if (tipo !== 'live') livePlaying = false;
-
         document.querySelectorAll('.video-box').forEach(function(v) { v.classList.remove('active'); });
         document.querySelectorAll('.sub-nav button').forEach(function(b) { b.classList.remove('active'); });
         document.getElementById(tipo + '-box').classList.add('active');
@@ -2034,44 +1754,22 @@
             fetchPlaylistGeneric(API_KEY, CLASICOS_PLAYLIST_ID, 'clasico', function(vids) {
                 clasicosVideos = vids; clasicosLoaded = true; cargarVideoClasico(0);
             });
-        } else if (tipo === 'clasico' && clasicosLoaded) {
-            renderSidePlaylist(clasicosVideos, currentClasicoIndex, 'clasico');
         } else if (tipo === 'mixes' && !mixesLoaded) {
             fetchPlaylistGeneric(API_KEY, MIXES_PLAYLIST_ID, 'mixes', function(vids) {
                 mixesVideos = vids; mixesLoaded = true; cargarVideoMixes(0);
             });
-        } else if (tipo === 'mixes' && mixesLoaded) {
-            renderSidePlaylist(mixesVideos, currentMixesIndex, 'mixes');
         } else if (tipo === 'variado' && !variadoLoaded) {
             fetchPlaylistGeneric(API_KEY, VARIADO_PLAYLIST_ID, 'variado', function(vids) {
                 variadoVideos = vids; variadoLoaded = true; cargarVideoVariado(0);
             });
-        } else if (tipo === 'variado' && variadoLoaded) {
-            renderSidePlaylist(variadoVideos, currentVariadoIndex, 'variado');
         } else if (tipo === 'rock' && !rockLoaded) {
             fetchPlaylistGeneric(API_KEY, ROCK_PLAYLIST_ID, 'rock', function(vids) {
                 rockVideos = vids; rockLoaded = true; cargarVideoRock(0);
             });
-        } else if (tipo === 'rock' && rockLoaded) {
-            renderSidePlaylist(rockVideos, currentRockIndex, 'rock');
         } else if (tipo === 'cumbias' && !cumbiasLoaded) {
             fetchPlaylistGeneric(API_KEY, CUMBIAS_PLAYLIST_ID, 'cumbias', function(vids) {
                 cumbiasVideos = vids; cumbiasLoaded = true; cargarVideoCumbias(0);
             });
-        } else if (tipo === 'cumbias' && cumbiasLoaded) {
-            renderSidePlaylist(cumbiasVideos, currentCumbiasIndex, 'cumbias');
-        } else if (tipo === 'notivideos' && !notivideosLoaded) {
-            fetchPlaylistGeneric(API_KEY, NOTIVIDEOS_PLAYLIST_ID, 'notivideos', function(vids) {
-                notivideosVideos = vids; notivideosLoaded = true; cargarVideoNotivideos(0);
-            });
-        } else if (tipo === 'notivideos' && notivideosLoaded) {
-            renderSidePlaylist(notivideosVideos, currentNotivideosIndex, 'notivideos');
-        } else if (tipo === 'live') {
-            if (playlistVideos && playlistVideos.length > 0) {
-                renderSidePlaylist(playlistVideos, currentPlaylistIndex, 'live');
-            } else {
-                renderSidePlaylist([], 0, 'live');
-            }
         }
     }
 
