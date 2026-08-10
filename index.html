@@ -1247,35 +1247,42 @@
         initPlayerLive();
     }
 
-    function initPlayerGeneric(id, containerId, firstId, onReadyFn, onStateFn) {
+    function initPlayerGeneric(id, containerId, firstId, onReadyFn, onStateFn, onErrorFn) {
         if (!document.getElementById(containerId)) return null;
+        var ev = { onReady: onReadyFn, onStateChange: onStateFn };
+        if (onErrorFn) ev.onError = onErrorFn;
         return new YT.Player(containerId, {
             height: '100%', width: '100%', videoId: firstId || '',
             playerVars: { controls: 0, modestbranding: 1, rel: 0, disablekb: 1, fs: 1, iv_load_policy: 3, autoplay: 0, showinfo: 0 },
-            events: { onReady: onReadyFn, onStateChange: onStateFn }
+            events: ev
         });
     }
 
     function initPlayerClasico() {
         var firstId = clasicosVideos.length > 0 ? clasicosVideos[0].id : '';
-        playerClasico = initPlayerGeneric('clasico', 'player-clasico', firstId, onPlayerClasicoReady, onPlayerClasicoStateChange);
+        playerClasico = initPlayerGeneric('clasico', 'player-clasico', firstId, onPlayerClasicoReady, onPlayerClasicoStateChange, onPlayerClasicoError);
     }
+    function onPlayerClasicoError(e){ handlePlayerError(e, 'clasico', playerClasicoNext); }
     function initPlayerMixes() {
         var firstId = mixesVideos.length > 0 ? mixesVideos[0].id : '';
-        playerMixes = initPlayerGeneric('mixes', 'player-mixes', firstId, onPlayerMixesReady, onPlayerMixesStateChange);
+        playerMixes = initPlayerGeneric('mixes', 'player-mixes', firstId, onPlayerMixesReady, onPlayerMixesStateChange, onPlayerMixesError);
     }
+    function onPlayerMixesError(e){ handlePlayerError(e, 'mixes', playerMixesNext); }
     function initPlayerVariado() {
         var firstId = variadoVideos.length > 0 ? variadoVideos[0].id : '';
-        playerVariado = initPlayerGeneric('variado', 'player-variado', firstId, onPlayerVariadoReady, onPlayerVariadoStateChange);
+        playerVariado = initPlayerGeneric('variado', 'player-variado', firstId, onPlayerVariadoReady, onPlayerVariadoStateChange, onPlayerVariadoError);
     }
+    function onPlayerVariadoError(e){ handlePlayerError(e, 'variado', playerVariadoNext); }
     function initPlayerRock() {
         var firstId = rockVideos.length > 0 ? rockVideos[0].id : '';
-        playerRock = initPlayerGeneric('rock', 'player-rock', firstId, onPlayerRockReady, onPlayerRockStateChange);
+        playerRock = initPlayerGeneric('rock', 'player-rock', firstId, onPlayerRockReady, onPlayerRockStateChange, onPlayerRockError);
     }
+    function onPlayerRockError(e){ handlePlayerError(e, 'rock', playerRockNext); }
     function initPlayerCumbias() {
         var firstId = cumbiasVideos.length > 0 ? cumbiasVideos[0].id : '';
-        playerCumbias = initPlayerGeneric('cumbias', 'player-cumbias', firstId, onPlayerCumbiasReady, onPlayerCumbiasStateChange);
+        playerCumbias = initPlayerGeneric('cumbias', 'player-cumbias', firstId, onPlayerCumbiasReady, onPlayerCumbiasStateChange, onPlayerCumbiasError);
     }
+    function onPlayerCumbiasError(e){ handlePlayerError(e, 'cumbias', playerCumbiasNext); }
     function initPlayerLive() {
         if (!document.getElementById('player-live')) return;
         playerLive = new YT.Player('player-live', {
@@ -1287,8 +1294,9 @@
 
     function initPlayerNotivideos() {
         var firstId = notivideosVideos.length > 0 ? notivideosVideos[0].id : '';
-        playerNotivideos = initPlayerGeneric('notivideos', 'player-notivideos', firstId, onPlayerNotivideosReady, onPlayerNotivideosStateChange);
+        playerNotivideos = initPlayerGeneric('notivideos', 'player-notivideos', firstId, onPlayerNotivideosReady, onPlayerNotivideosStateChange, onPlayerNotivideosError);
     }
+    function onPlayerNotivideosError(e){ handlePlayerError(e, 'notivideos', playerNotivideosNext); }
     function onPlayerNotivideosReady(e){ updateNotivideosTitle(); }
     function onPlayerNotivideosStateChange(e){ handleStateChange(e, 'notivideos', playerNotivideos, notivideosProgressInterval, startNotivideosProgress, stopNotivideosProgress, playerNotivideosNext); }
     function updateNotivideosTitle(){ var v=notivideosVideos[currentNotivideosIndex]; document.getElementById('title-notivideos').textContent=v?v.title:'Sin video'; }
@@ -1342,6 +1350,28 @@
         }
         if (event.data == YT.PlayerState.ENDED) {
             nextFn();
+        }
+    }
+
+    function handlePlayerError(event, prefix, nextFn) {
+        // 101/150 = propietario no permite reproduccion en sitios web
+        if (event.data === 101 || event.data === 150) {
+            var arr, idx;
+            switch(prefix) {
+                case 'clasico': arr = clasicosVideos; idx = currentClasicoIndex; break;
+                case 'mixes': arr = mixesVideos; idx = currentMixesIndex; break;
+                case 'variado': arr = variadoVideos; idx = currentVariadoIndex; break;
+                case 'rock': arr = rockVideos; idx = currentRockIndex; break;
+                case 'cumbias': arr = cumbiasVideos; idx = currentCumbiasIndex; break;
+                case 'notivideos': arr = notivideosVideos; idx = currentNotivideosIndex; break;
+                case 'playlist': arr = playlistVideos; idx = currentPlaylistIndex; break;
+                default: return;
+            }
+            if (arr && arr[idx]) {
+                arr[idx].unavailable = true;
+                renderPlaylistGrid(arr, prefix, idx);
+            }
+            setTimeout(function() { nextFn(); }, 600);
         }
     }
 
@@ -1474,6 +1504,7 @@
             if (pageToken) url += '&pageToken=' + pageToken;
             var xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
+            xhr.setRequestHeader('Cache-Control', 'no-cache');
             xhr.timeout = 15000;
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
@@ -1661,6 +1692,7 @@
             if (pageToken) url += '&pageToken=' + pageToken;
             var xhr2 = new XMLHttpRequest();
             xhr2.open('GET', url, true);
+            xhr2.setRequestHeader('Cache-Control', 'no-cache');
             xhr2.timeout = 15000;
             xhr2.onreadystatechange = function() {
                 if (xhr2.readyState === 4) {
@@ -1873,6 +1905,7 @@
     function cargarClima() {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=-18.4833&longitude=-64.1&current_weather=true', true);
+        xhr.setRequestHeader('Cache-Control', 'no-cache');
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 try {
@@ -2284,6 +2317,23 @@
                 console.log('Supabase:', msg);
             });
         }, 500);
+
+        // Recarga automatica de playlists activas cada 5 minutos
+        setInterval(function() {
+            var activeBox = document.querySelector('.video-box.active');
+            if (!activeBox) return;
+            var id = activeBox.id;
+            if (id === 'clasico-box' && clasicosLoaded) recargarClasicos();
+            else if (id === 'mixes-box' && mixesLoaded) recargarMixes();
+            else if (id === 'variado-box' && variadoLoaded) recargarVariado();
+            else if (id === 'rock-box' && rockLoaded) recargarRock();
+            else if (id === 'cumbias-box' && cumbiasLoaded) recargarCumbias();
+            else if (id === 'notivideos-box' && notivideosLoaded) recargarNotivideos();
+            else if (id === 'live-box') {
+                var listaVisible = document.getElementById('live-playlist-section').style.display !== 'none';
+                if (listaVisible && API_KEY) { playlistVideos=[]; fetchVideosWithAPI(API_KEY); }
+            }
+        }, 300000);
     });
 </script>
 </body>
