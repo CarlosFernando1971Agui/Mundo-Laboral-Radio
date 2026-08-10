@@ -811,6 +811,7 @@
                 <button onclick="cambiarVideo('variado')" id="sub-btn-variado"><i class="fas fa-random"></i> VARIADO</button>
                 <button onclick="cambiarVideo('rock')" id="sub-btn-rock"><i class="fas fa-guitar"></i> ROCK</button>
                 <button onclick="cambiarVideo('cumbias')" id="sub-btn-cumbias"><i class="fas fa-drum"></i> CUMBIAS</button>
+                <button onclick="cambiarVideo('notivideos')" id="sub-btn-notivideos"><i class="fas fa-video"></i> NOTIVIDEOS</button>
                 <button onclick="cambiarVideo('live')" id="sub-btn-live"><i class="fas fa-broadcast-tower"></i> EN VIVO</button>
             </div>
 
@@ -970,6 +971,38 @@
                     <div class="playlist-error" id="cumbias-playlist-error" style="display:none;">
                         <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
                         <small id="cumbias-playlist-error-msg">Verifica tu conexion.</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOTIVIDEOS -->
+            <div id="notivideos-box" class="video-box">
+                <div class="video-player-wrapper">
+                    <div class="iframe-container" style="border-radius:15px 15px 0 0;">
+                        <div id="player-notivideos"></div>
+                    </div>
+                    <div class="player-controls" id="controls-notivideos">
+                        <div class="video-title-display" id="title-notivideos">Cargando...</div>
+                        <button onclick="playerNotivideosPrev()" title="Anterior"><i class="fas fa-step-backward"></i></button>
+                        <button class="play-btn" onclick="playerNotivideosToggle()" id="btn-play-notivideos" title="Play/Pause"><i class="fas fa-play"></i></button>
+                        <button onclick="playerNotivideosStop()" title="Stop"><i class="fas fa-stop"></i></button>
+                        <button onclick="playerNotivideosNext()" title="Siguiente"><i class="fas fa-step-forward"></i></button>
+                        <div class="progress-container" onclick="playerNotivideosSeek(event)" id="progress-notivideos-container">
+                            <div class="progress-bar" id="progress-notivideos"></div>
+                        </div>
+                        <div class="time-display" id="time-notivideos">0:00 / 0:00</div>
+                    </div>
+                </div>
+                <div class="playlist-section">
+                    <div class="playlist-header-bar">
+                        <span><i class="fas fa-list"></i> NotiVideos</span>
+                        <button onclick="recargarNotivideos()" class="playlist-refresh-btn"><i class="fas fa-sync-alt"></i> Actualizar</button>
+                    </div>
+                    <div class="playlist-loading" id="notivideos-playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
+                    <div class="playlist-grid" id="notivideos-playlist-items"></div>
+                    <div class="playlist-error" id="notivideos-playlist-error" style="display:none;">
+                        <i class="fas fa-exclamation-circle"></i> Error al cargar los videos.<br>
+                        <small id="notivideos-playlist-error-msg">Verifica tu conexion.</small>
                     </div>
                 </div>
             </div>
@@ -1146,7 +1179,6 @@
 
 <footer>Mundo Laboral Radio. Vallegrande 2026</footer>
 
-<script src="https://www.youtube.com/iframe_api"></script>
 <script>
     // ====== YOUTUBE IFRAME API - CONTROLES PERSONALIZADOS ======
     var playerClasico = null;
@@ -1154,6 +1186,7 @@
     var playerVariado = null;
     var playerRock = null;
     var playerCumbias = null;
+    var playerNotivideos = null;
     var playerLive = null;
     var ytApiReady = false;
     var livePlaying = false;
@@ -1164,7 +1197,9 @@
     var VARIADO_PLAYLIST_ID = 'PLhNUar8noPOlg-zx7l0O9eLRLAMZn6iHV';
     var ROCK_PLAYLIST_ID = 'PLhNUar8noPOkUqrsVqPzbsfhzLwdgHRSw';
     var CUMBIAS_PLAYLIST_ID = 'PLhNUar8noPOk5ynkt0m76cgv9F_xvDeNb';
+    var NOTIVIDEOS_PLAYLIST_ID = 'PLLL35vAuI4q8';
     var CHANNEL_ID = 'UCUJY-xgeGJokDh-5Ho_Wb9A';
+    var UPLOADS_PLAYLIST_ID = 'UUUJY-xgeGJokDh-5Ho_Wb9A';
     var API_KEY = 'AIzaSyD93mpAa7LzQRNUEaW9fuYy6sLnuwl6LJY';
 
     // Arrays de videos
@@ -1193,6 +1228,11 @@
     var cumbiasLoaded = false;
     var cumbiasProgressInterval = null;
 
+    var notivideosVideos = [];
+    var currentNotivideosIndex = 0;
+    var notivideosLoaded = false;
+    var notivideosProgressInterval = null;
+
     var playlistVideos = [];
     var currentPlaylistIndex = 0;
 
@@ -1203,6 +1243,7 @@
         initPlayerVariado();
         initPlayerRock();
         initPlayerCumbias();
+        initPlayerNotivideos();
         initPlayerLive();
     }
 
@@ -1241,6 +1282,34 @@
             height: '100%', width: '100%', videoId: '',
             playerVars: { controls: 0, modestbranding: 1, rel: 0, disablekb: 1, fs: 1, iv_load_policy: 3, autoplay: 0, showinfo: 0 },
             events: { onReady: onPlayerLiveReady, onStateChange: onPlayerLiveStateChange }
+        });
+    }
+
+    function initPlayerNotivideos() {
+        var firstId = notivideosVideos.length > 0 ? notivideosVideos[0].id : '';
+        playerNotivideos = initPlayerGeneric('notivideos', 'player-notivideos', firstId, onPlayerNotivideosReady, onPlayerNotivideosStateChange);
+    }
+    function onPlayerNotivideosReady(e){ updateNotivideosTitle(); }
+    function onPlayerNotivideosStateChange(e){ handleStateChange(e, 'notivideos', playerNotivideos, notivideosProgressInterval, startNotivideosProgress, stopNotivideosProgress, playerNotivideosNext); }
+    function updateNotivideosTitle(){ var v=notivideosVideos[currentNotivideosIndex]; document.getElementById('title-notivideos').textContent=v?v.title:'Sin video'; }
+    function playerNotivideosToggle(){ togglePlayer(playerNotivideos); }
+    function playerNotivideosStop(){ stopPlayer(playerNotivideos, 'notivideos'); }
+    function playerNotivideosNext(){ if(notivideosVideos.length===0)return; currentNotivideosIndex=(currentNotivideosIndex+1)%notivideosVideos.length; cargarVideoNotivideos(currentNotivideosIndex); }
+    function playerNotivideosPrev(){ if(notivideosVideos.length===0)return; currentNotivideosIndex=(currentNotivideosIndex-1+notivideosVideos.length)%notivideosVideos.length; cargarVideoNotivideos(currentNotivideosIndex); }
+    function playerNotivideosSeek(e){ seekPlayer(playerNotivideos, e, 'notivideos'); }
+    function startNotivideosProgress() { startProgress('notivideos', playerNotivideos, notivideosProgressInterval); }
+    function stopNotivideosProgress() { notivideosProgressInterval = stopProgress(notivideosProgressInterval); }
+    function cargarVideoNotivideos(index) {
+        currentNotivideosIndex = index;
+        var video = notivideosVideos[index];
+        if (video && playerNotivideos && playerNotivideos.loadVideoById) playerNotivideos.loadVideoById(video.id);
+        renderPlaylistGrid(notivideosVideos, 'notivideos', currentNotivideosIndex);
+        updateNotivideosTitle();
+    }
+    function recargarNotivideos() {
+        notivideosVideos = []; notivideosLoaded = false;
+        fetchPlaylistGeneric(API_KEY, NOTIVIDEOS_PLAYLIST_ID, 'notivideos', function(vids) {
+            notivideosVideos = vids; notivideosLoaded = true; cargarVideoNotivideos(0);
         });
     }
 
@@ -1549,8 +1618,10 @@
         document.getElementById('btn-ver-vivo').classList.add('active');
         document.getElementById('btn-ver-lista').classList.remove('active');
         document.getElementById('live-playlist-section').style.display = 'none';
-        if (playerLive && playerLive.loadVideoById) {
-            playerLive.loadVideoById('live_stream?channel=' + CHANNEL_ID);
+        // Recargar iframe de live stream para asegurar que funcione
+        var liveIframe = document.getElementById('frame-live');
+        if (liveIframe) {
+            liveIframe.src = 'https://www.youtube.com/embed/live_stream?channel=' + CHANNEL_ID + '&controls=0&modestbranding=1&disablekb=1&autoplay=1';
         }
         document.getElementById('title-live').textContent = 'Transmisión en Vivo';
         livePlaying = false; updateLivePlayButton();
@@ -1579,36 +1650,8 @@
         document.getElementById('playlist-error').style.display = 'none';
         document.getElementById('playlist-items').innerHTML = '';
 
-        var channelUrl = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' + CHANNEL_ID + '&key=' + apiKey;
-        var xhr1 = new XMLHttpRequest();
-        xhr1.open('GET', channelUrl, true);
-        xhr1.timeout = 15000;
-        xhr1.onreadystatechange = function() {
-            if (xhr1.readyState === 4) {
-                if (xhr1.status === 200) {
-                    try {
-                        var data = JSON.parse(xhr1.responseText);
-                        if (data.items && data.items[0] && data.items[0].contentDetails) {
-                            var uploadsId = data.items[0].contentDetails.relatedPlaylists.uploads;
-                            fetchPlaylistItems(apiKey, uploadsId);
-                        } else {
-                            showPlaylistError('No se encontro la lista de uploads del canal.');
-                        }
-                    } catch(e) {
-                        showPlaylistError('Error al parsear respuesta del canal.');
-                    }
-                } else if (xhr1.status === 403) {
-                    showPlaylistError('API Key invalida o sin cuota.');
-                } else if (xhr1.status === 0) {
-                    showPlaylistError('Error de conexion.');
-                } else {
-                    showPlaylistError('Error ' + xhr1.status);
-                }
-            }
-        };
-        xhr1.onerror = function() { showPlaylistError('Error de red.'); };
-        xhr1.ontimeout = function() { showPlaylistError('Tiempo de espera agotado.'); };
-        xhr1.send();
+        // Usar directamente el uploads playlist ID conocido para evitar error en /channels
+        fetchPlaylistItems(apiKey, UPLOADS_PLAYLIST_ID);
     }
 
     function fetchPlaylistItems(apiKey, playlistId) {
@@ -1769,6 +1812,10 @@
         } else if (tipo === 'cumbias' && !cumbiasLoaded) {
             fetchPlaylistGeneric(API_KEY, CUMBIAS_PLAYLIST_ID, 'cumbias', function(vids) {
                 cumbiasVideos = vids; cumbiasLoaded = true; cargarVideoCumbias(0);
+            });
+        } else if (tipo === 'notivideos' && !notivideosLoaded) {
+            fetchPlaylistGeneric(API_KEY, NOTIVIDEOS_PLAYLIST_ID, 'notivideos', function(vids) {
+                notivideosVideos = vids; notivideosLoaded = true; cargarVideoNotivideos(0);
             });
         }
     }
