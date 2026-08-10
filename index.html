@@ -1919,8 +1919,8 @@
         videos.forEach(function(video, idx) {
             var activeClass = idx === currentIndex ? 'active' : '';
             var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
-            html += '<div class="playlist-item ' + activeClass + '" onclick="sideCargarVideo('' + prefix + '', ' + idx + ')">' +
-                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" onerror="this.style.display='none'">' +
+            html += '<div class="playlist-item ' + activeClass + '" onclick="sideCargarVideo(\'' + prefix + '\', ' + idx + ')">' +
+                '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" onerror="this.style.display=\'none\'">' +
                 '<div class="playlist-info">' +
                 '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
                 '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
