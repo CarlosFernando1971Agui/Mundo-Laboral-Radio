@@ -1978,26 +1978,47 @@
     }
 
     function cargarClima() {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=-18.4833&longitude=-64.1&current_weather=true', true);
-        xhr.setRequestHeader('Cache-Control', 'no-cache');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                try {
-                    var data = JSON.parse(xhr.responseText);
-                    var temp = Math.round(data.current_weather.temperature);
-                    var code = data.current_weather.weathercode;
-                    var iconClass = iconoClima(code);
-                    document.getElementById('header-clima').innerHTML = '<i class="fas ' + iconClass + '"></i> <span id="clima-temp">' + temp + '</span>°C';
-                } catch(e) {
+        var url = 'https://api.open-meteo.com/v1/forecast?latitude=-18.4833&longitude=-64.1&current_weather=true';
+        // Usar fetch en lugar de XHR para evitar problemas CORS con cabeceras personalizadas
+        if (window.fetch) {
+            fetch(url, { cache: 'no-store' })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data && data.current_weather) {
+                        var temp = Math.round(data.current_weather.temperature);
+                        var code = data.current_weather.weathercode;
+                        var iconClass = iconoClima(code);
+                        document.getElementById('header-clima').innerHTML = '<i class="fas ' + iconClass + '"></i> <span id="clima-temp">' + temp + '</span>°C';
+                    } else {
+                        throw new Error('Datos incompletos');
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Error clima (fetch):', err);
                     document.getElementById('header-clima').innerHTML = '<i class="fas fa-cloud"></i> <span id="clima-temp">--</span>°C';
+                });
+        } else {
+            // Fallback para navegadores antiguos
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        var temp = Math.round(data.current_weather.temperature);
+                        var code = data.current_weather.weathercode;
+                        var iconClass = iconoClima(code);
+                        document.getElementById('header-clima').innerHTML = '<i class="fas ' + iconClass + '"></i> <span id="clima-temp">' + temp + '</span>°C';
+                    } catch(e) {
+                        document.getElementById('header-clima').innerHTML = '<i class="fas fa-cloud"></i> <span id="clima-temp">--</span>°C';
+                    }
                 }
-            }
-        };
-        xhr.onerror = function() {
-            document.getElementById('header-clima').innerHTML = '<i class="fas fa-cloud"></i> <span id="clima-temp">--</span>°C';
-        };
-        xhr.send();
+            };
+            xhr.onerror = function() {
+                document.getElementById('header-clima').innerHTML = '<i class="fas fa-cloud"></i> <span id="clima-temp">--</span>°C';
+            };
+            xhr.send();
+        }
     }
 
     function actualizarReloj() {
