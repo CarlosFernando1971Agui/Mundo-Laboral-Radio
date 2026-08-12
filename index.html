@@ -1014,8 +1014,9 @@
                     <button id="btn-ver-lista" class="live-btn" onclick="mostrarPlaylist()">VER LISTA DE VIDEOS</button>
                 </div>
                 <div class="video-player-wrapper" id="live-wrapper">
-                    <div class="iframe-container" style="border-radius:15px 15px 0 0;">
-                        <iframe id="frame-live" src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A&controls=0&modestbranding=1&disablekb=1" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>
+                    <div class="iframe-container" style="border-radius:15px 15px 0 0; position:relative;">
+                        <iframe id="frame-live" src="https://www.youtube.com/embed/live_stream?channel=UCUJY-xgeGJokDh-5Ho_Wb9A&controls=0&modestbranding=1&disablekb=1" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" sandbox="allow-scripts allow-same-origin allow-presentation" style="position:absolute; top:0; left:0; width:100%; height:100%;"></iframe>
+                        <div id="player-live" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%;"></div>
                     </div>
                     <div class="player-controls" id="controls-live">
                         <div class="video-title-display" id="title-live">Transmisión en Vivo</div>
@@ -1284,7 +1285,14 @@
     }
     function onPlayerCumbiasError(e){ handlePlayerError(e, 'cumbias', playerCumbiasNext); }
     function initPlayerLive() {
-        if (!document.getElementById('player-live')) return;
+        var div = document.getElementById('player-live');
+        if (!div) {
+            console.warn('[initPlayerLive] Div #player-live no encontrado');
+            return;
+        }
+        // Asegurar que el div tenga dimensiones antes de crear el player
+        div.style.width = '100%';
+        div.style.height = '100%';
         playerLive = new YT.Player('player-live', {
             height: '100%', width: '100%', videoId: '',
             playerVars: { controls: 0, modestbranding: 1, rel: 0, disablekb: 1, fs: 1, iv_load_policy: 3, autoplay: 0, showinfo: 0 },
@@ -1569,13 +1577,21 @@
     }
 
     function showPlaylistErrorGeneric(prefix, msg) {
-        document.getElementById(prefix + '-playlist-loading').style.display = 'none';
-        document.getElementById(prefix + '-playlist-error').style.display = 'block';
-        document.getElementById(prefix + '-playlist-error-msg').textContent = msg;
+        var loadingEl = document.getElementById(prefix + '-playlist-loading');
+        var errorEl = document.getElementById(prefix + '-playlist-error');
+        var errorMsgEl = document.getElementById(prefix + '-playlist-error-msg');
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (errorEl) errorEl.style.display = 'block';
+        if (errorMsgEl) errorMsgEl.textContent = msg;
+        console.error('[showPlaylistErrorGeneric] prefix=' + prefix + ', msg=' + msg);
     }
 
     function renderPlaylistGrid(videos, prefix, currentIndex) {
         var container = document.getElementById(prefix + '-playlist-items');
+        if (!container) {
+            console.error('[renderPlaylistGrid] Container NO ENCONTRADO para prefix="' + prefix + '", buscando ID="' + prefix + '-playlist-items"');
+            return;
+        }
         var html = '';
         videos.forEach(function(video, idx) {
             var activeClass = idx === currentIndex ? 'active' : '';
@@ -1672,13 +1688,22 @@
         document.getElementById('btn-ver-vivo').classList.add('active');
         document.getElementById('btn-ver-lista').classList.remove('active');
         document.getElementById('live-playlist-section').style.display = 'none';
-        // Recargar iframe de live stream para asegurar que funcione
+        // Mostrar iframe live, ocultar player YT
         var liveIframe = document.getElementById('frame-live');
+        var playerDiv = document.getElementById('player-live');
+        if (liveIframe) liveIframe.style.display = 'block';
+        if (playerDiv) playerDiv.style.display = 'none';
+        // Recargar iframe de live stream para asegurar que funcione
         if (liveIframe) {
             liveIframe.src = 'https://www.youtube.com/embed/live_stream?channel=' + CHANNEL_ID + '&controls=0&modestbranding=1&disablekb=1&autoplay=1';
         }
+        // Detener player YT si está activo
+        if (playerLive && playerLive.stopVideo) {
+            playerLive.stopVideo();
+            livePlaying = false;
+        }
         document.getElementById('title-live').textContent = 'Transmisión en Vivo';
-        livePlaying = false; updateLivePlayButton();
+        updateLivePlayButton();
     }
 
     function mostrarPlaylist() {
@@ -1686,6 +1711,15 @@
         document.getElementById('btn-ver-lista').classList.add('active');
         document.getElementById('live-playlist-section').style.display = 'block';
         document.getElementById('playlist-api-setup').style.display = 'none';
+        // Ocultar iframe live, mostrar player YT
+        var liveIframe = document.getElementById('frame-live');
+        var playerDiv = document.getElementById('player-live');
+        if (liveIframe) liveIframe.style.display = 'none';
+        if (playerDiv) playerDiv.style.display = 'block';
+        // Asegurar que playerLive esté inicializado
+        if (!playerLive && ytApiReady && document.getElementById('player-live')) {
+            initPlayerLive();
+        }
         if (!playlistVideos || playlistVideos.length === 0) {
             fetchVideosWithAPI(API_KEY);
         } else {
@@ -1775,9 +1809,13 @@
     }
 
     function showPlaylistError(msg) {
-        document.getElementById('playlist-loading').style.display = 'none';
-        document.getElementById('playlist-error').style.display = 'block';
-        document.getElementById('playlist-error-msg').textContent = msg;
+        var loadingEl = document.getElementById('playlist-loading');
+        var errorEl = document.getElementById('playlist-error');
+        var errorMsgEl = document.getElementById('playlist-error-msg');
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (errorEl) errorEl.style.display = 'block';
+        if (errorMsgEl) errorMsgEl.textContent = msg;
+        console.error('[showPlaylistError] msg=' + msg);
     }
 
     function guardarApiKey() {
