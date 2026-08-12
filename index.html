@@ -1197,7 +1197,7 @@
     var VARIADO_PLAYLIST_ID = 'PLhNUar8noPOlg-zx7l0O9eLRLAMZn6iHV';
     var ROCK_PLAYLIST_ID = 'PLhNUar8noPOkUqrsVqPzbsfhzLwdgHRSw';
     var CUMBIAS_PLAYLIST_ID = 'PLhNUar8noPOk5ynkt0m76cgv9F_xvDeNb';
-    var NOTIVIDEOS_PLAYLIST_ID = 'PLLL35vAuI4q8';
+    var NOTIVIDEOS_PLAYLIST_ID = 'PLZ3tAupu6kYM';
     var CHANNEL_ID = 'UCUJY-xgeGJokDh-5Ho_Wb9A';
     var UPLOADS_PLAYLIST_ID = 'UUUJY-xgeGJokDh-5Ho_Wb9A';
     var API_KEY = 'AIzaSyD93mpAa7LzQRNUEaW9fuYy6sLnuwl6LJY';
@@ -1294,6 +1294,11 @@
 
     function initPlayerNotivideos() {
         var firstId = notivideosVideos.length > 0 ? notivideosVideos[0].id : '';
+        if (!firstId) {
+            // Si no hay videos aun, mostrar mensaje en el reproductor
+            var container = document.getElementById('player-notivideos');
+            if (container) container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#888;"><i class="fas fa-film" style="font-size:48px;margin-right:15px;"></i><span>Selecciona un video de la lista</span></div>';
+        }
         playerNotivideos = initPlayerGeneric('notivideos', 'player-notivideos', firstId, onPlayerNotivideosReady, onPlayerNotivideosStateChange, onPlayerNotivideosError);
     }
     function onPlayerNotivideosError(e){ handlePlayerError(e, 'notivideos', playerNotivideosNext); }
@@ -1494,14 +1499,17 @@
 
     // ====== FETCH GENÉRICO CON PAGINACIÓN ======
     function fetchPlaylistGeneric(apiKey, playlistId, prefix, onDone) {
-        document.getElementById(prefix + '-playlist-loading').style.display = 'block';
-        document.getElementById(prefix + '-playlist-error').style.display = 'none';
-        document.getElementById(prefix + '-playlist-items').innerHTML = '';
+        var loadingEl = document.getElementById(prefix + '-playlist-loading');
+        var errorEl = document.getElementById(prefix + '-playlist-error');
+        var itemsEl = document.getElementById(prefix + '-playlist-items');
+        if (loadingEl) loadingEl.style.display = 'block';
+        if (errorEl) errorEl.style.display = 'none';
+        if (itemsEl) itemsEl.innerHTML = '';
 
         var videos = [];
         function fetchPage(pageToken) {
-            var url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + playlistId + '&key=' + apiKey;
-            if (pageToken) url += '&pageToken=' + pageToken;
+            var url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + encodeURIComponent(playlistId) + '&key=' + encodeURIComponent(apiKey);
+            if (pageToken) url += '&pageToken=' + encodeURIComponent(pageToken);
             var xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
             xhr.setRequestHeader('Cache-Control', 'no-cache');
@@ -1511,7 +1519,14 @@
                     if (xhr.status === 200) {
                         try {
                             var data = JSON.parse(xhr.responseText);
-                            if (data.items) {
+                            // Verificar si la API devolvió un error dentro del JSON (status 200 pero con error)
+                            if (data.error) {
+                                var errMsg = (data.error.message || 'Error de API de YouTube');
+                                if (errMsg.indexOf('quota') !== -1) errMsg = 'Cuota de API agotada. Intenta mas tarde.';
+                                showPlaylistErrorGeneric(prefix, errMsg);
+                                return;
+                            }
+                            if (data.items && Array.isArray(data.items)) {
                                 data.items.forEach(function(item) {
                                     var s = item.snippet;
                                     if (s && s.resourceId && s.resourceId.videoId) {
@@ -1522,24 +1537,32 @@
                             if (data.nextPageToken) {
                                 fetchPage(data.nextPageToken);
                             } else {
-                                document.getElementById(prefix + '-playlist-loading').style.display = 'none';
-                                document.getElementById(prefix + '-playlist-error').style.display = 'none';
+                                if (loadingEl) loadingEl.style.display = 'none';
+                                if (errorEl) errorEl.style.display = 'none';
                                 onDone(videos);
                             }
                         } catch(e) {
-                            showPlaylistErrorGeneric(prefix, 'Error al procesar la lista.');
+                            console.error('Error parseando JSON:', e, xhr.responseText.substring(0, 500));
+                            showPlaylistErrorGeneric(prefix, 'Error al procesar la respuesta del servidor.');
                         }
                     } else if (xhr.status === 403) {
-                        showPlaylistErrorGeneric(prefix, 'API Key invalida o sin cuota.');
+                        showPlaylistErrorGeneric(prefix, 'API Key invalida o cuota agotada.');
+                    } else if (xhr.status === 404) {
+                        showPlaylistErrorGeneric(prefix, 'Playlist no encontrada. Verifica el ID.');
                     } else if (xhr.status === 0) {
-                        showPlaylistErrorGeneric(prefix, 'Error de conexion.');
+                        showPlaylistErrorGeneric(prefix, 'Error de conexion. Revisa tu internet.');
                     } else {
-                        showPlaylistErrorGeneric(prefix, 'Error ' + xhr.status);
+                        try {
+                            var errData = JSON.parse(xhr.responseText);
+                            showPlaylistErrorGeneric(prefix, errData.error ? errData.error.message : ('Error HTTP ' + xhr.status));
+                        } catch(e2) {
+                            showPlaylistErrorGeneric(prefix, 'Error HTTP ' + xhr.status);
+                        }
                     }
                 }
             };
-            xhr.onerror = function() { showPlaylistErrorGeneric(prefix, 'Error de red.'); };
-            xhr.ontimeout = function() { showPlaylistErrorGeneric(prefix, 'Tiempo de espera agotado.'); };
+            xhr.onerror = function() { showPlaylistErrorGeneric(prefix, 'Error de red. Revisa tu conexion.'); };
+            xhr.ontimeout = function() { showPlaylistErrorGeneric(prefix, 'Tiempo de espera agotado. Intenta de nuevo.'); };
             xhr.send();
         }
         fetchPage(null);
@@ -1688,8 +1711,8 @@
     function fetchPlaylistItems(apiKey, playlistId) {
         playlistVideos = [];
         function fetchPage(pageToken) {
-            var url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + playlistId + '&key=' + apiKey;
-            if (pageToken) url += '&pageToken=' + pageToken;
+            var url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + encodeURIComponent(playlistId) + '&key=' + encodeURIComponent(apiKey);
+            if (pageToken) url += '&pageToken=' + encodeURIComponent(pageToken);
             var xhr2 = new XMLHttpRequest();
             xhr2.open('GET', url, true);
             xhr2.setRequestHeader('Cache-Control', 'no-cache');
@@ -1699,7 +1722,13 @@
                     if (xhr2.status === 200) {
                         try {
                             var data = JSON.parse(xhr2.responseText);
-                            if (data.items) {
+                            if (data.error) {
+                                var errMsg = (data.error.message || 'Error de API');
+                                if (errMsg.indexOf('quota') !== -1) errMsg = 'Cuota de API agotada. Intenta mas tarde.';
+                                showPlaylistError(errMsg);
+                                return;
+                            }
+                            if (data.items && Array.isArray(data.items)) {
                                 data.items.forEach(function(item) {
                                     var s = item.snippet;
                                     if (s && s.resourceId && s.resourceId.videoId) {
@@ -1715,23 +1744,31 @@
                                     document.getElementById('playlist-error').style.display = 'none';
                                     cargarVideoPlaylist(0);
                                 } else {
-                                    showPlaylistError('El canal no tiene videos publicos.');
+                                    showPlaylistError('La playlist no tiene videos publicos o el ID es incorrecto.');
                                 }
                             }
                         } catch(e) {
-                            showPlaylistError('Error al procesar la lista.');
+                            console.error('Error parseando JSON:', e, xhr2.responseText.substring(0, 500));
+                            showPlaylistError('Error al procesar la respuesta del servidor.');
                         }
                     } else if (xhr2.status === 403) {
-                        showPlaylistError('API Key invalida o sin cuota.');
+                        showPlaylistError('API Key invalida o cuota agotada.');
+                    } else if (xhr2.status === 404) {
+                        showPlaylistError('Playlist no encontrada.');
                     } else if (xhr2.status === 0) {
-                        showPlaylistError('Error de conexion.');
+                        showPlaylistError('Error de conexion. Revisa tu internet.');
                     } else {
-                        showPlaylistError('Error ' + xhr2.status);
+                        try {
+                            var errData = JSON.parse(xhr2.responseText);
+                            showPlaylistError(errData.error ? errData.error.message : ('Error HTTP ' + xhr2.status));
+                        } catch(e2) {
+                            showPlaylistError('Error HTTP ' + xhr2.status);
+                        }
                     }
                 }
             };
-            xhr2.onerror = function() { showPlaylistError('Error de red.'); };
-            xhr2.ontimeout = function() { showPlaylistError('Tiempo de espera agotado.'); };
+            xhr2.onerror = function() { showPlaylistError('Error de red. Revisa tu conexion.'); };
+            xhr2.ontimeout = function() { showPlaylistError('Tiempo de espera agotado. Intenta de nuevo.'); };
             xhr2.send();
         }
         fetchPage(null);
