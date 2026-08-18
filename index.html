@@ -7,6 +7,11 @@
     <link rel="icon" type="image/jpeg" href="logo.jpg"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
     <style>
+        /* ===== PROTECCIONES GLOBALES CONTRA DESBORDAMIENTO ===== */
+        html, body { overflow-x: hidden; }
+        img, iframe, video, embed, object { max-width: 100%; }
+        * { word-break: break-word; overflow-wrap: break-word; }
+        pre, code { white-space: pre-wrap; word-break: break-all; }
         :root { --rojo: #ff4d4d; --negro: #0d0d11; --gris: #16161d; --texto: #ffffff; }
         *, *::before, *::after { box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--negro); color: var(--texto); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
@@ -23,8 +28,8 @@
             .header-left, .header-right { display: none; }
             header { display: block; padding: 6px 2px; text-align: center; }
             .header-center { width: 100%; max-width: 100%; overflow: hidden; display: block; }
-            .brand-name { font-size: 11px; gap: 3px; margin-bottom: 6px; letter-spacing: 0; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; }
-            .brand-logo { width: 18px; height: 18px; min-width: 18px; min-height: 18px; flex-shrink: 0; }
+            .brand-name { font-size: 12px; gap: 4px; margin-bottom: 6px; letter-spacing: 0; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; }
+            .brand-logo { width: 20px; height: 20px; min-width: 20px; min-height: 20px; flex-shrink: 0; }
             nav { gap: 6px; margin-bottom: 12px; }
             nav button { padding: 6px 10px; font-size: 0.7em; border-radius: 5px; }
             .wrapper { padding: 8px 4px; gap: 6px; overflow-x: hidden; }
@@ -90,9 +95,9 @@
         }
         .sub-nav button { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
         .sub-nav button.active { background: var(--rojo); }
-        .video-box { display: none; width: 100%; }
+        .video-box { display: none; width: 100%; overflow: hidden; }
         .video-box.active { display: block; }
-        .iframe-container { aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); }
+        .iframe-container { aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid var(--rojo); position: relative; }
         iframe { width: 100%; height: 100%; border: none; }
 
 
@@ -102,7 +107,7 @@
         .noticias-sub-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .noticias-sub-nav button { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .noticias-sub-nav button.active { background: var(--rojo); }
-        .noticias-box { display: none; width: 100%; }
+        .noticias-box { display: none; width: 100%; overflow: hidden; }
         .noticias-box.active { display: block; }
 
         .noticia-card {
@@ -125,7 +130,7 @@
         .noticia-body { padding: 20px; }
         .noticia-titulo { font-size: 1.25em; font-weight: bold; margin-bottom: 8px; color: #fff; }
         .noticia-fecha { color: #888; font-size: 0.85em; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-        .noticia-texto { color: #ccc; line-height: 1.6; white-space: pre-wrap; }
+        .noticia-texto { color: #ccc; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
         .noticia-actions {
             display: flex;
             gap: 10px;
@@ -767,11 +772,11 @@
             height: 100%;
         }
         @media (max-width: 768px) {
-            .player-controls { gap: 6px; padding: 8px 10px; }
-            .player-controls button { width: 32px; height: 32px; font-size: 11px; }
-            .player-controls button.play-btn { width: 40px; height: 40px; font-size: 14px; }
-            .video-title-display { max-width: 80px; font-size: 0.7em; }
-            .time-display { min-width: 60px; font-size: 0.65em; }
+            .player-controls { gap: 4px; padding: 6px 8px; }
+            .player-controls button { width: 30px; height: 30px; font-size: 10px; }
+            .player-controls button.play-btn { width: 38px; height: 38px; font-size: 13px; }
+            .video-title-display { max-width: 70px; font-size: 0.65em; }
+            .time-display { min-width: 55px; font-size: 0.6em; }
         }
     
     </style>
