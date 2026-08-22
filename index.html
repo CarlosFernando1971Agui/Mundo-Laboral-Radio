@@ -890,12 +890,32 @@
             flex-direction: column;
             align-items: center;
         }
+        .radio-bg-img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            overflow: hidden;
+            z-index: 0;
+            opacity: 0.25;
+            filter: blur(2px) brightness(0.6);
+            pointer-events: none;
+        }
+        .radio-bg-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
         .radio-cover-wrap {
             position: relative;
             width: 160px;
             height: 160px;
             margin-bottom: 18px;
         }
+
         .radio-cover-glow {
             position: absolute;
             top: 50%; left: 50%;
@@ -1191,19 +1211,22 @@
                             <span class="live-dot"></span>
                             <span>EN VIVO</span>
                         </div>
-                        <div class="radio-station-tag">Sonido Digital</div>
+                        <div class="radio-station-tag">Mundo Laboral Radio</div>
                     </div>
 
                     <div class="radio-modern-body">
                         <div class="radio-cover-wrap">
+                            <div class="radio-bg-img">
+                                <img src="https://raw.githubusercontent.com/CarlosFernando1971Agui/Mundo-Laboral-Radio/main/radio.jpg" alt="Fondo radio">
+                            </div>
                             <div class="radio-cover-glow"></div>
                             <img src="logo.jpg" id="radio-cover-img" alt="Mundo Laboral Radio" class="radio-cover-img">
                             <div class="radio-cover-ring"></div>
                         </div>
 
                         <div class="radio-track-meta">
-                            <div class="radio-track-title" id="radio-track-title">Desde Vallegrande al Mundo</div>
-                            <div class="radio-track-artist" id="radio-track-artist">Te acompañamos las 24 horas</div>
+                            <div class="radio-track-title" id="radio-track-title">Mundo Laboral Radio</div>
+                            <div class="radio-track-artist" id="radio-track-artist">Vallegrande, Bolivia</div>
                         </div>
 
                         <canvas id="radio-viz-canvas" width="400" height="80"></canvas>
