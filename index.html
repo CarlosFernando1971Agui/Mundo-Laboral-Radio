@@ -784,226 +784,7 @@
         }
     
 
-        /* ===== REPRODUCTOR RADIO PROFESIONAL ===== */
-        .radio-pro-card {
-            position: relative;
-            background: linear-gradient(145deg, #0f0f1a 0%, #1a1a2e 50%, #0d0d1a 100%);
-            border: 1px solid rgba(255, 77, 77, 0.3);
-            border-radius: 24px;
-            padding: 35px 30px 25px;
-            text-align: center;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
-        }
-        .radio-glow {
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 50% 50%, rgba(255,77,77,0.08) 0%, transparent 60%);
-            pointer-events: none;
-            animation: radioGlow 6s ease-in-out infinite;
-        }
-        @keyframes radioGlow {
-            0%, 100% { transform: scale(1); opacity: 0.6; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-        .radio-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            position: relative;
-            z-index: 1;
-        }
-        .radio-live-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 77, 77, 0.15);
-            border: 1px solid rgba(255, 77, 77, 0.4);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.75em;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: var(--rojo);
-            text-transform: uppercase;
-        }
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--rojo);
-            border-radius: 50%;
-            animation: livePulse 1.5s ease-in-out infinite;
-            box-shadow: 0 0 10px var(--rojo);
-        }
-        @keyframes livePulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.7); }
-        }
-        .radio-freq {
-            font-family: 'Courier New', monospace;
-            font-size: 0.85em;
-            color: #888;
-            letter-spacing: 3px;
-            background: rgba(255,255,255,0.03);
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-        .radio-visualizer-wrap {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-            z-index: 1;
-        }
-        .radio-album-art {
-            position: relative;
-            width: 140px;
-            height: 140px;
-            margin-bottom: 15px;
-        }
-        .radio-album-art img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid rgba(255, 77, 77, 0.4);
-            box-shadow: 0 0 30px rgba(255, 77, 77, 0.2);
-            transition: all 0.5s ease;
-        }
-        .radio-album-art.playing img {
-            animation: spinArt 8s linear infinite;
-            box-shadow: 0 0 40px rgba(255, 77, 77, 0.4);
-            border-color: var(--rojo);
-        }
-        @keyframes spinArt {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .radio-art-ring {
-            position: absolute;
-            top: -8px; left: -8px;
-            width: calc(100% + 16px);
-            height: calc(100% + 16px);
-            border-radius: 50%;
-            border: 2px dashed rgba(255, 77, 77, 0.2);
-            animation: ringSpin 20s linear infinite;
-            pointer-events: none;
-        }
-        .radio-album-art.playing .radio-art-ring {
-            border-color: rgba(255, 77, 77, 0.5);
-            animation: ringSpin 8s linear infinite reverse;
-        }
-        @keyframes ringSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        #radio-visualizer {
-            display: block;
-            margin: 0 auto;
-            width: 100%;
-            max-width: 400px;
-            height: 80px;
-            opacity: 0.7;
-        }
-        .radio-track-info {
-            position: relative;
-            z-index: 1;
-            margin-bottom: 18px;
-        }
-        .radio-station-name {
-            font-size: 1.3em;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #fff;
-            margin-bottom: 6px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-        .radio-song-title {
-            font-size: 1em;
-            color: var(--rojo);
-            font-weight: 600;
-            margin-bottom: 4px;
-            min-height: 1.4em;
-        }
-        .radio-song-artist {
-            font-size: 0.85em;
-            color: #888;
-            min-height: 1.3em;
-        }
-        .radio-progress-wrap {
-            width: 100%;
-            height: 3px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 2px;
-            margin-bottom: 22px;
-            overflow: hidden;
-            position: relative;
-            z-index: 1;
-        }
-        .radio-progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--rojo), #ff8080);
-            border-radius: 2px;
-            transition: width 0.3s ease;
-            box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
-        }
-        .radio-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 25px;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-        .radio-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #fff;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
-        }
-        .radio-btn:hover {
-            background: rgba(255, 77, 77, 0.2);
-            border-color: rgba(255, 77, 77, 0.5);
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
-        }
-        .radio-btn:active {
-            transform: scale(0.95);
-        }
-        .radio-btn-small {
-            width: 44px;
-            height: 44px;
-            font-size: 14px;
-        }
-        .radio-btn-main {
-            width: 72px;
-            height: 72px;
-            font-size: 24px;
-            background: linear-gradient(145deg, var(--rojo), #cc0000);
-            border: none;
-            box-shadow: 0 8px 25px rgba(255, 77, 77, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
-        }
-        .radio-btn-main:hover {
-            background: linear-gradient(145deg, #ff6666, #e60000);
-            box-shadow: 0 10px 35px rgba(255, 77, 77, 0.6);
-            transform: scale(1.08);
-        }
-        /* Volumen vertical lateral */
+        /* ===== REPRODUCTOR RADIO ESTILO PLANETA99 ===== */
         .radio-layout {
             display: flex;
             justify-content: center;
@@ -1011,29 +792,247 @@
             gap: 12px;
             max-width: 100%;
         }
+        .radio-pro-card {
+            position: relative;
+            background: linear-gradient(180deg, #1a0505 0%, #330a0a 30%, #4a0f0f 50%, #2d0808 70%, #0f0202 100%);
+            border: 2px solid #660000;
+            border-radius: 8px;
+            padding: 0;
+            text-align: center;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(255,0,0,0.3), inset 0 0 60px rgba(0,0,0,0.5);
+            max-width: 520px;
+            width: 100%;
+        }
+        .radio-pro-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff3333, #ff6600, #ff3333, transparent);
+            z-index: 10;
+        }
+        .radio-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 15px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 100%);
+            position: relative;
+            z-index: 5;
+        }
+        .radio-station-title {
+            font-family: 'Arial Black', 'Impact', sans-serif;
+            font-size: 1.1em;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,100,0,0.8), 0 2px 4px rgba(0,0,0,0.8);
+            letter-spacing: 1px;
+        }
+        .radio-live-text {
+            font-family: 'Courier New', monospace;
+            font-size: 0.75em;
+            font-weight: bold;
+            color: #ff4444;
+            text-shadow: 0 0 8px rgba(255,0,0,0.8);
+            letter-spacing: 2px;
+            animation: liveBlink 1.2s ease-in-out infinite;
+        }
+        @keyframes liveBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .radio-viz-area {
+            position: relative;
+            padding: 15px 20px 5px;
+            z-index: 2;
+        }
+        .radio-grid-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .radio-grid-line {
+            position: absolute;
+            left: 5%; right: 5%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,50,0,0.3), rgba(255,100,0,0.5), rgba(255,50,0,0.3), transparent);
+        }
+        #radio-visualizer {
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 440px;
+            height: 90px;
+            position: relative;
+            z-index: 2;
+        }
+        .radio-song-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 25px 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            color: #ff8866;
+            text-shadow: 0 0 5px rgba(255,100,0,0.5);
+            position: relative;
+            z-index: 3;
+        }
+        .radio-song-info span {
+            background: rgba(0,0,0,0.4);
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+        .radio-meta-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 20px;
+            background: rgba(0,0,0,0.5);
+            border-top: 1px solid rgba(255,50,0,0.2);
+            border-bottom: 1px solid rgba(255,50,0,0.2);
+            font-family: 'Courier New', monospace;
+            font-size: 0.7em;
+            color: #ffaa88;
+            position: relative;
+            z-index: 3;
+        }
+        .radio-meta-left {
+            display: flex;
+            gap: 15px;
+        }
+        .radio-meta-left span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .radio-meta-left i {
+            color: #ff4444;
+            font-size: 0.8em;
+        }
+        .radio-bottom-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px 12px;
+            background: linear-gradient(180deg, rgba(20,5,5,0.9) 0%, rgba(10,2,2,0.95) 100%);
+            position: relative;
+            z-index: 3;
+            gap: 12px;
+        }
+        .radio-ctrl-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .radio-ctrl-btn {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(145deg, #333, #1a1a1a);
+            border: 1px solid #555;
+            border-radius: 4px;
+            color: #ccc;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .radio-ctrl-btn:hover {
+            background: linear-gradient(145deg, #444, #222);
+            border-color: #ff4444;
+            color: #fff;
+        }
+        .radio-ctrl-btn:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .radio-ctrl-btn.main-play {
+            width: 38px;
+            height: 38px;
+            font-size: 14px;
+            background: linear-gradient(145deg, #cc0000, #660000);
+            border-color: #ff3333;
+            color: #fff;
+        }
+        .radio-ctrl-btn.main-play:hover {
+            background: linear-gradient(145deg, #ff0000, #990000);
+            box-shadow: 0 0 15px rgba(255,0,0,0.4);
+        }
+        .radio-time-display {
+            font-family: 'Courier New', monospace;
+            font-size: 0.75em;
+            color: #ffaa66;
+            text-shadow: 0 0 5px rgba(255,100,0,0.4);
+            white-space: nowrap;
+        }
+        .radio-knob-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+        .radio-knob {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #555, #222 60%, #111);
+            border: 2px solid #444;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255,255,255,0.1);
+            transition: transform 0.1s;
+        }
+        .radio-knob::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 10px;
+            background: #ff4444;
+            border-radius: 1px;
+            box-shadow: 0 0 4px rgba(255,0,0,0.6);
+        }
+        .radio-knob-label {
+            font-family: 'Courier New', monospace;
+            font-size: 0.6em;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .radio-knob-wrap:hover .radio-knob {
+            border-color: #ff4444;
+        }
+        /* Volumen vertical lateral */
         .radio-side-panel {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
-            padding: 18px 10px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
+            gap: 8px;
+            padding: 14px 8px;
+            background: linear-gradient(180deg, #1a0505, #0f0202);
+            border: 1px solid #660000;
+            border-radius: 8px;
             flex-shrink: 0;
             align-self: center;
+            box-shadow: 0 0 15px rgba(255,0,0,0.15);
         }
         .radio-vol-icon-side {
-            color: #666;
-            font-size: 0.7em;
-            transition: color 0.3s ease;
+            color: #ff6644;
+            font-size: 0.65em;
+            text-shadow: 0 0 5px rgba(255,50,0,0.5);
         }
         .radio-vol-v-track {
-            width: 5px;
-            height: 70px;
+            width: 4px;
+            height: 60px;
             background: rgba(255,255,255,0.08);
-            border-radius: 3px;
+            border-radius: 2px;
             position: relative;
             cursor: pointer;
             overflow: hidden;
@@ -1044,8 +1043,8 @@
             left: 0;
             width: 100%;
             height: 80%;
-            background: linear-gradient(to top, var(--rojo), #ff8080);
-            border-radius: 3px;
+            background: linear-gradient(to top, #cc0000, #ff6600);
+            border-radius: 2px;
             transition: height 0.1s ease;
             pointer-events: none;
         }
@@ -1053,80 +1052,32 @@
             content: '';
             position: absolute;
             left: 50%;
-            bottom: calc(var(--thumb-pos, 80%) - 5px);
+            bottom: calc(var(--thumb-pos, 80%) - 4px);
             transform: translateX(-50%);
-            width: 14px;
-            height: 14px;
-            background: var(--rojo);
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle at 35% 35%, #ff8866, #cc0000);
             border-radius: 50%;
-            box-shadow: 0 0 10px rgba(255,77,77,0.5);
+            box-shadow: 0 0 8px rgba(255,50,0,0.6);
             pointer-events: none;
             transition: bottom 0.1s ease;
         }
-        .radio-status {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 0.85em;
-            color: #888;
-            margin-bottom: 18px;
-            position: relative;
-            z-index: 1;
-            min-height: 1.4em;
-        }
-        .status-pulse {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #444;
-            transition: all 0.3s ease;
-        }
-        .radio-status.playing .status-pulse {
-            background: var(--rojo);
-            box-shadow: 0 0 8px var(--rojo);
-            animation: livePulse 1.5s ease-in-out infinite;
-        }
-        .radio-stats {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            position: relative;
-            z-index: 1;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        .radio-stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            color: #666;
-            font-size: 0.7em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .radio-stat i {
-            font-size: 1.4em;
-            color: #555;
-            transition: color 0.3s ease;
-        }
-        .radio-pro-card:hover .radio-stat i {
-            color: #777;
-        }
         @media (max-width: 700px) {
-            .radio-pro-card { padding: 25px 15px 20px; border-radius: 18px; }
-            .radio-album-art { width: 110px; height: 110px; }
-            .radio-station-name { font-size: 1.1em; letter-spacing: 2px; }
-            .radio-btn-main { width: 60px; height: 60px; font-size: 20px; }
-            .radio-btn-small { width: 38px; height: 38px; font-size: 12px; }
-            .radio-stats { gap: 15px; }
-            .radio-header { margin-bottom: 18px; }
-            #radio-visualizer { height: 60px; }
-            .radio-controls { gap: 18px; }
-            .radio-layout { gap: 8px; }
-            .radio-side-panel { padding: 14px 8px; border-radius: 16px; }
-            .radio-vol-v-track { height: 55px; }
+            .radio-pro-card { border-radius: 6px; }
+            .radio-station-title { font-size: 0.9em; }
+            .radio-viz-area { padding: 10px 12px 3px; }
+            #radio-visualizer { height: 65px; }
+            .radio-song-info { padding: 3px 15px 5px; font-size: 0.7em; }
+            .radio-meta-bar { padding: 4px 12px; font-size: 0.6em; }
+            .radio-bottom-controls { padding: 8px 10px 10px; gap: 8px; }
+            .radio-ctrl-btn { width: 28px; height: 28px; font-size: 10px; }
+            .radio-ctrl-btn.main-play { width: 32px; height: 32px; font-size: 12px; }
+            .radio-knob { width: 36px; height: 36px; }
+            .radio-knob::after { height: 8px; top: 5px; }
+            .radio-time-display { font-size: 0.65em; }
+            .radio-layout { gap: 6px; }
+            .radio-side-panel { padding: 10px 6px; border-radius: 6px; }
+            .radio-vol-v-track { height: 45px; }
         }
     </style>
 <meta name="referrer" content="no-referrer-when-downgrade">
@@ -1176,7 +1127,7 @@
                             <span class="live-dot"></span>
                             <span class="live-text">EN VIVO</span>
                         </div>
-                        <div class="radio-freq">Sonido Digital</div>
+                        <div class="radio-freq">FM 104.5</div>
                     </div>
 
                     <div class="radio-visualizer-wrap">
@@ -1189,8 +1140,8 @@
 
                     <div class="radio-track-info">
                         <div class="radio-station-name">Mundo Laboral Radio</div>
-                        <div class="radio-song-title" id="radio-song-title">Desde Vallegrande al Mundo</div>
-                        <div class="radio-song-artist" id="radio-song-artist">Te acompañamos las 24 horas</div>
+                        <div class="radio-song-title" id="radio-song-title">Vallegrande, Bolivia</div>
+                        <div class="radio-song-artist" id="radio-song-artist">La voz de los valles cruceños</div>
                     </div>
 
                     <div class="radio-progress-wrap">
@@ -2360,7 +2311,7 @@
         }
     }
 
-    // ====== RADIO PROFESIONAL ======
+    // ====== RADIO ESTILO PLANETA99 ======
     var radio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
     radio.crossOrigin = "anonymous";
     var sonando = false;
@@ -2368,17 +2319,18 @@
     var analyser = null;
     var dataArray = null;
     var source = null;
-    var vizInterval = null;
     var vizCanvas = null;
     var vizCtx = null;
+    var radioMuted = false;
+    var radioPrevVol = 0.8;
 
     function initVisualizer() {
         if (audioCtx) return;
         try {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 128;
-            analyser.smoothingTimeConstant = 0.8;
+            analyser.fftSize = 64;
+            analyser.smoothingTimeConstant = 0.85;
             source = audioCtx.createMediaElementSource(radio);
             source.connect(analyser);
             analyser.connect(audioCtx.destination);
@@ -2398,25 +2350,36 @@
         var w = vizCanvas.width;
         var h = vizCanvas.height;
         vizCtx.clearRect(0, 0, w, h);
-        // Usar solo 40 barras (frecuencias bajas/medias donde hay más energía)
-        var barCount = 40;
-        var barWidth = 5;
-        var gap = 3;
-        var totalWidth = barCount * barWidth + (barCount - 1) * gap;
-        var startX = (w - totalWidth) / 2;
-        for (var i = 0; i < barCount; i++) {
-            var barHeight = (dataArray[i] / 255) * h * 0.85;
-            var x = startX + i * (barWidth + gap);
-            var y = h - barHeight;
-            var grad = vizCtx.createLinearGradient(0, h, 0, y);
-            grad.addColorStop(0, 'rgba(255, 77, 77, 0.9)');
-            grad.addColorStop(0.5, 'rgba(255, 120, 120, 0.6)');
-            grad.addColorStop(1, 'rgba(255, 180, 180, 0.2)');
-            vizCtx.fillStyle = grad;
-            vizCtx.fillRect(x, y, barWidth, barHeight);
-            // Reflejo
-            vizCtx.fillStyle = 'rgba(255, 77, 77, 0.1)';
-            vizCtx.fillRect(x, h, barWidth, barHeight * 0.3);
+        // Estilo Planeta99: bloques cuadrados tipo grid
+        var cols = 32;
+        var rows = 10;
+        var blockW = 8;
+        var blockH = 5;
+        var gapX = 3;
+        var gapY = 2;
+        var totalW = cols * blockW + (cols - 1) * gapX;
+        var startX = (w - totalW) / 2;
+        var startY = h - 4;
+        for (var col = 0; col < cols; col++) {
+            var freqIdx = Math.floor((col / cols) * (dataArray.length * 0.7));
+            var val = dataArray[freqIdx] || 0;
+            var activeRows = Math.floor((val / 255) * rows);
+            for (var row = 0; row < rows; row++) {
+                var x = startX + col * (blockW + gapX);
+                var y = startY - row * (blockH + gapY);
+                var isActive = row < activeRows;
+                var alpha = isActive ? (0.3 + (row / rows) * 0.7) : 0.08;
+                var r = isActive ? 255 : 80;
+                var g = isActive ? Math.floor(80 + (row / rows) * 100) : 30;
+                var b = isActive ? Math.floor(30 + (row / rows) * 50) : 20;
+                vizCtx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+                vizCtx.fillRect(x, y, blockW, blockH);
+                // Brillo en los bloques activos de arriba
+                if (isActive && row === activeRows - 1) {
+                    vizCtx.fillStyle = 'rgba(255, 180, 100, 0.6)';
+                    vizCtx.fillRect(x, y, blockW, 1);
+                }
+            }
         }
     }
 
@@ -2435,7 +2398,8 @@
     function updateVolumeFill() {
         var slider = document.getElementById('vol-slider');
         var fill = document.getElementById('radio-volume-fill');
-        var icon = document.getElementById('radio-vol-icon');
+        var iconBot = document.getElementById('radio-vol-icon');
+        var iconTop = document.getElementById('radio-vol-icon-top');
         var track = document.getElementById('radio-vol-v-track');
         if (slider && fill) {
             fill.style.height = (slider.value * 100) + '%';
@@ -2443,15 +2407,18 @@
         if (track) {
             var pct = parseFloat(slider.value) * 100;
             track.style.setProperty('--thumb-pos', pct + '%');
-            // Actualizar posición del pseudo-elemento thumb via CSS custom property
             var style = track.style.cssText;
             track.style.cssText = style + '; --thumb-pos: ' + pct + '%;';
         }
-        if (icon) {
-            var v = parseFloat(slider.value);
-            if (v === 0) { icon.className = 'fas fa-volume-mute radio-vol-icon-side'; }
-            else if (v < 0.4) { icon.className = 'fas fa-volume-down radio-vol-icon-side'; }
-            else { icon.className = 'fas fa-volume-up radio-vol-icon-side'; }
+        var v = parseFloat(slider.value);
+        var cls = v === 0 ? 'fas fa-volume-mute radio-vol-icon-side' : v < 0.4 ? 'fas fa-volume-down radio-vol-icon-side' : 'fas fa-volume-up radio-vol-icon-side';
+        if (iconBot) iconBot.className = cls;
+        if (iconTop) iconTop.className = cls;
+        // Rotar knob según volumen
+        var knob = document.getElementById('radio-knob');
+        if (knob) {
+            var rot = -135 + (v * 270);
+            knob.style.transform = 'rotate(' + rot + 'deg)';
         }
     }
 
@@ -2464,6 +2431,7 @@
         var pct = 1 - Math.max(0, Math.min(1, y / rect.height));
         slider.value = pct;
         radio.volume = pct;
+        if (pct > 0 && radioMuted) { radioMuted = false; }
         updateVolumeFill();
     }
 
@@ -2472,6 +2440,7 @@
         var v = parseFloat(slider.value);
         slider.value = Math.min(1, v + 0.1);
         radio.volume = slider.value;
+        if (slider.value > 0 && radioMuted) { radioMuted = false; }
         updateVolumeFill();
     }
 
@@ -2483,54 +2452,81 @@
         updateVolumeFill();
     }
 
+    function radioToggleMute() {
+        var slider = document.getElementById('vol-slider');
+        if (radioMuted) {
+            slider.value = radioPrevVol || 0.8;
+            radio.volume = slider.value;
+            radioMuted = false;
+        } else {
+            radioPrevVol = parseFloat(slider.value);
+            slider.value = 0;
+            radio.volume = 0;
+            radioMuted = true;
+        }
+        updateVolumeFill();
+    }
+
     function radioPrevTrack() {
-        // Placeholder para funcionalidad de track anterior
         console.log('Track anterior');
     }
 
     function radioNextTrack() {
-        // Placeholder para funcionalidad de track siguiente
         console.log('Track siguiente');
+    }
+
+    function radioStop() {
+        radio.pause();
+        radio.currentTime = 0;
+        var icon = document.getElementById("p-icon");
+        var status = document.getElementById("status");
+        icon.className = "fas fa-play";
+        status.textContent = "Detenido";
+        sonando = false;
+        stopVisualizer();
     }
 
     function toggleAudio() {
         var icon = document.getElementById("p-icon");
         var status = document.getElementById("status");
-        var art = document.querySelector(".radio-album-art");
-        var progress = document.getElementById("radio-progress-bar");
         if (!sonando) {
             radio.play().catch(function(e) {
                 console.error("Error al reproducir:", e);
-                status.innerHTML = '<span class="status-pulse"></span>Error al cargar audio';
+                status.textContent = "Error al cargar audio";
                 return;
             });
             icon.className = "fas fa-pause";
-            status.innerHTML = '<span class="status-pulse"></span>SONANDO EN VIVO';
-            status.classList.add("playing");
-            if (art) art.classList.add("playing");
-            if (progress) {
-                progress.style.width = '100%';
-                progress.style.transition = 'width 2s ease';
-            }
+            status.textContent = "SONANDO...";
             sonando = true;
             startVisualizer();
         } else {
             radio.pause();
             icon.className = "fas fa-play";
-            status.innerHTML = '<span class="status-pulse"></span>Toca para escuchar';
-            status.classList.remove("playing");
-            if (art) art.classList.remove("playing");
-            if (progress) {
-                progress.style.width = '0%';
-                progress.style.transition = 'width 0.5s ease';
-            }
+            status.textContent = "Pausado";
             sonando = false;
             stopVisualizer();
         }
     }
 
+    function updateRadioTime() {
+        var now = new Date();
+        var h = String(now.getHours()).padStart(2, '0');
+        var m = String(now.getMinutes()).padStart(2, '0');
+        var s = String(now.getSeconds()).padStart(2, '0');
+        var el = document.getElementById('radio-time');
+        if (el) el.innerHTML = '<i class="far fa-clock"></i> ' + h + ':' + m + ':' + s;
+        // Simular listeners variando ligeramente
+        var listenersEl = document.getElementById('radio-listeners');
+        if (listenersEl && sonando) {
+            var base = 42;
+            var variation = Math.floor(Math.sin(now.getTime() / 5000) * 5);
+            listenersEl.textContent = base + variation;
+        }
+    }
+
     document.getElementById('vol-slider').oninput = function() {
         radio.volume = this.value;
+        if (this.value > 0 && radioMuted) radioMuted = false;
         updateVolumeFill();
     };
 
@@ -2983,6 +2979,10 @@
         cargarClima();
         actualizarReloj();
         setInterval(actualizarReloj, 1000);
+
+        // Reloj de radio y listeners
+        updateRadioTime();
+        setInterval(updateRadioTime, 1000);
 
         // Intentar conectar Supabase despues de que todo este listo
         setTimeout(function() {
