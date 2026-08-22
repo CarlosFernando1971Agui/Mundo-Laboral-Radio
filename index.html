@@ -2322,7 +2322,17 @@
         supabaseFetch('GET', '/noticias?select=id&limit=1', null, function(err, data) {
             if (err) {
                 console.error('Error Supabase test:', err);
-                callback(false, err);
+                var friendlyErr = 'Sin conexion a internet';
+                if (typeof err === 'string') {
+                    if (err.indexOf('HTTP 0') !== -1 || err.indexOf('red') !== -1 || err.indexOf('CORS') !== -1) {
+                        friendlyErr = 'Sin conexion a internet';
+                    } else if (err.indexOf('403') !== -1) {
+                        friendlyErr = 'Acceso denegado a la base de datos';
+                    } else {
+                        friendlyErr = err;
+                    }
+                }
+                callback(false, friendlyErr);
             } else {
                 callback(true, 'Conectado');
             }
@@ -2334,8 +2344,9 @@
         if (dbOnline) {
             div.innerHTML = '<div class="estado-db online"><i class="fas fa-cloud"></i> MODO ONLINE - Conectado a Supabase. Las noticias se sincronizan en todos los dispositivos.</div>';
         } else {
-            var msg = dbErrorMsg || 'Sin conexion a la base de datos';
-            div.innerHTML = '<div class="estado-db offline"><i class="fas fa-exclamation-triangle"></i> MODO LOCAL - ' + msg + '<br><small>Las noticias solo se guardan en este dispositivo.</small></div>';
+            // En modo offline no mostramos banner intrusivo, solo un aviso discreto
+            var msg = (dbErrorMsg && dbErrorMsg !== 'HTTP 0') ? dbErrorMsg : 'Sin conexion a internet';
+            div.innerHTML = '<div class="estado-db offline" style="padding:8px 12px;font-size:0.8em;"><i class="fas fa-info-circle"></i> Modo local activo. Las noticias se guardan en este dispositivo.</div>';
         }
     }
 
