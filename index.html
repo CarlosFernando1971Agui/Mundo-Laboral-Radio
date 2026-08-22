@@ -1176,7 +1176,7 @@
                             <span class="live-dot"></span>
                             <span class="live-text">EN VIVO</span>
                         </div>
-                        <div class="radio-freq">Sonido Digital</div>
+                        <div class="radio-freq">FM 104.5</div>
                     </div>
 
                     <div class="radio-visualizer-wrap">
@@ -1189,8 +1189,8 @@
 
                     <div class="radio-track-info">
                         <div class="radio-station-name">Mundo Laboral Radio</div>
-                        <div class="radio-song-title" id="radio-song-title">Desde Vallegrande al Mundo</div>
-                        <div class="radio-song-artist" id="radio-song-artist">Te acompañamos las 24 horas</div>
+                        <div class="radio-song-title" id="radio-song-title">Vallegrande, Bolivia</div>
+                        <div class="radio-song-artist" id="radio-song-artist">La voz de los valles cruceños</div>
                     </div>
 
                     <div class="radio-progress-wrap">
@@ -2398,12 +2398,15 @@
         var w = vizCanvas.width;
         var h = vizCanvas.height;
         vizCtx.clearRect(0, 0, w, h);
-        var barCount = dataArray.length;
-        var barWidth = (w / barCount) * 0.6;
-        var gap = (w / barCount) * 0.4;
+        // Usar solo 40 barras (frecuencias bajas/medias donde hay más energía)
+        var barCount = 40;
+        var barWidth = 5;
+        var gap = 3;
+        var totalWidth = barCount * barWidth + (barCount - 1) * gap;
+        var startX = (w - totalWidth) / 2;
         for (var i = 0; i < barCount; i++) {
             var barHeight = (dataArray[i] / 255) * h * 0.85;
-            var x = i * (barWidth + gap) + gap / 2;
+            var x = startX + i * (barWidth + gap);
             var y = h - barHeight;
             var grad = vizCtx.createLinearGradient(0, h, 0, y);
             grad.addColorStop(0, 'rgba(255, 77, 77, 0.9)');
