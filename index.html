@@ -2831,6 +2831,7 @@
         }, 300000);
     });
 </script>
+    <script>
     // ====== REPRODUCTOR RADIO MODERNO ======
     var radioAudio = new Audio("https://azura1.bitstreaming.net/listen/mundolaboral/radio.mp3");
     radioAudio.crossOrigin = "anonymous";
@@ -2887,7 +2888,6 @@
             grad.addColorStop(1, 'rgba(255, 160, 140, 0.25)');
             radioVizCtx.fillStyle = grad;
             radioVizCtx.fillRect(x, y, barW, barH);
-            // Reflejo suave
             radioVizCtx.fillStyle = 'rgba(255, 60, 60, 0.08)';
             radioVizCtx.fillRect(x, h + 2, barW, barH * 0.25);
         }
@@ -2978,19 +2978,15 @@
         }
     }
 
-    // Estado inicial del volumen
     radioAudio.volume = radioVol;
     updateRadioVolUI();
 
-    // Actualizar estado de conexión al cargar
     setTimeout(function() {
         var conn = document.getElementById('radio-conn-status');
         if (conn && !radioPlaying) {
             conn.innerHTML = '<i class="fas fa-wifi"></i> Listo';
         }
     }, 1000);
-
-
-
+</script>
 </body>
 </html>
