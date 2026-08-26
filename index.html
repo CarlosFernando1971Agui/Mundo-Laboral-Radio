@@ -1713,7 +1713,7 @@
         var ev = { onReady: onReadyFn, onStateChange: onStateFn };
         if (onErrorFn) ev.onError = onErrorFn;
         return new YT.Player(containerId, {
-            height: '100%', width: '100%', videoId: firstId || '',
+            height: '100%', width: '100%', videoId: '',
             playerVars: { controls: 0, modestbranding: 1, rel: 0, disablekb: 1, fs: 1, iv_load_policy: 3, autoplay: 0, showinfo: 0 },
             events: ev
         });
@@ -1783,7 +1783,7 @@
     function cargarVideoNotivideos(index) {
         currentNotivideosIndex = index;
         var video = notivideosVideos[index];
-        if (video && playerNotivideos && playerNotivideos.loadVideoById) playerNotivideos.loadVideoById(video.id);
+        if (video && playerNotivideos && playerNotivideos.loadVideoById) playerNotivideos.cueVideoById(video.id);
         renderPlaylistGrid(notivideosVideos, 'notivideos', currentNotivideosIndex);
         updateNotivideosTitle();
     }
@@ -2083,42 +2083,42 @@
     function cargarVideoClasico(index) {
         currentClasicoIndex = index;
         var video = clasicosVideos[index];
-        if (video && playerClasico && playerClasico.loadVideoById) playerClasico.loadVideoById(video.id);
+        if (video && playerClasico && playerClasico.loadVideoById) playerClasico.cueVideoById(video.id);
         renderPlaylistGrid(clasicosVideos, 'clasico', currentClasicoIndex);
         updateClasicoTitle();
     }
     function cargarVideoMixes(index) {
         currentMixesIndex = index;
         var video = mixesVideos[index];
-        if (video && playerMixes && playerMixes.loadVideoById) playerMixes.loadVideoById(video.id);
+        if (video && playerMixes && playerMixes.loadVideoById) playerMixes.cueVideoById(video.id);
         renderPlaylistGrid(mixesVideos, 'mixes', currentMixesIndex);
         updateMixesTitle();
     }
     function cargarVideoVariado(index) {
         currentVariadoIndex = index;
         var video = variadoVideos[index];
-        if (video && playerVariado && playerVariado.loadVideoById) playerVariado.loadVideoById(video.id);
+        if (video && playerVariado && playerVariado.loadVideoById) playerVariado.cueVideoById(video.id);
         renderPlaylistGrid(variadoVideos, 'variado', currentVariadoIndex);
         updateVariadoTitle();
     }
     function cargarVideoRock(index) {
         currentRockIndex = index;
         var video = rockVideos[index];
-        if (video && playerRock && playerRock.loadVideoById) playerRock.loadVideoById(video.id);
+        if (video && playerRock && playerRock.loadVideoById) playerRock.cueVideoById(video.id);
         renderPlaylistGrid(rockVideos, 'rock', currentRockIndex);
         updateRockTitle();
     }
     function cargarVideoCumbias(index) {
         currentCumbiasIndex = index;
         var video = cumbiasVideos[index];
-        if (video && playerCumbias && playerCumbias.loadVideoById) playerCumbias.loadVideoById(video.id);
+        if (video && playerCumbias && playerCumbias.loadVideoById) playerCumbias.cueVideoById(video.id);
         renderPlaylistGrid(cumbiasVideos, 'cumbias', currentCumbiasIndex);
         updateCumbiasTitle();
     }
     function cargarVideoPlaylist(index) {
         currentPlaylistIndex = index;
         var video = playlistVideos[index];
-        if (video && playerLive && playerLive.loadVideoById) playerLive.loadVideoById(video.id);
+        if (video && playerLive && playerLive.loadVideoById) playerLive.cueVideoById(video.id);
         renderPlaylistGrid(playlistVideos, 'playlist', currentPlaylistIndex);
         updateLiveTitle();
     }
@@ -2167,7 +2167,7 @@
         if (playerDiv) playerDiv.style.display = 'none';
         // Recargar iframe de live stream para asegurar que funcione
         if (liveIframe) {
-            liveIframe.src = 'https://www.youtube.com/embed/live_stream?channel=' + CHANNEL_ID + '&controls=0&modestbranding=1&disablekb=1&autoplay=1';
+            liveIframe.src = 'https://www.youtube.com/embed/live_stream?channel=' + CHANNEL_ID + '&controls=0&modestbranding=1&disablekb=1';
         }
         // Detener player YT si está activo
         if (playerLive && playerLive.stopVideo) {
