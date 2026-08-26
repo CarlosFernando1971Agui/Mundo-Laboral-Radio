@@ -493,6 +493,12 @@
             background: rgba(255, 77, 77, 0.15);
             border: 1px solid var(--rojo);
         }
+        .playlist-item.unavailable {
+            opacity: 0.5;
+        }
+        .playlist-item.unavailable .playlist-thumb {
+            filter: grayscale(100%);
+        }
         .playlist-thumb {
             width: 100px;
             height: 56px;
@@ -1836,9 +1842,18 @@
             }
             if (arr && arr[idx]) {
                 arr[idx].unavailable = true;
+                // Contar cuantos videos ya estan marcados como no disponibles
+                var unavailableCount = arr.filter(function(v){ return v.unavailable; }).length;
+                // Si todos estan bloqueados, mostrar mensaje y no seguir saltando
+                if (unavailableCount >= arr.length) {
+                    var titleEl = document.getElementById('title-' + prefix);
+                    if (titleEl) titleEl.textContent = 'Todos los videos estan bloqueados para reproduccion externa';
+                    renderPlaylistGrid(arr, prefix, idx);
+                    return;
+                }
                 renderPlaylistGrid(arr, prefix, idx);
             }
-            setTimeout(function() { nextFn(); }, 600);
+            setTimeout(function() { nextFn(); }, 800);
         }
     }
 
@@ -2049,13 +2064,16 @@
         var html = '';
         videos.forEach(function(video, idx) {
             var activeClass = idx === currentIndex ? 'active' : '';
+            var unavailableClass = video.unavailable ? 'unavailable' : '';
             var thumbUrl = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
             var fnName = 'cargarVideo' + prefix.charAt(0).toUpperCase() + prefix.slice(1);
-            html += '<div class="playlist-item ' + activeClass + '" onclick="' + fnName + '(' + idx + ')">' +
+            var unavailableBadge = video.unavailable ? '<span style="color:#ff4444;font-size:0.7em;margin-top:3px;display:block;"><i class="fas fa-lock"></i> No disponible aqui</span>' : '';
+            html += '<div class="playlist-item ' + activeClass + ' ' + unavailableClass + '" onclick="' + fnName + '(' + idx + ')">' +
                 '<img src="' + thumbUrl + '" class="playlist-thumb" alt="" onerror="this.style.display=\'none\'">' +
                 '<div class="playlist-info">' +
                 '<div class="playlist-title">' + escapeHtml(video.title) + '</div>' +
                 '<div class="playlist-duration"><i class="far fa-clock"></i> ' + video.duration + '</div>' +
+                unavailableBadge +
                 '</div></div>';
         });
         container.innerHTML = html;
@@ -2192,8 +2210,74 @@
         document.getElementById('playlist-error').style.display = 'none';
         document.getElementById('playlist-items').innerHTML = '';
 
-        // Usar directamente el uploads playlist ID conocido para evitar error en /channels
-        fetchPlaylistItems(apiKey, STREAMS_PLAYLIST_ID);
+        // Usar endpoint search con eventType=completed para obtener streams pasados del canal
+        fetchStreamsWithAPI(apiKey);
+    }
+
+    function fetchStreamsWithAPI(apiKey) {
+        playlistVideos = [];
+        var unavailableCount = 0;
+        function fetchSearchPage(pageToken) {
+            var url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=' + encodeURIComponent(CHANNEL_ID) + '&eventType=completed&type=video&maxResults=50&order=date&key=' + encodeURIComponent(apiKey);
+            if (pageToken) url += '&pageToken=' + encodeURIComponent(pageToken);
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.setRequestHeader('Cache-Control', 'no-cache');
+            xhr.timeout = 15000;
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        try {
+                            var data = JSON.parse(xhr.responseText);
+                            if (data.error) {
+                                var errMsg = (data.error.message || 'Error de API');
+                                if (errMsg.indexOf('quota') !== -1) errMsg = 'Cuota de API agotada. Intenta mas tarde.';
+                                showPlaylistError(errMsg);
+                                return;
+                            }
+                            if (data.items && Array.isArray(data.items)) {
+                                data.items.forEach(function(item) {
+                                    if (item.id && item.id.videoId && item.snippet) {
+                                        playlistVideos.push({ id: item.id.videoId, title: item.snippet.title || 'Sin titulo', duration: '--:--' });
+                                    }
+                                });
+                            }
+                            if (data.nextPageToken) {
+                                fetchSearchPage(data.nextPageToken);
+                            } else {
+                                if (playlistVideos.length > 0) {
+                                    document.getElementById('playlist-loading').style.display = 'none';
+                                    document.getElementById('playlist-error').style.display = 'none';
+                                    cargarVideoPlaylist(0);
+                                } else {
+                                    showPlaylistError('No se encontraron streams en este canal.');
+                                }
+                            }
+                        } catch(e) {
+                            console.error('Error parseando JSON:', e, xhr.responseText.substring(0, 500));
+                            showPlaylistError('Error al procesar la respuesta del servidor.');
+                        }
+                    } else if (xhr.status === 403) {
+                        showPlaylistError('API Key invalida o cuota agotada.');
+                    } else if (xhr.status === 404) {
+                        showPlaylistError('Canal no encontrado.');
+                    } else if (xhr.status === 0) {
+                        showPlaylistError('Error de conexion. Revisa tu internet.');
+                    } else {
+                        try {
+                            var errData = JSON.parse(xhr.responseText);
+                            showPlaylistError(errData.error ? errData.error.message : ('Error HTTP ' + xhr.status));
+                        } catch(e2) {
+                            showPlaylistError('Error HTTP ' + xhr.status);
+                        }
+                    }
+                }
+            };
+            xhr.onerror = function() { showPlaylistError('Error de red. Revisa tu conexion.'); };
+            xhr.ontimeout = function() { showPlaylistError('Tiempo de espera agotado. Intenta de nuevo.'); };
+            xhr.send();
+        }
+        fetchSearchPage(null);
     }
 
     function fetchPlaylistItems(apiKey, playlistId) {
