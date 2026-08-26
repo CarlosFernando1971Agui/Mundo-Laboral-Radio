@@ -1485,7 +1485,7 @@
                 </div>
                 <div class="playlist-section" id="live-playlist-section" style="display:none;">
                     <div class="playlist-header-bar">
-                        <span><i class="fas fa-list"></i> Videos del Canal</span>
+                        <span><i class="fas fa-list"></i> Streams del Canal</span>
                         <button onclick="if(API_KEY){playlistVideos=[];fetchVideosWithAPI(API_KEY);}" class="playlist-refresh-btn"><i class="fas fa-sync-alt"></i> Actualizar</button>
                     </div>
                     <div class="playlist-loading" id="playlist-loading"><i class="fas fa-spinner fa-spin"></i> Cargando videos...</div>
@@ -1654,6 +1654,7 @@
     var NOTIVIDEOS_PLAYLIST_ID = 'PLLL35vAuI4q8';
     var CHANNEL_ID = 'UCUJY-xgeGJokDh-5Ho_Wb9A';
     var UPLOADS_PLAYLIST_ID = 'UUUJY-xgeGJokDh-5Ho_Wb9A';
+    var STREAMS_PLAYLIST_ID = 'UULVUJY-xgeGJokDh-5Ho_Wb9A';
     var API_KEY = 'AIzaSyD93mpAa7LzQRNUEaW9fuYy6sLnuwl6LJY';
 
     // Arrays de videos
@@ -2192,7 +2193,7 @@
         document.getElementById('playlist-items').innerHTML = '';
 
         // Usar directamente el uploads playlist ID conocido para evitar error en /channels
-        fetchPlaylistItems(apiKey, UPLOADS_PLAYLIST_ID);
+        fetchPlaylistItems(apiKey, STREAMS_PLAYLIST_ID);
     }
 
     function fetchPlaylistItems(apiKey, playlistId) {
