@@ -2656,14 +2656,30 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(noticias));
     }
 
+    function esUUID(id) {
+        return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id || '');
+    }
+
     function obtenerNoticias(callback) {
         if (dbOnline) {
             supabaseFetch('GET', '/noticias?select=*&order=fecha.desc', null, function(err, data) {
+                var locales = obtenerNoticiasLocal();
                 if (err) {
                     console.error('Error Supabase select:', err);
-                    callback(obtenerNoticiasLocal());
+                    callback(locales);
                 } else {
-                    callback(data || []);
+                    var remotas = data || [];
+                    // Limpiar copias locales que ya existen en Supabase (mismo titulo + categoria)
+                    var titulosRemotos = {};
+                    remotas.forEach(function(r) { titulosRemotos[(r.categoria + '|' + r.titulo).toLowerCase()] = true; });
+                    var localesFiltradas = locales.filter(function(l) {
+                        return !titulosRemotos[(l.categoria + '|' + l.titulo).toLowerCase()];
+                    });
+                    if (localesFiltradas.length !== locales.length) {
+                        guardarNoticiasLocal(localesFiltradas);
+                    }
+                    // Combinar: remotas primero, luego locales que no estan en la nube
+                    callback(remotas.concat(localesFiltradas));
                 }
             });
         } else {
@@ -2672,7 +2688,9 @@
     }
 
     function guardarNoticiaDB(noticia, callback) {
-        if (dbOnline) {
+        // Si la noticia tiene un ID local (no UUID de Supabase), siempre se guarda en localStorage
+        var esNoticiaLocal = noticia.id && !esUUID(noticia.id);
+        if (dbOnline && !esNoticiaLocal) {
             if (noticia.id) {
                 supabaseFetch('PATCH', '/noticias?id=eq.' + noticia.id, {
                     categoria: noticia.categoria,
@@ -2725,8 +2743,18 @@
         }
     }
 
-    function eliminarNoticiaDB(id, callback) {
-        if (dbOnline) {
+    function eliminarNoticiaDB(noticia, callback) {
+        var id = noticia.id;
+        // 1) Purgar TODAS las copias locales: por ID y por titulo+categoria (duplicados residuales)
+        var locales = obtenerNoticiasLocal();
+        var restantes = locales.filter(function(n) {
+            if (id && n.id === id) return false;
+            if (n.titulo === noticia.titulo && n.categoria === noticia.categoria) return false;
+            return true;
+        });
+        if (restantes.length !== locales.length) guardarNoticiasLocal(restantes);
+        // 2) Borrar de Supabase (todos los dispositivos)
+        if (dbOnline && esUUID(id)) {
             supabaseFetch('DELETE', '/noticias?id=eq.' + id, null, function(err, data) {
                 if (err) {
                     console.error('Error Supabase delete:', err);
@@ -2736,11 +2764,51 @@
                 }
             });
         } else {
-            var noticias = obtenerNoticiasLocal();
-            noticias = noticias.filter(function(n) { return n.id !== id; });
-            guardarNoticiasLocal(noticias);
+            // Noticia local sin copia en la nube: con purgarla de localStorage basta
             callback(true);
         }
+    }
+
+    // ====== MIGRACION AUTOMATICA DE NOTICIAS LOCALES A SUPABASE ======
+    function migrarNoticiasLocales(callback) {
+        if (!dbOnline) { callback(0); return; }
+        var locales = obtenerNoticiasLocal();
+        if (locales.length === 0) { callback(0); return; }
+        supabaseFetch('GET', '/noticias?select=titulo,categoria', null, function(err, remotas) {
+            if (err) { callback(0); return; }
+            var existentes = {};
+            (remotas || []).forEach(function(r) {
+                existentes[(r.categoria + '|' + r.titulo).toLowerCase()] = true;
+            });
+            var clave = function(l) { return (l.categoria + '|' + l.titulo).toLowerCase(); };
+            var pendientes = locales.filter(function(l) { return !existentes[clave(l)]; });
+            // Limpiar locales que ya estan en la nube
+            var sobran = locales.filter(function(l) { return existentes[clave(l)]; });
+            if (sobran.length) guardarNoticiasLocal(sobran);
+            if (pendientes.length === 0) { callback(0); return; }
+            var body = pendientes.map(function(l) {
+                return {
+                    categoria: l.categoria,
+                    titulo: l.titulo,
+                    contenido: l.contenido,
+                    foto: l.foto || '',
+                    fecha: l.fecha || new Date().toISOString()
+                };
+            });
+            supabaseFetch('POST', '/noticias', body, function(err2, data) {
+                if (!err2) {
+                    // Quitar del localStorage las que ya se migraron
+                    var clavesMigradas = {};
+                    pendientes.forEach(function(l) { clavesMigradas[clave(l)] = true; });
+                    var finales = obtenerNoticiasLocal().filter(function(l) { return !clavesMigradas[clave(l)]; });
+                    guardarNoticiasLocal(finales);
+                    callback(pendientes.length);
+                } else {
+                    console.error('Error migrando noticias locales:', err2);
+                    callback(0);
+                }
+            });
+        });
     }
 
     // ====== ACCIONES DE NOTICIAS ======
@@ -2850,13 +2918,23 @@
             alert('Acceso denegado.');
             return;
         }
-        if (!confirm('Estas seguro de que quieres eliminar esta noticia?')) return;
-        eliminarNoticiaDB(id, function(ok) {
-            if (ok) {
-                renderNoticias();
-            } else {
-                alert('Error al eliminar la noticia.');
+        if (!confirm('Estas seguro de que quieres eliminar esta noticia? Se eliminara de todos los dispositivos.')) return;
+        obtenerNoticias(function(noticias) {
+            var noticia = null;
+            for (var i = 0; i < noticias.length; i++) {
+                if (noticias[i].id === id) { noticia = noticias[i]; break; }
             }
+            if (!noticia) {
+                alert('No se encontro la noticia.');
+                return;
+            }
+            eliminarNoticiaDB(noticia, function(ok) {
+                if (ok) {
+                    renderNoticias();
+                } else {
+                    alert('Error al eliminar la noticia de la nube. Revisa tu conexion e intenta de nuevo.');
+                }
+            });
         });
     }
 
@@ -2933,7 +3011,11 @@
                 dbErrorMsg = msg;
                 mostrarEstadoDB();
                 if (ok) {
-                    renderNoticias();
+                    // Migrar noticias antiguas del navegador a la nube para que existan en todos los dispositivos
+                    migrarNoticiasLocales(function(nMigradas) {
+                        if (nMigradas > 0) console.log('Migradas ' + nMigradas + ' noticias locales a Supabase');
+                        renderNoticias();
+                    });
                 }
                 console.log('Supabase:', msg);
             });
